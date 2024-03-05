@@ -1,4 +1,4 @@
-﻿namespace InternetBank.Core.Domain.Enum;
+﻿namespace InternetBank.Core.Domain.Enumerations;
 
 public enum TypeOperation
 {

@@ -1,5 +1,5 @@
 ﻿using InternetBank.Core.Domain.Common;
-using InternetBank.Core.Domain.Enum;
+using InternetBank.Core.Domain.Enumerations;
 
 namespace InternetBank.Core.Domain.Entities;
 
@@ -11,6 +11,10 @@ public class Operation : BaseAuditableEntity
     public string Name { get; private set; } = string.Empty;
     public decimal Value { get; private set; }
     public TypeOperation Type { get; private set; }
+
+    public Account ReceiveAccount { get; set; }
+    public Account SendAccount { get; set; }
+    public Currency OperationCurrency { get; set; }
 
     protected Operation() : base() {}
 

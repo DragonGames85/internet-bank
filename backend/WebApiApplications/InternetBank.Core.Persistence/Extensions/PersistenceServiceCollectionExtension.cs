@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using InternetBank.Core.Persistence.Contexts.EfCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace InternetBank.Core.Persistence.Extensions;
@@ -7,11 +8,12 @@ public static class PersistenceServiceCollectionExtension
 {
     public static void AddPersistenceLayer(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddServices();
+        services.AddEfCoreMicrosoftSqlServerDbContext(configuration);
     }
 
-    public static void AddServices(this IServiceCollection services)
+    public static void AddEfCoreMicrosoftSqlServerDbContext(this IServiceCollection services, IConfiguration configuration)
     {
-        // TODO: Add services
+        var conStr = configuration["ConnectionStrings:InternetBankDb"];
+        services.AddSqlServer<ApplicationDbContext>(conStr);
     }
 }
