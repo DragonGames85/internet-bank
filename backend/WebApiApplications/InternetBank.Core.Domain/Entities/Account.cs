@@ -5,11 +5,11 @@ namespace InternetBank.Core.Domain.Entities;
 
 public class Account : BaseAuditableEntity
 {
-    public Guid CurrencyId { get; private set; }
-    public decimal Balance { get; private set; } = 0;
-    public string Number { get; private set; } = string.Empty;
-    public DateTime? ClosedDate { get; private set; }
-    public TypeAccount Type { get; private set; }
+    public Guid CurrencyId { get; set; }
+    public decimal Balance { get; set; } = 0;
+    public string Number { get; set; } = string.Empty;
+    public DateTime? ClosedDate { get; set; }
+    public TypeAccount Type { get; set; }
 
     public Currency AccountCurrency { get; set; }
     public ICollection<Operation> ReceivedOperations { get; set; } = new List<Operation>();

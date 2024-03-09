@@ -5,12 +5,12 @@ namespace InternetBank.Core.Domain.Entities;
 
 public class Operation : BaseAuditableEntity
 {
-    public Guid? ReceiveAccountId { get; private set; }
-    public Guid? SendAccountId { get; private set; }
-    public Guid CurrencyId { get; private set; }
-    public string Name { get; private set; } = string.Empty;
-    public decimal Value { get; private set; }
-    public TypeOperation Type { get; private set; }
+    public Guid? ReceiveAccountId { get; set; }
+    public Guid? SendAccountId { get; set; }
+    public Guid CurrencyId { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public decimal Value { get; set; }
+    public TypeOperation Type { get; set; }
 
     public Account ReceiveAccount { get; set; }
     public Account SendAccount { get; set; }

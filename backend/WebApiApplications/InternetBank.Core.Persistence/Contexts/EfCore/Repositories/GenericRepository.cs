@@ -1,5 +1,7 @@
 ﻿using InternetBank.Core.Application.Interfaces.Repositories;
+using InternetBank.Core.Application.Interfaces.Repositories.AccountRepositories;
 using InternetBank.Core.Domain.Common;
+using InternetBank.Core.Persistence.Contexts.EfCore.Repositories.AccountRepositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace InternetBank.Core.Persistence.Contexts.EfCore.Repositories;
@@ -40,7 +42,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseAuditabl
     public async Task UpdateAsync(T entity)
     {
         T item = await _context.Set<T>().FindAsync(entity.Id)
-            ?? throw new Exception($"{typeof(T).Name} not found");
+            ?? throw new Exception($"{typeof(T).Name} not found.");
 
         _context.Entry(item).CurrentValues.SetValues(entity);
     }
