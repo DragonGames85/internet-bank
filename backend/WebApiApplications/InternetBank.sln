@@ -13,21 +13,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternetBank.Core.Api", "We
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternetBank.Core.Domain", "InternetBank.Core.Domain\InternetBank.Core.Domain.csproj", "{67584FA0-2C18-47E8-90E1-F0A2E6F39991}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternetBank.Core.Application", "InternetBank.Core.Application\InternetBank.Core.Application.csproj", "{64502233-C26C-477B-896C-493DDB5FF6BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternetBank.Core.Application", "InternetBank.Core.Application\InternetBank.Core.Application.csproj", "{64502233-C26C-477B-896C-493DDB5FF6BC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{67584FA0-2C18-47E8-90E1-F0A2E6F39991} = {67584FA0-2C18-47E8-90E1-F0A2E6F39991}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternetBank.Core.Infrastructure", "InternetBank.Core.Infrastructure\InternetBank.Core.Infrastructure.csproj", "{0BF87215-77FC-4108-97B8-C8CDE856571D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternetBank.Core.Infrastructure", "InternetBank.Core.Infrastructure\InternetBank.Core.Infrastructure.csproj", "{0BF87215-77FC-4108-97B8-C8CDE856571D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{64502233-C26C-477B-896C-493DDB5FF6BC} = {64502233-C26C-477B-896C-493DDB5FF6BC}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternetBank.Core.Persistence", "InternetBank.Core.Persistence\InternetBank.Core.Persistence.csproj", "{003B7027-350E-464E-B347-EC1F3380417D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternetBank.Core.Persistence", "InternetBank.Core.Persistence\InternetBank.Core.Persistence.csproj", "{003B7027-350E-464E-B347-EC1F3380417D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{64502233-C26C-477B-896C-493DDB5FF6BC} = {64502233-C26C-477B-896C-493DDB5FF6BC}
 		{67584FA0-2C18-47E8-90E1-F0A2E6F39991} = {67584FA0-2C18-47E8-90E1-F0A2E6F39991}
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{11B8F11F-66AB-4C3B-BC0D-8787C7A89CA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,6 +60,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{443D7D5B-EC30-4DBA-82B8-84D19A5993F1} = {11B8F11F-66AB-4C3B-BC0D-8787C7A89CA2}
+		{67584FA0-2C18-47E8-90E1-F0A2E6F39991} = {11B8F11F-66AB-4C3B-BC0D-8787C7A89CA2}
+		{64502233-C26C-477B-896C-493DDB5FF6BC} = {11B8F11F-66AB-4C3B-BC0D-8787C7A89CA2}
+		{0BF87215-77FC-4108-97B8-C8CDE856571D} = {11B8F11F-66AB-4C3B-BC0D-8787C7A89CA2}
+		{003B7027-350E-464E-B347-EC1F3380417D} = {11B8F11F-66AB-4C3B-BC0D-8787C7A89CA2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {29B89E51-28DE-4AEE-BA68-41B6A692E4D2}

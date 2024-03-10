@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InternetBank.Auth.Application\InternetBank.Auth.Application.csproj" />
+    <ProjectReference Include="..\InternetBank.Auth.Domain\InternetBank.Auth.Domain.csproj" />
+    <ProjectReference Include="..\InternetBank.Auth.Infrastructure\InternetBank.Auth.Infrastructure.csproj" />
+    <ProjectReference Include="..\InternetBank.Auth.Persistence\InternetBank.Auth.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>
