@@ -42,5 +42,5 @@ export const animationVariants = {
 };
 
 export const setURL = (url: number) => {
-    axios.defaults.baseURL = `http://localhost:${url}/api`;
+    axios.defaults.baseURL = `https://localhost:${url}/api`;
 };
