@@ -9,12 +9,7 @@ namespace CreditService.Services
 {
     public class MyHostedService : IHostedService
     {
-        private readonly IPaymentService _paymentService;
-        public MyHostedService(IPaymentService paymentService)
-        {
-            _paymentService = paymentService;
-        }
-
+        
         public Task StartAsync(CancellationToken cancellationToken)
         {
             Task.Run(async () =>
@@ -24,7 +19,7 @@ namespace CreditService.Services
                   Console.WriteLine(DateTime.Now.ToString());
                     
                     await Task.Delay(new TimeSpan(0, 1, 0));
-                    await _paymentService.CheckPaymentDay();
+          
                     // 5 second delay
                 }
             });
