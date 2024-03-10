@@ -41,7 +41,7 @@ public class CreateOperationCommandHandler : IRequestHandler<CreateOperationComm
             throw new Exception("Accounts and Operation have different currencies.");
         }
 
-            var operation = Operation.Create(
+        var operation = Operation.Create(
             recieveAccount?.Id,
             sendAccount?.Id,
             request.Dto.Name,
