@@ -1,0 +1,157 @@
+{
+  "posts": [
+    {
+      "id": "12",
+      "title": "a title",
+      "views": 100
+    },
+    {
+      "id": "2",
+      "title": "another title",
+      "views": 200
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "name": "Данил",
+      "isBanned": false,
+      "accounts": [
+        "1"
+      ],
+      "credits": [
+        "1"
+      ],
+      "role": "USER"
+    },
+    {
+      "id": "4",
+      "name": "Олег",
+      "isBanned": false,
+      "accounts": [
+        "1"
+      ],
+      "credits": [
+        "1"
+      ],
+      "role": "USER"
+    },
+    {
+      "id": "5",
+      "name": "Соня",
+      "isBanned": false,
+      "accounts": [
+        "1"
+      ],
+      "credits": [
+        "1"
+      ],
+      "role": "USER"
+    },
+    {
+      "id": "6",
+      "name": "Вячеслав",
+      "isBanned": false,
+      "accounts": [
+        "1"
+      ],
+      "credits": [
+        "1"
+      ],
+      "role": "USER"
+    },
+    {
+      "id": "1",
+      "name": "Олег",
+      "isBanned": false,
+      "role": "COOP"
+    },
+    {
+      "id": "2",
+      "name": "Денис",
+      "isBanned": false,
+      "role": "COOP"
+    },
+    {
+      "id": "3",
+      "name": "Диана",
+      "isBanned": false,
+      "role": "COOP"
+    }
+  ],
+  "credits": [
+    {
+      "id": "1",
+      "name": "Кредит 1",
+      "percent": 1
+    },
+    {
+      "id": "2",
+      "name": "Кредит 2",
+      "percent": 2
+    },
+    {
+      "id": "3",
+      "name": "Кредит 3",
+      "percent": 3
+    }
+  ],
+  "accounts": [
+    {
+      "id": "1",
+      "name": "Счёт 1",
+      "author": "1",
+      "balance": 100,
+      "operations": [
+        "1",
+        "2"
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Счёт 2",
+      "author": "2",
+      "balance": 100,
+      "operations": [
+        "1",
+        "2"
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Счёт 3",
+      "author": "3",
+      "balance": 100,
+      "operations": [
+        "1",
+        "2"
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": "1",
+      "account": "1",
+      "money": 100,
+      "type": "INCOME"
+    },
+    {
+      "id": "2",
+      "account": "2",
+      "money": 100,
+      "type": "OUTCOME"
+    },
+    {
+      "id": "3",
+      "account": "3",
+      "money": 100,
+      "type": "OUTCOME"
+    },
+    {
+      "id": "4",
+      "account": "1",
+      "money": 100,
+      "type": "OUTCOME"
+    }
+  ]
+}
