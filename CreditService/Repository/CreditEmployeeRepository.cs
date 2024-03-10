@@ -10,6 +10,8 @@ namespace CreditService.Repository
         Task<List<UserCreditEntity>> GetUserCredits(Guid userId);
         Task<UserCreditEntity> GetCredit(Guid creditId);
         Task<List<LoanPayments>> GetCreditPayments(Guid creditId);
+        Task DeleteCredit(UserCreditEntity credit);
+        Task<List<LoanPayments>> GetPaymentsForDay();
     }
     public class CreditEmployeeRepository: ICreditEmployeeRepository
     {
@@ -42,6 +44,16 @@ namespace CreditService.Repository
         public async Task<List<LoanPayments>> GetCreditPayments(Guid creditId)
         {
             var list = await _context.Payments.Where(x => x.CreditId == creditId).OrderBy(s => s.NumberPay).ToListAsync();
+            return list;
+        }
+        public async Task DeleteCredit(UserCreditEntity credit)
+        {
+            _context.Credit.Remove(credit);
+            await _context.SaveChangesAsync();
+        }
+        public async Task<List<LoanPayments>> GetPaymentsForDay()
+        {
+            var list = await _context.Payments.Where(x => x.Date.Day == DateTime.Now.Day).ToListAsync();
             return list;
         }
     }

@@ -20,6 +20,8 @@ builder.Services.AddScoped<IUserCreditService, UserCreditService>();
 builder.Services.AddScoped<ICreditRepository, CreditRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<ICreditEmployeeRepository, CreditEmployeeRepository>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddHostedService<MyHostedService>();
 //var logger = new LoggerConfiguration()
 //  .ReadFrom.Configuration(builder.Configuration)
 //  .Enrich.FromLogContext()
@@ -32,6 +34,7 @@ var app = builder.Build();
 //using var serviceScope = app.Services.CreateScope();
 //var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 //dbContext?.Database.Migrate();
+
 
 if (app.Environment.IsDevelopment())
 {

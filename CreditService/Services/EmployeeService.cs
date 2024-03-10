@@ -11,6 +11,7 @@ namespace CreditService.Services
         Task CreateNewTariff(AddCreditTariffModel model);
         Task<List<UserCreditModel>> GetUserCredits(Guid userId);
         Task<UserCreditDetailsModel> GetCreditDetails(Guid creditId);
+        Task DeleteCredit(Guid creditId);
     }
     public class EmployeeService: IEmployeeService
     {
@@ -110,6 +111,13 @@ namespace CreditService.Services
                 Payments = payments,
             };
             return creditModel;
+        }
+        public async Task DeleteCredit(Guid creditId)
+        {
+            var credit = await _creditEmployeeRepository.GetCredit(creditId);
+            if (credit == null) { throw new KeyNotFoundException("Credit not found"); };
+            await _creditEmployeeRepository.DeleteCredit(credit);
+
         }
 
     }

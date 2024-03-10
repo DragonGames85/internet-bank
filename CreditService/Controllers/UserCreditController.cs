@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CreditService.Controllers
 {
-    [Route("api/credit")]
+    
     [ApiController]
+    [Route("api/")]
     public class UserCreditController : ControllerBase
     {
         private IUserCreditService _creditService;
@@ -17,7 +18,7 @@ namespace CreditService.Controllers
             _logger = logger;
         }
         [HttpPost]
-        [Route("/addCredit")]
+        [Route("takeCredit")]
         public async Task<IActionResult> AddUserCredit(CreditModel model)
         {
             try
@@ -46,7 +47,7 @@ namespace CreditService.Controllers
             }
         }
         [HttpGet]
-        [Route("/getTariffs")]
+        [Route("getTariffs")]
         public async Task<IActionResult> GetAllCreditTariffs()
         {
             try
@@ -69,7 +70,7 @@ namespace CreditService.Controllers
             }
         }
         [HttpPut]
-        [Route("/closeCredit")]
+        [Route("closeCredit/{creditId}")]
         public async Task<IActionResult> CloseCredit(Guid creditId)
         {
             try

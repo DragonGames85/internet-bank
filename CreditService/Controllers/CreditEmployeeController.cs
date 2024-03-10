@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CreditService.Controllers
 {
-    [Route("api/employeeCredit")]
     [ApiController]
+    [Route("api/")]
     public class CreditEmployeeController : Controller
     {
         private IEmployeeService _employeeService;
@@ -17,7 +17,7 @@ namespace CreditService.Controllers
         }
 
         [HttpPost]
-        [Route("/createCreditTariff")]
+        [Route("createCreditTariff")]
         public async Task<IActionResult> CreateNewTariff(AddCreditTariffModel model)
         {
             try
@@ -38,7 +38,7 @@ namespace CreditService.Controllers
             }
         }
         [HttpGet]
-        [Route("/getUserCredits")]
+        [Route("getUserCredits/{userId}")]
         public async Task<IActionResult> GetUserCredits(Guid userId)
         {
             try
@@ -59,13 +59,34 @@ namespace CreditService.Controllers
             }
         }
         [HttpGet]
-        [Route("/getCredit")]
+        [Route("getCredit/{creditId}")]
         public async Task<IActionResult> GetUserCredit(Guid creditId)
         {
             try
             {
                 var results = await _employeeService.GetCreditDetails(creditId);
                 return Ok(results);
+            }
+            catch (KeyNotFoundException e)
+            {
+                _logger.LogError(e, e.Message);
+                return Problem(statusCode: 404, title: "Not found", detail: e.Message);
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return Problem(statusCode: 500, title: "Something went wrong");
+            }
+        }
+        [HttpDelete]
+        [Route("delete/{creditId}")]
+        public async Task<IActionResult> DeleteUserCredit(Guid creditId)
+        {
+            try
+            {
+                await _employeeService.DeleteCredit(creditId);
+                return Ok();
             }
             catch (KeyNotFoundException e)
             {
