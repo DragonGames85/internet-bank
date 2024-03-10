@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { accountsApi } from './accounts';
 import { creditsApi } from './credits';
 import { operationsApi } from './operations';
@@ -17,7 +16,5 @@ class Api {
         this.accounts = new accountsApi();
     }
 }
-
-axios.defaults.baseURL = 'https://localhost:7227/api';
 
 export const api = new Api();
