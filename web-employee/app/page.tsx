@@ -7,16 +7,16 @@ import { api } from './api';
 import { User } from './api/types';
 import AddModal from './components/AddModal';
 import DeleteModal from './components/DeleteModal';
-import EditModal from './components/EditModal';
 import UserGrid from './components/UserGrid';
+import EditModal from './components/EditModal';
 
 export default function Home() {
     const { data: users } = useSWR<User[]>('/api/users', api.users.getAll);
 
     const [isCoop, setIsCoop] = useState(false);
     const [isAddOpen, openAdd] = useState(false);
-    const [isDelOpen, openDel] = useState(false);
     const [isEditOpen, openEdit] = useState(false);
+    const [isDelOpen, openDel] = useState(false);
     const [user, choseUser] = useState<User>();
 
     useEffect(() => {
@@ -84,11 +84,13 @@ export default function Home() {
             </div>
             {users && users.length && (
                 <UserGrid
-                    array={users.filter(user => user.role == (isCoop ? 'COOP' : 'USER'))}
+                    users={users.filter(user => user.role == (isCoop ? 'Employee' : 'Customer'))}
+                    accounts={isCoop ? [] : []}
+                    credits={isCoop ? [] : []}
                     choseUser={choseUser}
                     isCoop={isCoop}
-                    openDel={() => openDel(true)}
                     openEdit={() => openEdit(true)}
+                    openDel={() => openDel(true)}
                 />
             )}
         </>

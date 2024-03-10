@@ -10,7 +10,6 @@ import { animationVariants } from '../config';
 import { useColorEffect } from '../hooks/useColorEffect';
 import AddCredModal from './components/AddCredModal';
 import DeleteCredModal from './components/DeleteCredModal';
-import EditCredModal from './components/EditCredModal';
 
 const Credits: FC = () => {
     useColorEffect('120 0 120');
@@ -19,20 +18,11 @@ const Credits: FC = () => {
 
     const [isAddOpen, openAdd] = useState(false);
     const [isDelOpen, openDel] = useState(false);
-    const [isEditOpen, openEdit] = useState(false);
     const [credit, choseCredit] = useState<Credit>();
 
     return (
         <>
             <AddCredModal isOpen={isAddOpen} onClose={() => openAdd(false)} />
-            <EditCredModal
-                isOpen={isEditOpen}
-                onClose={() => {
-                    openEdit(false);
-                    choseCredit(undefined);
-                }}
-                credit={credit}
-            />
             <DeleteCredModal
                 isOpen={isDelOpen}
                 onClose={() => {
@@ -71,16 +61,6 @@ const Credits: FC = () => {
                                     {cred.name}
                                 </p>
                                 <div className="flex gap-2 items-center">
-                                    <FaPen
-                                        cursor={'pointer'}
-                                        color="white"
-                                        size={24}
-                                        onClick={e => {
-                                            choseCredit(cred);
-                                            openEdit(true);
-                                            e.preventDefault();
-                                        }}
-                                    />
                                     <MdOutlineDisabledByDefault
                                         cursor={'pointer'}
                                         color="red"

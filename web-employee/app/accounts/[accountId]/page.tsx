@@ -7,7 +7,7 @@ import useSWR from 'swr';
 const Accounts = ({ params }: { params: { accountId: string } }) => {
     useColorEffect('71, 85, 105');
 
-    const { data: account } = useSWR('/api/accounts', () => api.accounts.get(params.accountId));
+    const { data: account } = useSWR('/api/accounts', () => api.accounts.account(params.accountId));
     const { data: operations } = useSWR('/api/operations', () => api.operations.getAll(params.accountId));
 
     if (account)

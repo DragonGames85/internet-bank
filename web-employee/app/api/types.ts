@@ -41,9 +41,7 @@ export interface User {
     id: string;
     name: string;
     isBanned: boolean;
-    role: 'COOP' | 'Customer'; // сотрудник или клиент
-    accounts?: string[];
-    credits?: string[];
+    role: 'Employee' | 'Customer'; // сотрудник или клиент
 }
 
 export interface Currency {

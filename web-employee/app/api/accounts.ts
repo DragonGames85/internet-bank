@@ -1,8 +1,14 @@
 import axios from 'axios';
 import { Account } from './types';
+import { setURL } from '../config';
 
 export class accountsApi {
-    public get(userId: string) {
-        return axios.get<Account>(`/Account/${userId}`).then(res => res.data);
+    public account(accountId: string) {
+        setURL(7227);
+        return axios.get<Account>(`/Account/${accountId}`).then(res => res.data);
+    }
+    public userAccounts(userId: string) {
+        setURL(7227);
+        return axios.get<Account[]>(`/Account/user/${userId}`).then(res => res.data);
     }
 }

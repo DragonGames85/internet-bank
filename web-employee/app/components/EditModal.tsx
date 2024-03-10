@@ -2,75 +2,57 @@ import { FC } from 'react';
 import { api } from '../api';
 import { User } from '../api/types';
 import { ModalProps } from '../config';
-import { useModalFetch } from '../hooks/useModalFetch';
 import Modal from './Modal';
+import useSWR from 'swr';
+import Link from 'next/link';
 
 const EditModal: FC<ModalProps & { isCoop: boolean; user: User | undefined }> = ({ isOpen, onClose, isCoop, user }) => {
-    const titleText = isCoop ? 'сотрудника' : 'клиента';
-
-    type Inputs = {
-        name: string;
-        password: string;
-    };
-
-    if (!user) {
+    if (!user || isCoop) {
         return null;
     }
 
-    const { errors, handleSubmit, mutate, onModalClose, onSubmit, register } = useModalFetch<Inputs>(async data => {
-        try {
-            await api.users.put(user?.id, { ...user, name: data.name });
-            mutate('/api/users', async (prev: any) => {
-                return prev.map((u: any) => {
-                    if (u.id === user?.id) {
-                        return { ...u, name: data.name };
-                    }
-                    return u;
-                });
-            });
-        } catch (error) {}
-    }, onClose);
+    const { data: accounts } = useSWR(`/api/accounts/${user.id}`, () => api.accounts.userAccounts(user.id));
+    const { data: credits } = useSWR(`/api/credits/${user.id}`, () => api.credits.getUserCredits(user.id));
 
-    return (
-        <Modal
-            isOpen={isOpen}
-            onClose={onModalClose}
-            style={{
-                backgroundColor: 'rgb(var(--background-end-rgb))',
-                color: 'white',
-            }}
-            className="p-4 rounded-xl text-2xl text-center"
-        >
-            <div className="p-12 rounded-xl text-2xl text-center">
-                <h1 className="text-3xl font-bold underline underline-offset-8 mb-6">Изменить {titleText}</h1>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="p-4 flex flex-col">
-                        <p>Введите имя</p>
-                        <input
-                            defaultValue={user.name}
-                            {...register('name', { required: true })}
-                            className="text-black"
-                        />
-                        {errors.name && <span className="text-red-600">Это поле обязательно!</span>}
+    if (accounts && credits)
+        return (
+            <Modal
+                isOpen={isOpen}
+                onClose={onClose}
+                style={{
+                    backgroundColor: 'rgb(var(--background-end-rgb))',
+                    color: 'white',
+                }}
+                className="p-4 rounded-xl text-2xl text-center"
+            >
+                <div className="p-12 rounded-xl text-2xl text-center">
+                    <div className="h-full py-4 w-full rounded-3xl self-center text-xl overflow-hidden text-ellipsis">
+                        <div className="flex flex-col w-full gap-4">
+                            <div className={`text-slate-200`}>
+                                <h3>Счета:</h3>
+                                <div className="flex gap-5 underline underline-offset-8 flex-wrap">
+                                    {accounts.map(acc => (
+                                        <Link key={acc.id} href={`/accounts/${acc.id}`}>
+                                            {acc.id}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className={`text-[rgb(255,0,255)]`}>
+                                <h3>Кредиты:</h3>
+                                <div className="flex gap-5 underline underline-offset-8 flex-wrap">
+                                    {credits.map(cred => (
+                                        <Link key={cred.id} href={`/credits?id=${cred.id}`}>
+                                            {cred.id}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="p-4 flex flex-col">
-                        <p>Задайте пароль</p>
-                        <input {...register('password', { required: true })} className="text-black" />
-                        {errors.password && <span className="text-red-600">Это поле обязательно!</span>}
-                    </div>
-
-                    <div className="flex gap-4 mt-4 justify-center">
-                        <button type="submit" className="p-4 bg-gray-500 rounded-full">
-                            Изменить
-                        </button>
-                        <button className="p-4 bg-black rounded-full" onClick={onModalClose}>
-                            Отмена
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </Modal>
-    );
+                </div>
+            </Modal>
+        );
 };
 
 export default EditModal;

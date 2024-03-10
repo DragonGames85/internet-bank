@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export type divProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 export type ModalProps = { isOpen: boolean; onClose: () => void };
 export const LOREM =
@@ -37,4 +39,8 @@ export const animationVariants = {
             opacity: 1,
         },
     },
+};
+
+export const setURL = (url: number) => {
+    axios.defaults.baseURL = `http://localhost:${url}/api`;
 };

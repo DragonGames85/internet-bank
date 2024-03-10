@@ -9,17 +9,15 @@ const AddModal = ({ isOpen, onClose, isCoop }: ModalProps & { isCoop: boolean })
     const titleText = isCoop ? 'сотрудника' : 'клиента';
     type Inputs = {
         name: string;
+        login: string;
         password: string;
     };
 
     const { errors, handleSubmit, mutate, onModalClose, onSubmit, register } = useModalFetch<Inputs>(async data => {
         try {
             await api.users.post({
-                name: data.name,
-                accounts: [],
-                credits: [],
-                role: isCoop ? 'COOP' : 'Customer',
-                isBanned: false,
+                ...data,
+                role: isCoop ? 'Employee' : 'Customer',
             });
             mutate('/api/users');
         } catch (error) {}
@@ -44,6 +42,11 @@ const AddModal = ({ isOpen, onClose, isCoop }: ModalProps & { isCoop: boolean })
                     <p>Введите имя</p>
                     <input {...register('name', { required: true })} className="text-black" />
                     {errors.name && <span className="text-red-600">Это поле обязательно!</span>}
+                </div>
+                <div className="p-4 flex flex-col">
+                    <p>Введите логин</p>
+                    <input {...register('login', { required: true })} className="text-black" />
+                    {errors.login && <span className="text-red-600">Это поле обязательно!</span>}
                 </div>
                 <div className="p-4 flex flex-col">
                     <p>Задайте пароль</p>

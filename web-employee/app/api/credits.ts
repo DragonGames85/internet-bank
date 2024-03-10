@@ -1,20 +1,26 @@
 import axios from 'axios';
 import { Credit } from './types';
+import { setURL } from '../config';
 
 export class creditsApi {
     public getAll() {
-        return axios.get('/getTarrifs').then(res => res.data);
+        setURL(7229);
+        return axios.get<Credit[]>('/getTarrifs').then(res => res.data);
     }
-    public get(userId: string) {
-        return axios.get(`/getUserCredits/${userId}`).then(res => res.data);
+    public get(id: string) {
+        setURL(7229);
+        return axios.get<Credit>(`/getCredit/${id}`).then(res => res.data);
+    }
+    public getUserCredits(userId: string) {
+        setURL(7229);
+        return axios.get<Credit[]>(`/getUserCredits/${userId}`).then(res => res.data);
     }
     public post(credit: Omit<Credit, 'id'> & Partial<Credit>) {
+        setURL(7229);
         return axios.post('/createCreditTariff', credit).then(res => res.data);
     }
-    // public put(id: string, credit: Omit<Credit, 'id'> & Partial<Credit>) {
-    //     return axios.put(`/credits/${id}`, credit).then(res => res.data);
-    // }
-    // public delete(id: string) {
-    //     return axios.delete(`/credits/${id}`).then(res => res.data);
-    // }
+    public delete(id: string) {
+        setURL(7229);
+        return axios.delete(`/deleteCredit/${id}`).then(res => res.data);
+    }
 }
