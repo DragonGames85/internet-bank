@@ -16,15 +16,6 @@
 <img alt="tailwind" src="https://img.shields.io/badge/tailwind-06B6D4.svg?&style=for-the-badge&logo=tailwindcss&logoColor=fff" />&nbsp;
 <img alt="typescript" src="https://img.shields.io/badge/typescript-007ACC.svg?&style=for-the-badge&logo=typescript&logoColor=fff" />&nbsp;
 
-- Testing ??
-
-<img alt="jest" src="https://img.shields.io/badge/jest-success.svg?&style=for-the-badge&logo=jest&logoColor=fff" /> <img alt="jest" src="https://img.shields.io/badge/rtl-red.svg?&style=for-the-badge&logo=testing-library&logoColor=fff" /> <img alt="jest" src="https://img.shields.io/badge/loki-blueviolet.svg?&style=for-the-badge&logo=apache-cassandra&logoColor=fff" /> <img alt="jest" src="https://img.shields.io/badge/storybook-ff69b4.svg?&style=for-the-badge&logo=storybook&logoColor=fff" /> <img alt="jest" src="https://img.shields.io/badge/cypress-red.svg?&style=for-the-badge&logo=cypress&logoColor=fff" /> 
-
-- UI Kits ??
-
-<img alt="bootstrap" src="https://img.shields.io/badge/bootstrap-7610F7.svg?&style=for-the-badge&logo=bootstrap&logoColor=fff" />&nbsp;
-<img alt="antdesign" src="https://img.shields.io/badge/antdesign-0170FE.svg?&style=for-the-badge&logo=antdesign&logoColor=fff" />&nbsp;
-
 ---
 
 ### 🛠 Tools:
