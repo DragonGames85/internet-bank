@@ -9,7 +9,7 @@ namespace CreditService.Model.DTO
         [Required]
         public Guid UserId { get; set; }
         [Required]
-        public Guid Currency { get; set; };
+        public Guid Currency { get; set; }
         public decimal Value { get; set; }
         public Guid TariffId { get; set; }
 

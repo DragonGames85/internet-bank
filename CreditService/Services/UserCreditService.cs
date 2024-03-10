@@ -74,7 +74,7 @@ namespace CreditService.Services
             await _creditRepository.AddCredit(credit);
             if (tariff.PaymentType == Model.Enum.PaymentTypeEnum.DifferentiatedPayment)
             {
-                await CalculationOfPaymentsForDifferentiatedPayments();
+                await CalculationOfPaymentsForDifferentiatedPayments(tariff, credit);
             }
 
             if (tariff.PaymentType == Model.Enum.PaymentTypeEnum.AnnuityPayment)
@@ -82,9 +82,44 @@ namespace CreditService.Services
                 await CalculationOfPaymentsForAnnuityDaysPayment(tariff, credit);
             }
         }
-        private async Task CalculationOfPaymentsForDifferentiatedPayments()
+        private async Task CalculationOfPaymentsForDifferentiatedPayments(CreditTariff tariff, UserCreditEntity credit)
         {
-           
+            //предполагается только для месячных платежей 
+            var i = (double)tariff.Percent / 100;
+            var n = credit.RepaymentPeriod / credit.PaymentPeriod;
+            var amountOfPayment = credit.Value / n;
+
+            var numberPay = 1;
+            decimal amountOfRepaidPrincipalDebt = 0;
+            decimal balanceOwed = credit.Value;
+            while (numberPay <= n)
+            {
+                var PaymentDate = credit.CreatedAt.AddMonths(credit.PaymentPeriod * numberPay);
+                int days = DateTime.DaysInMonth(PaymentDate.Year, PaymentDate.Month);
+                var daysInYear = 0;
+                if (DateTime.IsLeapYear(PaymentDate.Year))
+                {
+                    daysInYear = 366;
+                }
+                else { daysInYear = 365; }
+
+                var percentageForPeriod = (credit.Value - amountOfRepaidPrincipalDebt) * (decimal)i * days / daysInYear;
+                balanceOwed = credit.Value - amountOfRepaidPrincipalDebt;
+                var loanPayment = new LoanPayments
+                {
+                    Date = PaymentDate,
+                    CreditId = credit.Id,
+                    AmountOfPayment = amountOfPayment + percentageForPeriod,
+                    Status = Model.Enum.PaymentStatusEnum.Waiting,
+                    NumberPay = numberPay,
+                    PercentageForPeriod = percentageForPeriod,
+                    MainDebt = amountOfPayment,
+                    BalanceOwed = balanceOwed,
+                };
+                amountOfRepaidPrincipalDebt += amountOfPayment;
+                await _creditRepository.AddLoanPayment(loanPayment);
+                numberPay++;
+            }
         }
         private async Task CalculationOfPaymentsForAnnuityDaysPayment(CreditTariff tariff, UserCreditEntity credit)
         {

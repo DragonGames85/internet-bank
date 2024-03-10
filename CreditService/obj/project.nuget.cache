@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JORNk64BIP8uSqUI4vyVkxVOsvZ0xB/ocDj9/dfVrfQL3rRMXve4ktTe5oyQqStJc9X22QAhfnBJdlh4xCSEJA==",
+  "dgSpecHash": "CS/V7C6kiMFKuOvihlo3bcpLss3jAtlpts0Sp2BwKdS9ShKJ/VmP/vPOWp2ZhfDiywkEmYnHjkNGm4OVQas/lw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\User\\source\\repos\\internet-bank\\CreditService\\CreditService.csproj",
+  "projectFilePath": "C:\\Users\\User\\source\\repos\\s\\CreditService\\CreditService.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\User\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

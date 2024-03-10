@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 
 namespace CreditService.Services
 {
+    public interface IScopedProcessingService
+    {
+        Task DoWorkAsync(CancellationToken stoppingToken);
+    }
     public class MyHostedService : BackgroundService
     {
-     
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
