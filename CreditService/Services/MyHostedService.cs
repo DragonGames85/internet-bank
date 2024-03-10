@@ -7,29 +7,16 @@ using System.Threading.Tasks;
 
 namespace CreditService.Services
 {
-    public class MyHostedService : IHostedService
+    public class MyHostedService : BackgroundService
     {
-        
-        public Task StartAsync(CancellationToken cancellationToken)
+     
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            Task.Run(async () =>
+            while (!stoppingToken.IsCancellationRequested)
             {
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                  Console.WriteLine(DateTime.Now.ToString());
-                    
-                    await Task.Delay(new TimeSpan(0, 1, 0));
-          
-                    // 5 second delay
-                }
-            });
-
-            return Task.CompletedTask;
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
+                   
+                await Task.Delay(TimeSpan.FromHours(24), stoppingToken);
+            }
         }
     }
 }

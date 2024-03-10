@@ -6,6 +6,7 @@ namespace CreditService.Model.DTO
     {
         public string Name { get; set; } = string.Empty;
         public decimal Percent { get; set; } = decimal.Zero;
+        public Guid Currency { get; set; } = Guid.Empty;
         public decimal? MaxCreditSum { get; set; }
         public decimal? MinCreditSum { get; set; }
         //минимальный и максимальный срок погашения измеряется в кол-ве месяцев

@@ -28,6 +28,7 @@ namespace CreditService.Services
             {
                 Name = model.Name,
                 Percent = model.Percent,
+                CurrencyId = model.Currency,
                 MaxCreditSum = model.MaxCreditSum,
                 MinCreditSum = model.MinCreditSum,
                 MinRepaymentPeriod = model.MinRepaymentPeriod,

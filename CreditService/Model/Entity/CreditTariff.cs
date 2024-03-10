@@ -11,7 +11,7 @@ namespace CreditService.Model.Entity
         public string Name { get; set; } = string.Empty;
         [Required]
         public decimal Percent { get; set; } = decimal.Zero;
-        public Guid CurrencyId { get; private set; } = Guid.Empty;
+        public Guid CurrencyId { get; set; } = Guid.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public RateType rateType { get; set; }
         //необязательный функционал
