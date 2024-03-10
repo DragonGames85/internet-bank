@@ -37,7 +37,7 @@ const Credits: FC = () => {
                         </p>
                         <p className={`text-white w-full py-2 text-xl text-ellipsis`}>Ставка {cred.percent}%</p>
                     </div>
-                    {index % 2 != 0 ? (
+                    <div>
                         <button
                             onClick={async () => {
                                 await api.credits.close(cred.id);
@@ -46,12 +46,11 @@ const Credits: FC = () => {
                         >
                             Погасить <FaFlagCheckered />
                         </button>
-                    ) : (
                         <button
                             onClick={async () => {
                                 const result = Number(prompt('Сколько хотите взять?'));
                                 await api.credits.sub({
-                                    userId: '1',
+                                    userId: localStorage.getItem('userId') ?? '1',
                                     currency: 'RUB',
                                     value: result,
                                     tariffId: cred.id,
@@ -63,7 +62,7 @@ const Credits: FC = () => {
                         >
                             Взять <FaMoneyBillTransfer />
                         </button>
-                    )}
+                    </div>
                 </motion.li>
             ))}
         </motion.ul>

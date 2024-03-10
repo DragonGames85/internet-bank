@@ -30,15 +30,17 @@ const Login = () => {
     } = useForm<RegisterType>();
 
     const onLogin: SubmitHandler<LoginType> = async data => {
-        const { token } = await api.auth.login(data);
+        const { token, userId } = await api.auth.login(data);
         localStorage.setItem('token', token);
+        localStorage.setItem('userId', userId);
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         window.location.reload();
     };
 
     const onRegister: SubmitHandler<RegisterType> = async data => {
-        const { token } = await api.auth.register({ ...data, confirmPassword: data.password });
+        const { token, userId } = await api.auth.register(data);
         localStorage.setItem('token', token);
+        localStorage.setItem('userId', userId);
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         window.location.reload();
     };
