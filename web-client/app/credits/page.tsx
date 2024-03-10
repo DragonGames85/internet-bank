@@ -1,150 +1,72 @@
 'use client';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
-import { FC, useEffect, useState } from 'react';
-import { FaPen } from 'react-icons/fa';
-import { MdAddCircleOutline, MdOutlineDisabledByDefault } from 'react-icons/md';
-import AddCredModal from './components/AddCredModal';
-import { IdName } from '../config';
-import DeleteCredModal from './components/DeleteCredModal';
-import EditCredModal from './components/EditCredModal';
-
-const container = {
-    hidden: { opacity: 1, scale: 0 },
-    visible: {
-        opacity: 1,
-        scale: 1,
-        transition: {
-            delayChildren: 0.1,
-            staggerChildren: 0.1,
-        },
-    },
-};
-
-const item = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-        y: 0,
-        opacity: 1,
-    },
-};
-
-const creditsArray = [
-    {
-        id: 1,
-        name: 'Кредит 1',
-        percent: 10,
-    },
-    {
-        id: 2,
-        name: 'Кредит 2',
-        percent: 20,
-    },
-    {
-        id: 3,
-        name: 'Кредит 3',
-        percent: 30,
-    },
-    {
-        id: 4,
-        name: 'Кредит 4',
-        percent: 40,
-    },
-    {
-        id: 5,
-        name: 'Кредит 5',
-        percent: 50,
-    },
-];
+import { FC } from 'react';
+import { FaFlagCheckered } from 'react-icons/fa';
+import { FaMoneyBillTransfer } from 'react-icons/fa6';
+import { useColorEffect } from '../hooks/useColorEffect';
+import { animationVariants } from '../config';
+import useSWR from 'swr';
+import { api } from '../api';
 
 const Credits: FC = () => {
-    useEffect(() => {
-        document.documentElement.style.setProperty('--background-end-rgb', '120 0 120');
-    }, []);
+    useColorEffect('120 0 120');
+    const { data: credits } = useSWR('/api/credits', api.credits.getAll);
 
-    const [isAddOpen, openAdd] = useState(false);
-    const [isDelOpen, openDel] = useState(false);
-    const [isEditOpen, openEdit] = useState(false);
-    const [credit, choseCredit] = useState<IdName & { percent: number }>();
-
-    return (
-        <>
-            <AddCredModal isOpen={isAddOpen} onClose={() => openAdd(false)} />
-            <EditCredModal
-                isOpen={isEditOpen}
-                onClose={() => {
-                    openEdit(false);
-                    choseCredit(undefined);
-                }}
-                credit={credit}
-            />
-            <DeleteCredModal
-                isOpen={isDelOpen}
-                onClose={() => {
-                    openDel(false);
-                    choseCredit(undefined);
-                }}
-                credit={credit}
-            />
-            <button
-                onClick={() => openAdd(true)}
-                className="text-3xl mx-auto border-2 rounded-2xl p-2 flex gap-2 items-center bg-gray-900"
-            >
-                Добавить
-                <MdAddCircleOutline />
-            </button>
-            <motion.ul
-                className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-12 overflow-hidden pt-5"
-                variants={container}
-                initial="hidden"
-                animate="visible"
-            >
-                {creditsArray.map((cred, index) => (
-                    <Link key={index} href={`/credits/${cred.id}`}>
-                        <motion.li
-                            variants={item}
-                            className={`flex flex-col items-start border-[1px] rounded-3xl p-6 bg-fuchsia-950 h-auto gap-1`}
+    return !(credits && !!credits.length) ? (
+        <h1>Нет кредитов</h1>
+    ) : (
+        <motion.ul
+            className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-12 pt-5"
+            variants={animationVariants.container}
+            initial="hidden"
+            animate="visible"
+        >
+            {credits.map((cred, index) => (
+                <motion.li
+                    variants={animationVariants.item}
+                    className={`flex items-center justify-between border-[1px] rounded-3xl p-6 bg-fuchsia-950 h-auto gap-1`}
+                >
+                    <div>
+                        <p
+                            style={{
+                                color: 'rgb(255, 0,255)',
+                            }}
+                            className={`text-3xl `}
                         >
-                            <div key={index} className="flex w-full text-3xl justify-between">
-                                <p
-                                    style={{
-                                        color: 'rgb(255, 0,255)',
-                                    }}
-                                    className={`self-center underline underline-offset-8`}
-                                >
-                                    {cred.name}
-                                </p>
-                                <div className="flex gap-2 items-center">
-                                    <FaPen
-                                        cursor={'pointer'}
-                                        color="white"
-                                        size={24}
-                                        onClick={e => {
-                                            choseCredit(cred);
-                                            openEdit(true);
-                                            e.preventDefault();
-                                        }}
-                                    />
-                                    <MdOutlineDisabledByDefault
-                                        cursor={'pointer'}
-                                        color="red"
-                                        size={36}
-                                        onClick={e => {
-                                            choseCredit(cred);
-                                            openDel(true);
-                                            e.preventDefault();
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                            <div className="h-full py-4 w-full rounded-3xl self-center text-xl overflow-hidden text-ellipsis">
-                                <p className={`text-white w-full`}>Ставка {cred.percent}%</p>
-                            </div>
-                        </motion.li>
-                    </Link>
-                ))}
-            </motion.ul>
-        </>
+                            {cred.name}
+                        </p>
+                        <p className={`text-white w-full py-2 text-xl text-ellipsis`}>Ставка {cred.percent}%</p>
+                    </div>
+                    {index % 2 != 0 ? (
+                        <button
+                            onClick={async () => {
+                                await api.credits.close(cred.id);
+                            }}
+                            className="flex items-center gap-2 border-[1px] rounded-full p-2 px-4 text-xl text-red-500"
+                        >
+                            Погасить <FaFlagCheckered />
+                        </button>
+                    ) : (
+                        <button
+                            onClick={async () => {
+                                const result = Number(prompt('Сколько хотите взять?'));
+                                await api.credits.sub({
+                                    userId: '1',
+                                    currency: 'RUB',
+                                    value: result,
+                                    tariffId: cred.id,
+                                    repaymentPeriod: 24,
+                                    paymentPeriod: 1,
+                                });
+                            }}
+                            className="flex items-center gap-2 border-[1px] rounded-full p-2 px-4 text-xl text-purple-400"
+                        >
+                            Взять <FaMoneyBillTransfer />
+                        </button>
+                    )}
+                </motion.li>
+            ))}
+        </motion.ul>
     );
 };
 

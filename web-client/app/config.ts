@@ -15,6 +15,26 @@ export const adaptiveClass = (
     values.forEach((value, index) => {
         className += `${adaptiveArray[index]}${standard}-${value} `;
     });
-    console.log(className)
     return className;
+};
+
+export const animationVariants = {
+    container: {
+        hidden: { opacity: 1, scale: 0 },
+        visible: {
+            opacity: 1,
+            scale: 1,
+            transition: {
+                delayChildren: 0.1,
+                staggerChildren: 0.1,
+            },
+        },
+    },
+    item: {
+        hidden: { y: 20, opacity: 0 },
+        visible: {
+            y: 0,
+            opacity: 1,
+        },
+    },
 };

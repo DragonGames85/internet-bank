@@ -1,108 +1,78 @@
 'use client';
-
 import { useEffect, useState } from 'react';
-import { MdAddCircleOutline } from 'react-icons/md';
-import AddModal from './components/AddModal';
-import DeleteModal from './components/DeleteModal';
-import EditModal from './components/EditModal';
-import UserGrid from './components/UserGrid';
-import { IdName } from './config';
+import { DaDataFio, DaDataSuggestion, FioSuggestions } from 'react-dadata';
+
+import MALE from '@/assets/MALE.png';
+import FEMALE from '@/assets/FEMALE.png';
+import SAME from '@/assets/SAME.png';
+
+import Login from './components/Login';
+import 'react-dadata/dist/react-dadata.css';
+import Image from 'next/image';
 
 export default function Home() {
-    const people = [
-        { id: 1, name: 'Данил' },
-        { id: 2, name: 'Никита' },
-        { id: 3, name: 'Ярик' },
-        { id: 4, name: 'Олег' },
-        { id: 5, name: 'Соня' },
-        { id: 6, name: 'Вячеслав' },
-    ];
+    const [dadata, setDadata] = useState<DaDataSuggestion<DaDataFio> | undefined>();
+    const [name, setName] = useState<string>();
+    const [image, setImage] = useState(MALE);
 
-    const coops = [
-        { id: 1, name: 'Диана' },
-        { id: 2, name: 'Костя' },
-        { id: 3, name: 'Денис' },
-        { id: 4, name: 'Митя' },
-        { id: 5, name: 'Павел' },
-        { id: 6, name: 'Эрик' },
-    ];
-
-    const [isCoop, setIsCoop] = useState(false);
-    const [isAddOpen, openAdd] = useState(false);
-    const [isDelOpen, openDel] = useState(false);
-    const [isEditOpen, openEdit] = useState(false);
-    const [user, choseUser] = useState<IdName>();
+    console.log(name);
 
     useEffect(() => {
-        if (isCoop) {
-            document.documentElement.style.setProperty('--background-end-rgb', '0 0 120');
-        } else {
-            document.documentElement.style.setProperty('--background-end-rgb', '0 80 0');
-        }
-    }, [isCoop]);
+        document.documentElement.style.setProperty('--background-end-rgb', '0 80 0');
+    }, []);
 
-    return (
-        <>
-            <AddModal isOpen={isAddOpen} onClose={() => openAdd(false)} isCoop={isCoop} />
-            <EditModal
-                isOpen={isEditOpen}
-                onClose={() => {
-                    openEdit(false);
-                    choseUser(undefined);
-                }}
-                isCoop={isCoop}
-                user={user}
+    useEffect(() => {
+        setName(dadata?.data.name ?? '');
+        switch (dadata?.data.gender) {
+            case 'FEMALE':
+                setImage(FEMALE);
+                break;
+            case 'MALE':
+                setImage(MALE);
+                break;
+            case 'UNKNOWN':
+                setImage(SAME);
+                break;
+            default:
+                setImage(SAME);
+                break;
+        }
+    }, [dadata]);
+
+    let token = localStorage.getItem('token');
+
+    return token ? (
+        <div className="flex flex-col w-full items-center text-black gap-12">
+            <Image
+                width={400}
+                height={400}
+                src={image}
+                alt="profile-image"
+                className="rounded-full border-[3px] object-cover pointer-events-none text-2xl"
             />
-            <DeleteModal
-                isOpen={isDelOpen}
-                onClose={() => {
-                    openDel(false);
-                    choseUser(undefined);
-                }}
-                isCoop={isCoop}
-                user={user}
-            />
-            <div
-                className={
-                    'w-full py-8 text-3xl flex flex-col sm:flex-row items-center justify-center gap-2 relative sm:gap-2 md:gap-6 lg:gap-12 xl:gap-16 2xl:gap-24'
-                }
-            >
-                <p
-                    style={{ cursor: 'pointer' }}
-                    className={!isCoop ? 'border-green-400  border-2 rounded-full p-2 bg-green-900  ' : 'p-2'}
-                    onClick={() => {
-                        setIsCoop(false);
-                    }}
-                >
-                    Клиенты
-                </p>
-                <p
-                    style={{ cursor: 'pointer', color: 'cyan' }}
-                    className={isCoop ? 'border-blue-400 border-2 rounded-full p-2 bg-blue-600' : 'p-2'}
-                    onClick={() => {
-                        setIsCoop(true);
-                    }}
-                >
-                    Сотрудники
-                </p>
-                <button
-                    onClick={() => openAdd(true)}
-                    style={{
-                        color: isCoop ? 'rgb(0, 255, 255)' : 'rgb(0, 255,0)',
-                    }}
-                    className="lg:absolute lg:right-0 border-2 rounded-2xl p-2 flex gap-2 items-center bg-gray-900"
-                >
-                    Добавить
-                    <MdAddCircleOutline />
-                </button>
+            <div className="flex flex-col gap-2">
+                <p className="text-white text-xl">Токен: {token}</p>
+                <div className="flex items-center gap-2">
+                    {/* <FioSuggestions
+                        token="72bcb1ac7f6c6951b537dd41c247700242b412aa"
+                        value={dadata}
+                        onChange={setDadata}
+                        inputProps={{
+                            value: name,
+                            onChange(e) {
+                                setName(e.currentTarget.value);
+                            },
+                            style: {
+                                width: '400px',
+                                height: '50px',
+                                fontSize: '1.5rem',
+                            },
+                        }}
+                    /> */}
+                </div>
             </div>
-            <UserGrid
-                array={isCoop ? coops : people}
-                choseUser={choseUser}
-                isCoop={isCoop}
-                openDel={() => openDel(true)}
-                openEdit={() => openEdit(true)}
-            />
-        </>
+        </div>
+    ) : (
+        <Login />
     );
 }

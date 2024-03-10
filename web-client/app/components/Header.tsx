@@ -3,25 +3,28 @@ import { PiUserRectangleBold } from 'react-icons/pi';
 import { GiBanknote } from 'react-icons/gi';
 import { MdCreditCard } from 'react-icons/md';
 import Link from 'next/link';
-import { IoMdLogIn } from 'react-icons/io';
+import { useEffect } from 'react';
+import axios from 'axios';
 export const HeaderComp = () => {
-    const links = [
-        {
-            name: 'КЛИЕНТЫ',
-            icon: <PiUserRectangleBold size={60} />,
-            to: '/',
-        },
-        // {
-        //     name: 'СЧЕТА',
-        //     icon: <GiBanknote size={60} />,
-        //     to: '/accounts',
-        // },
-        {
-            name: 'КРЕДИТЫ',
-            icon: <MdCreditCard size={60} />,
-            to: '/credits',
-        },
-    ];
+    const links = !localStorage.getItem('token')
+        ? []
+        : [
+              {
+                  name: 'ПРОФИЛЬ',
+                  icon: <PiUserRectangleBold size={60} />,
+                  to: '/',
+              },
+              {
+                  name: 'СЧЕТА',
+                  icon: <GiBanknote size={60} />,
+                  to: '/accounts',
+              },
+              {
+                  name: 'КРЕДИТЫ',
+                  icon: <MdCreditCard size={60} />,
+                  to: '/credits',
+              },
+          ];
 
     const Button = ({ children, href, className }: any) => {
         return (
@@ -34,6 +37,12 @@ export const HeaderComp = () => {
         );
     };
 
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+        }
+    }, []);
+
     return (
         <header className="flex flex-col lg:flex-row justify-between px-12 py-4 w-full">
             <div className="flex flex-col lg:flex-row gap-4 lg:gap-12">
@@ -44,10 +53,6 @@ export const HeaderComp = () => {
                     </Button>
                 ))}
             </div>
-            <Button href={'/login'} className={'mt-4 lg:mt-0'}>
-                <IoMdLogIn size={60} />
-                ВОЙТИ&nbsp;&nbsp;&nbsp;&nbsp;
-            </Button>
         </header>
     );
 };
