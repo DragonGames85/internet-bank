@@ -1,9 +1,11 @@
 ﻿using InternetBank.Core.Application.Interfaces.Repositories;
 using InternetBank.Core.Application.Interfaces.Repositories.AccountRepositories;
 using InternetBank.Core.Application.Interfaces.Repositories.CurrencyRepositories;
+using InternetBank.Core.Application.Interfaces.Repositories.OperationRepositories;
 using InternetBank.Core.Domain.Common;
 using InternetBank.Core.Persistence.Contexts.EfCore.Repositories.AccountRepositories;
 using InternetBank.Core.Persistence.Contexts.EfCore.Repositories.CurrencyRepositories;
+using InternetBank.Core.Persistence.Contexts.EfCore.Repositories.OperationRepositories;
 using System.Collections;
 
 namespace InternetBank.Core.Persistence.Contexts.EfCore.Repositories;
@@ -13,6 +15,7 @@ public class UnitOfWork : IUnitOfWork
     private readonly ApplicationDbContext _dbContext;
     public IAccountRepository AccountRepository { get; }
     public ICurrencyRepository CurrencyRepository { get; }
+    public IOperationRepository OperationRepository { get; }
     private Hashtable _repositories;
 
     public UnitOfWork(ApplicationDbContext dbContext)
@@ -20,6 +23,7 @@ public class UnitOfWork : IUnitOfWork
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         AccountRepository = new AccountRepository(dbContext);
         CurrencyRepository = new CurrencyRepository(dbContext);
+        OperationRepository = new OperationRepository(dbContext);
     }
 
     public IGenericRepository<T> Repository<T>() where T : BaseAuditableEntity

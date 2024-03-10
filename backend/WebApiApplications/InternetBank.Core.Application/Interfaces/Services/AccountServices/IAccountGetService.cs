@@ -6,4 +6,5 @@ public interface IAccountGetService
 {
     Task<List<AccountDto>> GetAccounts(Guid userId);
     Task<List<AccountDto>> GetAllAccounts();
+    Task<AccountDto> GetAccount(Guid id);
 }

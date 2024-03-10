@@ -27,4 +27,11 @@ public class AccountGetService : IAccountGetService
 
         return result;
     }
+
+    public async Task<AccountDto> GetAccount(Guid id)
+    {
+        var result = await _mediator.Send(new GetAccountQuery(id));
+
+        return result;
+    }
 }

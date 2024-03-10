@@ -32,12 +32,27 @@ public class AccountController : ControllerBase
         }
     }
 
-    [HttpGet("{userId}")]
+    [HttpGet("user/{userId}")]
     public async Task<ActionResult<List<AccountDto>>> GetUserAccounts(Guid userId)
     {
         try
         {
             var result = await _accountGetService.GetAccounts(userId);
+
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<AccountDto>> GetAccount(Guid id)
+    {
+        try
+        {
+            var result = await _accountGetService.GetAccount(id);
 
             return Ok(result);
         }

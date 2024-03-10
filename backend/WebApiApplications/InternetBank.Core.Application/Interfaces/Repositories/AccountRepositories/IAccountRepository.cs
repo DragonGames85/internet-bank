@@ -4,6 +4,8 @@ namespace InternetBank.Core.Application.Interfaces.Repositories.AccountRepositor
 
 public interface IAccountRepository
 {
-    public Task<IEnumerable<Account>> GetAccountsIncludesCurrencyByUserId(Guid id);
-    public Task<IEnumerable<Account>> GetAllAccountsIncludesCurrency();
+    public Task<IEnumerable<Account>> GetAccountsIncludedCurrencyByUserId(Guid id);
+    public Task<IEnumerable<Account>> GetAllAccountsIncludedCurrency();
+    public Task<Account?> GetAccountByNumber(string number);
+    public Task<Account?> GetAccountIncludedCurrencyById(Guid id);
 }

@@ -21,13 +21,13 @@ public class GetAllAccountsQueryHandler : IRequestHandler<GetAllAccountsQuery, L
 
     public async Task<List<AccountDto>> Handle(GetAllAccountsQuery request, CancellationToken cancellationToken)
     {
-        var accounts = await _unitOfWork.AccountRepository.GetAllAccountsIncludesCurrency();
+        var accounts = await _unitOfWork.AccountRepository.GetAllAccountsIncludedCurrency();
 
         var dtoAccounts = new List<AccountDto>();
 
         foreach (var account in accounts)
         {
-            var dtoCurrency = new CurrencyDto(account.AccountCurrency.Name, account.AccountCurrency.Symbol);
+            var dtoCurrency = new CurrencyDto(account.AccountCurrency.Id, account.AccountCurrency.Name, account.AccountCurrency.Symbol);
             var dtoUser = new UserDto(Guid.NewGuid(), "Benjamin Batton");
 
             dtoAccounts.Add(new AccountDto(
