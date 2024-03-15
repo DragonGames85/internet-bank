@@ -1,7 +1,6 @@
 ﻿using InternetBank.Core.Application.Interfaces.Repositories.AccountRepositories;
 using InternetBank.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace InternetBank.Core.Persistence.Contexts.EfCore.Repositories.AccountRepositories;
 

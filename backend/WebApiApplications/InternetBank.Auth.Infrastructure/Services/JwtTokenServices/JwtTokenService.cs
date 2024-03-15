@@ -1,6 +1,6 @@
 ﻿using InternetBank.Auth.Application.DTOs.TokenDTOs;
+using InternetBank.Auth.Application.DTOs.UserDTOs;
 using InternetBank.Auth.Application.Interfaces.Services.JwtTokenServices;
-using InternetBank.Auth.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,16 +18,18 @@ public class JwtTokenService : IJwtTokenService
         _configuration = configuration;
     }
 
-    public Task<TokenDto> GenerateToken(User user)
+    public Task<TokenDto> GenerateToken(UserDto user)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Name),
+            new Claim("id", user.Id.ToString()),
+            new Claim("name", user.Name),
+            new Claim("role", user.Role),
+            new Claim("isBanned", user.IsBanned.ToString()),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            // Добавьте дополнительные утверждения/клеймы если необходимо
         };
 
         var token = new JwtSecurityToken(

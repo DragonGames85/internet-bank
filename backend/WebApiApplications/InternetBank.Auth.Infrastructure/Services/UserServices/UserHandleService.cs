@@ -1,34 +1,39 @@
 ﻿using InternetBank.Auth.Application.DTOs.TokenDTOs;
 using InternetBank.Auth.Application.DTOs.UserDTOs;
-using InternetBank.Auth.Application.Features.Currencies.Commands;
+using InternetBank.Auth.Application.Features.Users.Commands;
 using InternetBank.Auth.Application.Interfaces.Services.UserServices;
 using MediatR;
 
-namespace InternetBank.Auth.Infrastructure.Services.AccountServices;
+namespace InternetBank.Auth.Infrastructure.Services.UserServices;
 
 public class UserHandleService : IUserHandleService
 {
     private readonly IMediator _mediator;
-    private readonly IJwtService _jwtService;
+    private readonly IUserAuthService _userAuthService;
 
-    public UserHandleService(IMediator mediator, IJwtService jwtService)
+    public UserHandleService(IMediator mediator, IUserAuthService userAuthService)
     {
         _mediator = mediator;
-        _jwtService = jwtService
+        _userAuthService = userAuthService;
     }
 
     public async Task<TokenDto> CreateUser(CreateUserDto dto)
     {
         await _mediator.Send(new CreateUserCommand(dto));
 
-        await _mediator.Send(new GetJwtSecurityTokenCommand())
+        return await _userAuthService.LoginUser(new LoginUserDto(dto.Login, dto.Password));
+    }
+
+    public Task ToggleBanUser(Guid id)
+    {
+        var result = _mediator.Send(new ToggleBanUserCommand(id));
 
         return result;
     }
 
-    public Task BanToggleUser(Guid id)
+    public Task DeleteUser(Guid id)
     {
-        var result = _mediator.Send(new BanToggleUserCommand(id));
+        var result = _mediator.Send(new DeleteUserCommand(id));
 
         return result;
     }
