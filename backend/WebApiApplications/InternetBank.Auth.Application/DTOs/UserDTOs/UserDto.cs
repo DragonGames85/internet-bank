@@ -1,7 +1,7 @@
 ﻿namespace InternetBank.Auth.Application.DTOs.UserDTOs;
 
 public record UserDto(
-    string Login,
+    Guid Id,
     string Name,
-    RoleDto Role,
+    string Role,
     bool IsBanned);

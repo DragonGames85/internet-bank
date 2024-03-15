@@ -1,5 +1,9 @@
 ﻿using InternetBank.Auth.Application.Interfaces.Repositories;
+using InternetBank.Auth.Application.Interfaces.Repositories.RoleRepositories;
+using InternetBank.Auth.Application.Interfaces.Repositories.UserRepositories;
 using InternetBank.Auth.Domain.Common;
+using InternetBank.Auth.Persistence.Contexts.EfCore.Repositories.RoleRepositories;
+using InternetBank.Auth.Persistence.Contexts.EfCore.Repositories.UserRepositories;
 using System.Collections;
 
 namespace InternetBank.Auth.Persistence.Contexts.EfCore.Repositories;
@@ -7,11 +11,15 @@ namespace InternetBank.Auth.Persistence.Contexts.EfCore.Repositories;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly ApplicationDbContext _dbContext;
+    public IUserRepository UserRepository { get; }
+    public IRoleRepository RoleRepository { get; }
     private Hashtable _repositories;
 
     public UnitOfWork(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        UserRepository = new UserRepository(dbContext);
+        RoleRepository = new RoleRepository(dbContext);
     }
 
     public IGenericRepository<T> Repository<T>() where T : BaseAuditableEntity

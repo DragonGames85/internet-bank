@@ -1,6 +1,7 @@
 using InternetBank.Core.Application.DTOs.AccountDTOs;
 using InternetBank.Core.Application.Interfaces.Services.AccountServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace WebApiCoreApplication.Controllers;
 
@@ -22,7 +23,10 @@ public class AccountController : ControllerBase
     {
         try
         {
-            var result = await _accountGetService.GetAccounts(Guid.NewGuid());
+            var userIdClaim = User.FindFirst("id")
+                ?? throw new Exception("Id is not found.");
+
+            var result = await _accountGetService.GetAccounts(Guid.Parse(userIdClaim.Value));
 
             return Ok(result);
         } 

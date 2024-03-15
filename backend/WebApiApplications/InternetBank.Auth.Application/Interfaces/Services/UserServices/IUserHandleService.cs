@@ -6,5 +6,6 @@ namespace InternetBank.Auth.Application.Interfaces.Services.UserServices;
 public interface IUserHandleService
 {
     Task<TokenDto> CreateUser(CreateUserDto dto);
-    Task BanToggleUser(Guid id);
+    Task DeleteUser(Guid id);
+    Task ToggleBanUser(Guid id);
 }

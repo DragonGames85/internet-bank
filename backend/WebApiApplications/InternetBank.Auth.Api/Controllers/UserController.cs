@@ -1,28 +1,28 @@
-using InternetBank.Core.Application.DTOs.AccountDTOs;
-using InternetBank.Core.Application.Interfaces.Services.AccountServices;
+using InternetBank.Auth.Application.DTOs.UserDTOs;
+using InternetBank.Auth.Application.Interfaces.Services.UserServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApiCoreApplication.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AccountController : ControllerBase
+public class UserController : ControllerBase
 {
-    private readonly IAccountGetService _accountGetService;
-    private readonly IAccountHandleService _accountHandleService;
+    private readonly IUserGetService _userGetService;
+    private readonly IUserHandleService _userHandleService;
 
-    public AccountController(IAccountGetService accountGetService, IAccountHandleService accountHandleService)
+    public UserController(IUserGetService userGetService, IUserHandleService userHandleService)
     {
-        _accountGetService = accountGetService;
-        _accountHandleService = accountHandleService;
+        _userGetService = userGetService;
+        _userHandleService = userHandleService;
     }
 
-    [HttpGet("my")]
-    public async Task<ActionResult<List<AccountDto>>> GetMyAccounts()
+    [HttpGet("all")]
+    public async Task<ActionResult<List<UserDto>>> GetAllUsers()
     {
         try
         {
-            var result = await _accountGetService.GetAccounts(Guid.NewGuid());
+            var result = await _userGetService.GetAllUsers();
 
             return Ok(result);
         } 
@@ -32,72 +32,12 @@ public class AccountController : ControllerBase
         }
     }
 
-    [HttpGet("user/{userId}")]
-    public async Task<ActionResult<List<AccountDto>>> GetUserAccounts(Guid userId)
+    [HttpPost("ban/{userId}")]
+    public async Task<ActionResult> ToggleBanUser(Guid userId)
     {
         try
         {
-            var result = await _accountGetService.GetAccounts(userId);
-
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
-
-    [HttpGet("{id}")]
-    public async Task<ActionResult<AccountDto>> GetAccount(Guid id)
-    {
-        try
-        {
-            var result = await _accountGetService.GetAccount(id);
-
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
-
-    [HttpGet("all")]
-    public async Task<ActionResult<List<AccountDto>>> GetAllAccounts()
-    {
-        try
-        {
-            var result = await _accountGetService.GetAllAccounts();
-
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
-
-    [HttpPost]
-    public async Task<ActionResult> CreateAccount(CreateAccountDto dto, Guid? userId)
-    {
-        try
-        {
-            await _accountHandleService.CreateAccount(dto, userId ?? Guid.NewGuid());
-
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
-
-    [HttpPut("{id}")]
-    public async Task<ActionResult<List<AccountDto>>> EditAccount(Guid id, EditAccountDto dto)
-    {
-        try
-        {
-            await _accountHandleService.EditAccount(id, dto);
+            await _userHandleService.ToggleBanUser(userId);
 
             return Ok();
         }
@@ -108,11 +48,11 @@ public class AccountController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult<List<AccountDto>>> DeleteAccount(Guid id)
+    public async Task<ActionResult> DeleteUser(Guid id)
     {
         try
         {
-            await _accountHandleService.DeleteAccount(id);
+            await _userHandleService.DeleteUser(id);
 
             return Ok();
         }
