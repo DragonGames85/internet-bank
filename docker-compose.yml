@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    environment:
+      SA_PASSWORD: "Team8Strong(!)Password"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+
+  authcomponent:
+    image: authcomponent    
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:5000;http://+:6000
+    build:
+      context: ./backend-auth
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"
+    depends_on:
+      - sqlserver
+
+  corecomponent:
+    image: corecomponent
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:5001;http://+:6001
+    build:
+      context: ./backend-core
+      dockerfile: Dockerfile
+    ports:
+      - "5001:80"
+    depends_on:
+      - sqlserver
+
+  creditcomponent:
+    image: creditcomponent
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:5002;http://+:6002
+    build:
+      context: ./CreditService
+      dockerfile: Dockerfile
+    ports:
+      - "5002:80"
+    depends_on:
+      - sqlserver
+
+  clientcomponent:
+    image: clientcomponent
+    build:
+      context: ./web-client
+      dockerfile: Dockerfile
+    ports:
+      - "5003:80"
+
+  employeecomponent:
+    image: employeecomponent
+    build:
+      context: ./web-employee
+      dockerfile: Dockerfile
+    ports:
+      - "5004:80"
+

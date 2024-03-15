@@ -4,7 +4,7 @@ import { setURL } from '../config';
 
 export class operationsApi {
     public getAll(accountId: string) {
-        setURL(7227);
+        setURL(5001);
         return axios.get<Operation[]>(`/Operation/account/${accountId}`).then(res => res.data);
     }
 
@@ -15,7 +15,7 @@ export class operationsApi {
         sendAccountNumber?: string;
         currencyName: string;
     }) {
-        setURL(7227);
+        setURL(5001);
         return () => {
             axios.post('/Operation', operation);
         };

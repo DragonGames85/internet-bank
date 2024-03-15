@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "2i6h/gFx7WgOnHSU8sNsEAIsCYDwU2lXU2CTHzmSFJ0=",
+  "Source": "InternetBank.Auth.Api",
+  "BasePath": "_content/InternetBank.Auth.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
