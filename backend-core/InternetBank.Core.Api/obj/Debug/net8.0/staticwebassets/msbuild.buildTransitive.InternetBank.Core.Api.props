@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\InternetBank.Core.Api.props" />
-</Project>

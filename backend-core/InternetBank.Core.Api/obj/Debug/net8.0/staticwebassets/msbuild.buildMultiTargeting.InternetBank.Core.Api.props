@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\InternetBank.Core.Api.props" />
-</Project>
