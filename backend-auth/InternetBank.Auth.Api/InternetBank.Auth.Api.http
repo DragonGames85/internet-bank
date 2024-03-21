@@ -1,4 +1,4 @@
-@InternetBank.Auth.Api_HostAddress = http://localhost:5181
+@InternetBank.Auth.Api_HostAddress = http://localhost:7228
 
 GET {{InternetBank.Auth.Api_HostAddress}}/weatherforecast/
 Accept: application/json

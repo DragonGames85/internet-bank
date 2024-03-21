@@ -4,7 +4,7 @@ import { setURL } from '../config';
 
 export class creditsApi {
     public getAll() {
-        setURL(5002);
+        setURL(7302);
         return axios.get<Credit[]>('/getTarrifs').then(res => res.data);
     }
     public sub(credit: {
@@ -15,11 +15,11 @@ export class creditsApi {
         paymentPeriod: number;
         repaymentPeriod: number;
     }) {
-        setURL(5002);
+        setURL(7302);
         return axios.post('/takeCredit', credit).then(res => res.data);
     }
     public close(id: string) {
-        setURL(5002);
+        setURL(7302);
         return axios.put(`/closeCredit/${id}`).then(res => res.data);
     }
 }

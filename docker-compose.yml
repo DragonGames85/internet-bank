@@ -13,12 +13,12 @@ services:
     image: authcomponent    
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:5000;http://+:6000
+      - ASPNETCORE_URLS=https://+:7400;http://+:7300
     build:
       context: ./backend-auth
       dockerfile: Dockerfile
     ports:
-      - "5000:80"
+      - "7300:7300"
     depends_on:
       - sqlserver
 
@@ -26,12 +26,12 @@ services:
     image: corecomponent
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:5001;http://+:6001
+      - ASPNETCORE_URLS=https://+:7401;http://+:7301
     build:
       context: ./backend-core
       dockerfile: Dockerfile
     ports:
-      - "5001:80"
+      - "7301:7301"
     depends_on:
       - sqlserver
 
@@ -39,12 +39,12 @@ services:
     image: creditcomponent
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:5002;http://+:6002
+      - ASPNETCORE_URLS=https://+:7402;http://+:7302
     build:
       context: ./CreditService
       dockerfile: Dockerfile
     ports:
-      - "5002:80"
+      - "7302:7302"
     depends_on:
       - sqlserver
 
@@ -54,7 +54,7 @@ services:
       context: ./web-client
       dockerfile: Dockerfile
     ports:
-      - "5003:80"
+      - "3000:80"
 
   employeecomponent:
     image: employeecomponent
@@ -62,5 +62,5 @@ services:
       context: ./web-employee
       dockerfile: Dockerfile
     ports:
-      - "5004:80"
+      - "3001:80"
 

@@ -4345,11 +4345,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Всё\\My Work Space\\emir help\\git\\internet-bank\\backend-core\\WebApiCoreApplication\\InternetBank.Core.Api.csproj",
+      "projectUniqueName": "C:\\Всё\\My Work Space\\emir help\\git\\internet-bank\\backend-core\\InternetBank.Core.Api\\InternetBank.Core.Api.csproj",
       "projectName": "InternetBank.Core.Api",
-      "projectPath": "C:\\Всё\\My Work Space\\emir help\\git\\internet-bank\\backend-core\\WebApiCoreApplication\\InternetBank.Core.Api.csproj",
+      "projectPath": "C:\\Всё\\My Work Space\\emir help\\git\\internet-bank\\backend-core\\InternetBank.Core.Api\\InternetBank.Core.Api.csproj",
       "packagesPath": "C:\\Users\\Nia477\\.nuget\\packages\\",
-      "outputPath": "C:\\Всё\\My Work Space\\emir help\\git\\internet-bank\\backend-core\\WebApiCoreApplication\\obj\\",
+      "outputPath": "C:\\Всё\\My Work Space\\emir help\\git\\internet-bank\\backend-core\\InternetBank.Core.Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -32,7 +32,7 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpPost("ban/{userId}")]
+    [HttpPost("{userId}/ban")]
     public async Task<ActionResult> ToggleBanUser(Guid userId)
     {
         try

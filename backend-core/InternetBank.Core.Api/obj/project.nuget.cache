@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Bh/Jp3LNXGh5evDJqVaZoN4tJNrnRzo4lreK9gWaEdwmyTOfKXgLMXfYazk2NHpwbbAmtTr3Hi/LiHHbWmAacA==",
+  "dgSpecHash": "vzclL7cB/7bh7wLrpya/sPzzbWwkSsqarfGUeBW3j3SAb9cfbZ3BiBskPBTUz/f2z6Lp8kcNjP9GNZRb12ggJw==",
   "success": true,
-  "projectFilePath": "C:\\Всё\\My Work Space\\emir help\\git\\internet-bank\\backend-core\\WebApiCoreApplication\\InternetBank.Core.Api.csproj",
+  "projectFilePath": "C:\\Всё\\My Work Space\\emir help\\git\\internet-bank\\backend-core\\InternetBank.Core.Api\\InternetBank.Core.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Nia477\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\Nia477\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

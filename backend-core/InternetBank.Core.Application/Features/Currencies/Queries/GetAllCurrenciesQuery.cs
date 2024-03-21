@@ -5,7 +5,7 @@ using MediatR;
 
 namespace InternetBank.Core.Application.Features.Currencies.Queries;
 
-public class GetAllCurrenciesQuery : IRequest<List<CurrencyDto>>
+public record GetAllCurrenciesQuery : IRequest<List<CurrencyDto>>
 {
 }
 
