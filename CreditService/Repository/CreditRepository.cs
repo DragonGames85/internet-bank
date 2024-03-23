@@ -13,8 +13,9 @@ namespace CreditService.Repository
         Task<UserCreditEntity> GetCredit(Guid creditId);
         Task<List<LoanPayments>> GetCreditPayments(Guid creditId);
         Task UpdateCreditStatus(Guid creditId);
+        Task<List<LoanPayments>> GetOverduePayments(Guid creditId);
     }
-    public class CreditRepository: ICreditRepository
+    public class CreditRepository : ICreditRepository
     {
         private readonly ApplicationDbContext _context;
         public CreditRepository(ApplicationDbContext context)
@@ -29,8 +30,8 @@ namespace CreditService.Repository
         }
         public async Task<List<CreditTariff>> GetAllTariffs()
         {
-           var list = await _context.CreditTariff.ToListAsync();
-           return list;
+            var list = await _context.CreditTariff.ToListAsync();
+            return list;
         }
         public async Task<CreditTariff> GetCreditTariff(Guid Id)
         {
@@ -58,6 +59,11 @@ namespace CreditService.Repository
             credit.Status = Model.Enum.StatusEnum.Closed;
             await _context.SaveChangesAsync();
 
+        }
+        public async Task<List<LoanPayments>> GetOverduePayments(Guid creditId)
+        {
+            var loanList = await _context.Payments.Where(x => (x.CreditId == creditId) && (x.Status == Model.Enum.PaymentStatusEnum.Overdue)).OrderBy(s => s.NumberPay).ToListAsync();
+            return loanList;
         }
     }
 }
