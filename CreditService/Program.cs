@@ -41,6 +41,13 @@ builder.Services.AddHostedService<MyHostedService>();
 
 var app = builder.Build();
 
+// Auto migration
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext?.Database.Migrate();
+}
+
 //using var serviceScope = app.Services.CreateScope();
 //var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 //dbContext?.Database.Migrate();

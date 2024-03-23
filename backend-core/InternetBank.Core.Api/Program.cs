@@ -1,7 +1,9 @@
 using InternetBank.Core.Application.Extensions;
 using InternetBank.Core.Infrastructure.Extensions;
+using InternetBank.Core.Persistence.Contexts.EfCore;
 using InternetBank.Core.Persistence.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Cryptography.X509Certificates;
@@ -67,6 +69,13 @@ builder.Services.AddSwaggerGen(c =>
 
 
 var app = builder.Build();
+
+// Auto migration
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext?.Database.Migrate();
+}
 
 app.UseCors();
 

@@ -1,7 +1,9 @@
 using InternetBank.Auth.Application.Extensions;
 using InternetBank.Auth.Infrastructure.Extensions;
+using InternetBank.Auth.Persistence.Contexts.EfCore;
 using InternetBank.Auth.Persistence.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -45,6 +47,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// Auto migration
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext?.Database.Migrate();
+}
 
 app.UseCors();
 
