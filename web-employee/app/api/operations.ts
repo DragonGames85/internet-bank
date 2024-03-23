@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { Operation } from './types';
-import { setURL } from '../config';
+import { coreAppUrl, setURL } from '../config';
 
 export class operationsApi {
     public getAll(accountId: string) {
-        setURL(7301);
+        setURL(coreAppUrl);
         return axios.get<Operation[]>(`/Operation/account/${accountId}`).then(res => res.data);
     }
 }

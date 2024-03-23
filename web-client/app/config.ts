@@ -40,6 +40,11 @@ export const animationVariants = {
     },
 };
 
-export const setURL = (url: number) => {
-    axios.defaults.baseURL = `https://localhost:${url}/api`;
+const productionMode = process.env.NEXT_PUBLIC_PRODUCTION_MODE === 'true';
+export const authAppUrl = (productionMode ? process.env.NEXT_PUBLIC_AUTH_APP_URL_PROD : process.env.NEXT_PUBLIC_AUTH_APP_URL_LOCAL) ?? '';
+export const coreAppUrl = (productionMode ? process.env.NEXT_PUBLIC_CORE_APP_URL_PROD : process.env.NEXT_PUBLIC_CORE_APP_URL_LOCAL) ?? '';
+export const creditAppUrl = (productionMode ? process.env.NEXT_PUBLIC_CREDIT_APP_URL_PROD : process.env.NEXT_PUBLIC_CREDIT_APP_URL_LOCAL) ?? '';
+
+export const setURL = (url: string) => {
+    axios.defaults.baseURL = `${url}/api`;
 };

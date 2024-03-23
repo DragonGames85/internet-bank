@@ -1,5 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
+EXPOSE 7301
+EXPOSE 7401
+
 COPY ["./InternetBank.Core.Api/InternetBank.Core.Api.csproj", "InternetBank.Core.Api/"]
 COPY ["./InternetBank.Core.Domain/InternetBank.Core.Domain.csproj", "InternetBank.Core.Domain/"]
 COPY ["./InternetBank.Core.Application/InternetBank.Core.Application.csproj", "InternetBank.Core.Application/"]

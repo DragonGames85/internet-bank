@@ -13,6 +13,8 @@ services:
     image: authcomponent    
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty.123
       - ASPNETCORE_URLS=https://+:7400;http://+:7300
     build:
       context: ./backend-auth
@@ -21,11 +23,15 @@ services:
       - "7300:7300"
     depends_on:
       - sqlserver
+    volumes:
+      - ./other/certificate.pfx:/https/certificate.pfx
 
   corecomponent:
     image: corecomponent
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty.123
       - ASPNETCORE_URLS=https://+:7401;http://+:7301
     build:
       context: ./backend-core
@@ -34,11 +40,15 @@ services:
       - "7301:7301"
     depends_on:
       - sqlserver
+    volumes:
+      - ./other/certificate.pfx:/https/certificate.pfx
 
   creditcomponent:
     image: creditcomponent
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty.123
       - ASPNETCORE_URLS=https://+:7402;http://+:7302
     build:
       context: ./CreditService
@@ -47,9 +57,19 @@ services:
       - "7302:7302"
     depends_on:
       - sqlserver
+    volumes:
+      - ./other/certificate.pfx:/https/certificate.pfx
 
   clientcomponent:
     image: clientcomponent
+    environment:
+      - NEXT_PUBLIC_PRODUCTION_MODE=false
+      - NEXT_PUBLIC_AUTH_APP_URL_LOCAL=https://localhost:7400
+      - NEXT_PUBLIC_AUTH_APP_URL_PROD=https://bayanshonhodoev.ru/auth
+      - NEXT_PUBLIC_CORE_APP_URL_LOCAL=https://localhost:7401
+      - NEXT_PUBLIC_CORE_APP_URL_PROD=https://bayanshonhodoev.ru/core
+      - NEXT_PUBLIC_CREDIT_APP_URL_LOCAL=https://localhost:7402
+      - NEXT_PUBLIC_CREDIT_APP_URL_PROD=https://bayanshonhodoev.ru/credit
     build:
       context: ./web-client
       dockerfile: Dockerfile
@@ -58,6 +78,14 @@ services:
 
   employeecomponent:
     image: employeecomponent
+    environment:
+      - NEXT_PUBLIC_PRODUCTION_MODE=false
+      - NEXT_PUBLIC_AUTH_APP_URL_LOCAL=https://localhost:7400
+      - NEXT_PUBLIC_AUTH_APP_URL_PROD=https://bayanshonhodoev.ru/auth
+      - NEXT_PUBLIC_CORE_APP_URL_LOCAL=https://localhost:7401
+      - NEXT_PUBLIC_CORE_APP_URL_PROD=https://bayanshonhodoev.ru/core
+      - NEXT_PUBLIC_CREDIT_APP_URL_LOCAL=https://localhost:7402
+      - NEXT_PUBLIC_CREDIT_APP_URL_PROD=https://bayanshonhodoev.ru/credit
     build:
       context: ./web-employee
       dockerfile: Dockerfile

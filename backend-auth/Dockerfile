@@ -1,5 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
+EXPOSE 7300
+EXPOSE 7400
+
 COPY ["./InternetBank.Auth.Api/InternetBank.Auth.Api.csproj", "InternetBank.Auth.Api/"]
 COPY ["./InternetBank.Auth.Domain/InternetBank.Auth.Domain.csproj", "InternetBank.Auth.Domain/"]
 COPY ["./InternetBank.Auth.Application/InternetBank.Auth.Application.csproj", "InternetBank.Auth.Application/"]
