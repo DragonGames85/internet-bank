@@ -2,12 +2,16 @@ version: '3.8'
 
 services:
   sqlserver:
-    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    image: "mcr.microsoft.com/mssql/server:2022-preview-ubuntu-22.04"
     environment:
-      SA_PASSWORD: "Team8Strong(!)Password"
       ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Team8Strong(!)Password"
+      MSSQL_PID: "Evaluation"
     ports:
       - "1433:1433"
+    container_name: sqlpreview
+    hostname: sqlpreview
+    restart: unless-stopped
 
   authcomponent:
     image: authcomponent    
@@ -23,6 +27,7 @@ services:
       - "7300:7300"
     depends_on:
       - sqlserver
+    restart: on-failure
     volumes:
       - ./other/certificate.pfx:/https/certificate.pfx
 
@@ -40,6 +45,7 @@ services:
       - "7301:7301"
     depends_on:
       - sqlserver
+    restart: on-failure
     volumes:
       - ./other/certificate.pfx:/https/certificate.pfx
 
@@ -57,6 +63,7 @@ services:
       - "7302:7302"
     depends_on:
       - sqlserver
+    restart: on-failure
     volumes:
       - ./other/certificate.pfx:/https/certificate.pfx
 
