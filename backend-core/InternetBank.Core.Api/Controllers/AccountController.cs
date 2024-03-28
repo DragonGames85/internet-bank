@@ -6,7 +6,7 @@ using System.Security.Claims;
 namespace WebApiCoreApplication.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("core/api/[controller]")]
 public class AccountController : ControllerBase
 {
     private readonly IAccountGetService _accountGetService;
