@@ -1,9 +1,9 @@
 'use client';
 import { Dialog } from '@headlessui/react';
-import { api } from '../api';
-import { ModalProps } from '../config';
-import { useModalFetch } from '../hooks/useModalFetch';
-import Modal from './Modal';
+import { api } from '../../api';
+import { ModalProps } from '../../config';
+import { useModalFetch } from '../../hooks/useModalFetch';
+import Modal from '../../components/Modal';
 
 const AddModal = ({ isOpen, onClose, isCoop }: ModalProps & { isCoop: boolean }) => {
     const titleText = isCoop ? 'сотрудника' : 'клиента';
