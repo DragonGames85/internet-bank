@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebApiCoreApplication.Controllers;
 
 [ApiController]
-[Route("auth/api/[controller]")]
+[Route("api/[controller]")]
 public class RoleController : ControllerBase
 {
     private readonly IRoleGetService _roleGetService;

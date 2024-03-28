@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace InternetBank.Core.Api.Controllers;
 
 [ApiController]
-[Route("core/api/[controller]")]
+[Route("api/[controller]")]
 public class OperationController : ControllerBase
 {
     private readonly IOperationGetService _operationGetService;

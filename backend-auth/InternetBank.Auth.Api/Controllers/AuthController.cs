@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebApiCoreApplication.Controllers;
 
 [ApiController]
-[Route("auth/api/[controller]")]
+[Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
     private readonly IUserAuthService _userAuthService;

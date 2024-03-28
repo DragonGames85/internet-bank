@@ -7,7 +7,7 @@ namespace CreditService.Controllers
 {
 
     [ApiController]
-    [Route("credit/api/")]
+    [Route("api/")]
     public class UserCreditController : ControllerBase
     {
         private IUserCreditService _creditService;

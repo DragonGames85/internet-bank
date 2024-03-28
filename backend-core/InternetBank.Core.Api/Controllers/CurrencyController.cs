@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebApiCoreApplication.Controllers;
 
 [ApiController]
-[Route("core/api/[controller]")]
+[Route("api/[controller]")]
 public class CurrencyController : ControllerBase
 {
     private readonly ICurrencyGetService _currencyGetService;

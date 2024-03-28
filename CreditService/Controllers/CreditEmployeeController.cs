@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CreditService.Controllers
 {
     [ApiController]
-    [Route("credit/api/")]
+    [Route("api/")]
     public class CreditEmployeeController : Controller
     {
         private IEmployeeService _employeeService;
