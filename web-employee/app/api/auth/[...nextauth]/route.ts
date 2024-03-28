@@ -1,0 +1,42 @@
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import GithubProvider from 'next-auth/providers/github';
+import { api } from '../..';
+
+const handler = NextAuth({
+    providers: [
+        CredentialsProvider({
+            // The name to display on the sign in form (e.g. "Sign in with...")
+            name: 'Логин + пароль',
+            // `credentials` is used to generate a form on the sign in page.
+            // You can specify which fields should be submitted, by adding keys to the `credentials` object.
+            // e.g. domain, username, password, 2FA token, etc.
+            // You can pass any HTML attribute to the <input> tag through the object.
+            credentials: {
+                login: { label: 'Логин', type: 'text', placeholder: 'User' },
+                password: { label: 'Пароль', type: 'password' },
+            },
+            async authorize(credentials, req) {
+                // const user = api.auth.login(credentials ? credentials : { login: '', password: '' });
+                const user = true
+                    ? { id: '1', name: 'J Smith', email: 'jsmith@example.com' }
+                    : api.auth.login(credentials ? credentials : { login: '', password: '' });
+                if (user) {
+                    // Any object returned will be saved in `user` property of the JWT
+                    return user;
+                } else {
+                    // If you return null then an error will be displayed advising the user to check their details.
+                    return null;
+
+                    // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+                }
+            },
+        }),
+        GithubProvider({
+            clientId: 'fbfa25240b6e7bb41360',
+            clientSecret: '01c78a27d49a0b162beae18ac8dcbd059819a268',
+        }),
+    ],
+});
+
+export { handler as GET, handler as POST };
