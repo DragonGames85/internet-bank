@@ -32,8 +32,8 @@ export interface Operation {
     value: number;
     name?: string;
     createdDate?: string;
-    receiveAccount: Omit<Account, 'balance'>;
-    sendAccount: Omit<Account, 'balance'>;
+    receiveAccount?: Omit<Account, 'balance'>;
+    sendAccount?: Omit<Account, 'balance'>;
     currency: Currency;
 }
 
@@ -42,10 +42,56 @@ export interface User {
     name: string;
     isBanned: boolean;
     role: 'Employee' | 'Customer'; // сотрудник или клиент
+    creditRating?: number;
 }
 
 export interface Currency {
     id: string;
     name: string;
-    symbol: string;
+    symbol: CurrencySymbol;
 }
+
+export type CurrencySymbol =
+    | 'AUD'
+    | 'AZN'
+    | 'GBP'
+    | 'AMD'
+    | 'BYN'
+    | 'BGN'
+    | 'BRL'
+    | 'HUF'
+    | 'VND'
+    | 'HKD'
+    | 'GEL'
+    | 'DKK'
+    | 'AED'
+    | 'USD'
+    | 'EUR'
+    | 'EGP'
+    | 'INR'
+    | 'IDR'
+    | 'KZT'
+    | 'CAD'
+    | 'QAR'
+    | 'KGS'
+    | 'CNY'
+    | 'MDL'
+    | 'NZD'
+    | 'NOK'
+    | 'PLN'
+    | 'RON'
+    | 'XDR'
+    | 'SGD'
+    | 'TJS'
+    | 'THB'
+    | 'TRY'
+    | 'TMT'
+    | 'UZS'
+    | 'UAH'
+    | 'CZK'
+    | 'SEK'
+    | 'CHF'
+    | 'RSD'
+    | 'ZAR'
+    | 'KRW'
+    | 'JPY';

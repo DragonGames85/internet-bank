@@ -44,12 +44,12 @@ const AddCredModal = ({ isOpen, onClose }: ModalProps) => {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="p-4 flex flex-col">
                     <p>Введите название</p>
-                    <input {...register('name', { required: true })} className="text-black" />
+                    <input {...register('name', { required: true })} className="text-black dark:text-white" />
                     {errors.name && <span className="text-red-600">Это поле обязательно!</span>}
                 </div>
                 <div className="p-4 flex flex-col">
                     <p>Задайте % ставку</p>
-                    <input type="number" {...register('percent', { required: true })} className="text-black" />
+                    <input type="number" {...register('percent', { required: true })} className="text-black dark:text-white" />
                     {errors.percent && <span className="text-red-600">Это поле обязательно!</span>}
                 </div>
 
@@ -57,7 +57,7 @@ const AddCredModal = ({ isOpen, onClose }: ModalProps) => {
                     return (
                         <div className="p-4 flex flex-col">
                             <p>Введите {inp}</p>
-                            <input type="number" {...register(inp, { required: true })} className="text-black" />
+                            <input type="number" {...register(inp, { required: true })} className="text-black dark:text-white" />
                             {errors[inp] && <span className="text-red-600">Это поле обязательно!</span>}
                         </div>
                     );

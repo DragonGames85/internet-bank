@@ -6,6 +6,16 @@
     --foreground-rgb: 0, 255, 0;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 80, 0;
+
+    --text-color: black;
+    --bg-color: rgb(154, 150, 150);
+    --bg2-color: rgb(219, 219, 219);
+    --bg3-color: #4e4e4e;
+
+    --text-color-dark: white;
+    --bg-color-dark: #1c1f39;
+    --bg2-color-dark: #3c4172;
+    --bg3-color-dark: #0e00a7;
 }
 
 /* --foreground-rgb: 255, 100, 20;
@@ -13,13 +23,32 @@
     --background-end-rgb: 20, 20, 20; */
 
 body {
-    color: rgb(var(--foreground-rgb));
-    background: linear-gradient(to bottom, transparent, 60%, rgb(var(--background-end-rgb)))
-        rgb(var(--background-start-rgb));
+    color: rgb(var(--text-color));
+    background: linear-gradient(to bottom, transparent, 60%, rgb(var(--bg2-color))) rgb(var(--bg2-color));
 }
 
 @layer utilities {
     .text-balance {
         text-wrap: balance;
     }
+}
+
+.flex-center {
+    @apply flex items-center justify-center;
+}
+
+.flex-start {
+    @apply flex items-start justify-items-start;
+}
+
+.flex-column {
+    @apply flex flex-col;
+}
+
+.flex-between {
+    @apply flex items-center justify-between;
+}
+
+.text-outline {
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }

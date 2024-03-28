@@ -19,21 +19,13 @@ const AddAccModal = ({ isOpen, onClose }: ModalProps) => {
     }, onClose);
 
     return (
-        <Modal
-            onClose={onModalClose}
-            isOpen={isOpen}
-            style={{
-                backgroundColor: 'rgb(var(--background-end-rgb))',
-                color: 'white',
-            }}
-            className="p-12 rounded-xl text-2xl text-center"
-        >
+        <Modal onClose={onModalClose} isOpen={isOpen} className="p-12 rounded-xl text-2xl text-center bg-bgColor">
             <Dialog.Title className={'text-3xl font-bold underline underline-offset-8 mb-6'}>Открыть счёт</Dialog.Title>
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="p-4 flex flex-col">
                     <p>Введите тип</p>
-                    <select {...register('type', { required: true })} className="text-black">
+                    <select {...register('type', { required: true })}>
                         <option value={0}>Дебетовая</option>
                         <option value={1}>Кредитовая</option>
                     </select>
@@ -41,17 +33,17 @@ const AddAccModal = ({ isOpen, onClose }: ModalProps) => {
                 </div>
                 <div className="p-4 flex flex-col">
                     <p>Введите валюта</p>
-                    <select {...register('currencyName', { required: true })} className="text-black">
+                    <select {...register('currencyName', { required: true })}>
                         <option value={'RUB'}>Рубли</option>
                         <option value={'USD'}>Доллары</option>
                     </select>
                     {errors.type && <span className="text-red-600">Это поле обязательно!</span>}
                 </div>
                 <div className="flex gap-4 mt-4 justify-center">
-                    <button type="submit" className="p-4 bg-gray-500 rounded-full">
+                    <button type="submit" className="p-4 bg-bgColor2 rounded-full">
                         Создать
                     </button>
-                    <button className="p-4 bg-black rounded-full" onClick={onClose}>
+                    <button className="p-4 bg-black rounded-full bg-bgColor3" onClick={onClose}>
                         Отмена
                     </button>
                 </div>
