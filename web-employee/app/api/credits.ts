@@ -23,4 +23,9 @@ export class creditsApi {
         setURL(creditAppUrl);
         return axios.delete(`/deleteCredit/${id}`).then(res => res.data);
     }
+    // * Просроченные кредиты
+    public expired(userId: string) {
+        setURL(creditAppUrl);
+        return axios.get<Credit[]>(`/getUserCredits/${userId}`).then(res => res.data);
+    }
 }

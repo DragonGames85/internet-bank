@@ -2,6 +2,7 @@ import { accountsApi } from './accounts';
 import { creditsApi } from './credits';
 import { operationsApi } from './operations';
 import { authApi } from './auth';
+import axios from 'axios';
 
 class Api {
     public auth: authApi;
@@ -14,6 +15,16 @@ class Api {
         this.operations = new operationsApi();
         this.credits = new creditsApi();
         this.accounts = new accountsApi();
+
+        axios.interceptors.response.use(
+            response => {
+                return response;
+            },
+            error => {
+                const URL = error.request.responseURL;
+                console.log(URL, error);
+            }
+        );
     }
 }
 
