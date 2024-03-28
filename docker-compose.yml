@@ -71,11 +71,11 @@ services:
     image: clientcomponent
     environment:
       - NEXT_PUBLIC_PRODUCTION_MODE=false
-      - NEXT_PUBLIC_AUTH_APP_URL_LOCAL=https://localhost:7400
+      - NEXT_PUBLIC_AUTH_APP_URL_LOCAL=http://localhost:7400/auth
       - NEXT_PUBLIC_AUTH_APP_URL_PROD=https://bayanshonhodoev.ru/auth
-      - NEXT_PUBLIC_CORE_APP_URL_LOCAL=https://localhost:7401
+      - NEXT_PUBLIC_CORE_APP_URL_LOCAL=http://localhost:7401/core
       - NEXT_PUBLIC_CORE_APP_URL_PROD=https://bayanshonhodoev.ru/core
-      - NEXT_PUBLIC_CREDIT_APP_URL_LOCAL=https://localhost:7402
+      - NEXT_PUBLIC_CREDIT_APP_URL_LOCAL=http://localhost:7402/credit
       - NEXT_PUBLIC_CREDIT_APP_URL_PROD=https://bayanshonhodoev.ru/credit
     build:
       context: ./web-client
@@ -87,11 +87,11 @@ services:
     image: employeecomponent
     environment:
       - NEXT_PUBLIC_PRODUCTION_MODE=false
-      - NEXT_PUBLIC_AUTH_APP_URL_LOCAL=https://localhost:7400
+      - NEXT_PUBLIC_AUTH_APP_URL_LOCAL=http://localhost:7400/auth
       - NEXT_PUBLIC_AUTH_APP_URL_PROD=https://bayanshonhodoev.ru/auth
-      - NEXT_PUBLIC_CORE_APP_URL_LOCAL=https://localhost:7401
+      - NEXT_PUBLIC_CORE_APP_URL_LOCAL=http://localhost:7401/core
       - NEXT_PUBLIC_CORE_APP_URL_PROD=https://bayanshonhodoev.ru/core
-      - NEXT_PUBLIC_CREDIT_APP_URL_LOCAL=https://localhost:7402
+      - NEXT_PUBLIC_CREDIT_APP_URL_LOCAL=http://localhost:7402/credit
       - NEXT_PUBLIC_CREDIT_APP_URL_PROD=https://bayanshonhodoev.ru/credit
     build:
       context: ./web-employee
