@@ -28,8 +28,8 @@ public class OperationController : ControllerBase
     {
         try
         {
-            var userIdClaim = User.FindFirst("id")
-                ?? throw new Exception("Id is not found.");
+            var userIdClaim = User.FindFirst("userId")
+                ?? throw new Exception("userId is not found.");
 
             var result = await _operationGetService.GetOperationsByUserId(Guid.NewGuid());
 

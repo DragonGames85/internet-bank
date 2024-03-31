@@ -26,8 +26,8 @@ public class AccountController : ControllerBase
     {
         try
         {
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "id")
-                ?? throw new Exception("Id is not found.");
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId")
+                ?? throw new Exception("userId is not found.");
 
             var result = await _accountGetService.GetAccounts(Guid.Parse(userIdClaim.Value));
 

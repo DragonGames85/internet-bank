@@ -51,7 +51,7 @@ public class OperationBackgroundService : BackgroundService
                 }
 
                 Console.WriteLine($"Connection attempt {attempt} failed. Will try again in a minute.");
-                Task.Delay(TimeSpan.FromSeconds(10)).Wait();
+                Task.Delay(TimeSpan.FromSeconds(4)).Wait();
             }
             catch (Exception ex)
             {
