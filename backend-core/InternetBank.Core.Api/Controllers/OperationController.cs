@@ -1,6 +1,11 @@
 ﻿using InternetBank.Core.Application.DTOs.OperationDTOs;
 using InternetBank.Core.Application.Interfaces.Services.OperationServices;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
+using System.Text;
 
 namespace InternetBank.Core.Api.Controllers;
 
@@ -18,6 +23,7 @@ public class OperationController : ControllerBase
     }
 
     [HttpGet("my")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<ActionResult<List<OperationDto>>> GetMyOperations()
     {
         try
@@ -80,7 +86,40 @@ public class OperationController : ControllerBase
         }
     }
 
+
     [HttpPost]
+    public Task<ActionResult> CreateOperationWithMQ(CreateOperationDto dto)
+    {
+        try
+        {
+            var factory = new ConnectionFactory() { HostName = "localhost", UserName = "user", Password = "password" };
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.QueueDeclare(queue: "operationsQueue",
+                                     durable: false,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
+
+                var message = JsonConvert.SerializeObject(dto);
+                var body = Encoding.UTF8.GetBytes(message);
+
+                channel.BasicPublish(exchange: "",
+                                     routingKey: "operationsQueue",
+                                     basicProperties: null,
+                                     body: body);
+            }
+
+            return Task.FromResult<ActionResult>(Ok());
+        }
+        catch (Exception e)
+        {
+            return Task.FromResult<ActionResult>(BadRequest(e.Message));
+        }
+    }
+
+/* 
     public async Task<ActionResult> CreateOperation(CreateOperationDto dto, Guid? userId)
     {
         try
@@ -94,4 +133,5 @@ public class OperationController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+*/
 }

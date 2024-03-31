@@ -14,6 +14,8 @@ public static class InfrastructureServiceCollectionExtension
     public static void AddInfrastructureLayer(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddServices();
+        services.AddWebSockets();
+        services.AddMessageQueue();
     }
 
     public static void AddServices(this IServiceCollection services)
@@ -25,5 +27,16 @@ public static class InfrastructureServiceCollectionExtension
         services.AddTransient<IOperationGetService, OperationGetService>();
         services.AddTransient<IOperationHandleService, OperationHandleService>();
         // TODO: Add services
+    }
+
+    private static void AddWebSockets(this IServiceCollection services)
+    {
+        services.AddSignalR();
+        services.AddSingleton<IOperationNotificationService, OperationNotificationService>();
+    }
+
+    private static void AddMessageQueue(this IServiceCollection services)
+    {
+        services.AddHostedService<OperationBackgroundService>();
     }
 }
