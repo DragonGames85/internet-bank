@@ -1,40 +1,38 @@
 'use client';
-import { PiUserRectangleBold } from 'react-icons/pi';
+import Link from 'next/link';
 import { GiBanknote } from 'react-icons/gi';
 import { MdCreditCard } from 'react-icons/md';
-import Link from 'next/link';
-import { useEffect } from 'react';
-import axios from 'axios';
-import ThemeSwitch from './ThemeSwitch';
+import { PiUserRectangleBold } from 'react-icons/pi';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import ThemeSwitch from './ThemeSwitch';
 
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 const HeaderComp = () => {
-    // const [token, _] = useLocalStorage('token', '');
+    const [token, _] = useLocalStorage('token', '');
 
-    // const { data: session } = useSession();
-    let session = {};
+    const { data: session } = useSession();
 
-    const links = session
-        ? [
-              {
-                  name: 'ПРОФИЛЬ',
-                  icon: <PiUserRectangleBold size={60} />,
-                  to: '/',
-              },
-              {
-                  name: 'СЧЕТА',
-                  icon: <GiBanknote size={60} />,
-                  to: '/accounts',
-              },
-              {
-                  name: 'КРЕДИТЫ',
-                  icon: <MdCreditCard size={60} />,
-                  to: '/credits',
-              },
-          ]
-        : [];
+    const links =
+        session || token
+            ? [
+                  {
+                      name: 'ПРОФИЛЬ',
+                      icon: <PiUserRectangleBold size={60} />,
+                      to: '/',
+                  },
+                  {
+                      name: 'СЧЕТА',
+                      icon: <GiBanknote size={60} />,
+                      to: '/accounts',
+                  },
+                  {
+                      name: 'КРЕДИТЫ',
+                      icon: <MdCreditCard size={60} />,
+                      to: '/credits',
+                  },
+              ]
+            : [];
 
     const ButtonComp = ({ children, href, className }: any) => {
         return (
@@ -47,12 +45,6 @@ const HeaderComp = () => {
         );
     };
 
-    // useEffect(() => {
-    //     if (token) {
-    //         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    //     }
-    // }, []);
-
     return (
         <header className="flex flex-col lg:flex-row justify-between px-12 py-4 w-full">
             <div className="flex flex-col lg:flex-row gap-4 lg:gap-12">
@@ -63,10 +55,14 @@ const HeaderComp = () => {
                     </ButtonComp>
                 ))}
             </div>
-            {session && (
+            {(session || token) && (
                 <>
                     <button
-                        onClick={() => signOut()}
+                        onClick={() => {
+                            localStorage.removeItem('token');
+                            localStorage.removeItem('user');
+                            signOut();
+                        }}
                         className="border-2 rounded-full px-4 lg:px-16 bg-bgColor2 dark:bg-bgColor3Dark text-3xl"
                     >
                         Выйти
