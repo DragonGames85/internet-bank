@@ -1,4 +1,5 @@
 import axios from 'axios';
+import 'dotenv/config';
 
 export type divProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 export type ModalProps = { isOpen: boolean; onClose: () => void };
@@ -42,9 +43,12 @@ export const animationVariants = {
 };
 
 const productionMode = process.env.NEXT_PUBLIC_PRODUCTION_MODE === 'true';
-export const authAppUrl = (productionMode ? process.env.NEXT_PUBLIC_AUTH_APP_URL_PROD : process.env.NEXT_PUBLIC_AUTH_APP_URL_LOCAL) ?? '';
-export const coreAppUrl = (productionMode ? process.env.NEXT_PUBLIC_CORE_APP_URL_PROD : process.env.NEXT_PUBLIC_CORE_APP_URL_LOCAL) ?? '';
-export const creditAppUrl = (productionMode ? process.env.NEXT_PUBLIC_CREDIT_APP_URL_PROD : process.env.NEXT_PUBLIC_CREDIT_APP_URL_LOCAL) ?? '';
+export const authAppUrl =
+    (productionMode ? process.env.NEXT_PUBLIC_AUTH_APP_URL_PROD : process.env.NEXT_PUBLIC_AUTH_APP_URL_LOCAL) ?? '';
+export const coreAppUrl =
+    (productionMode ? process.env.NEXT_PUBLIC_CORE_APP_URL_PROD : process.env.NEXT_PUBLIC_CORE_APP_URL_LOCAL) ?? '';
+export const creditAppUrl =
+    (productionMode ? process.env.NEXT_PUBLIC_CREDIT_APP_URL_PROD : process.env.NEXT_PUBLIC_CREDIT_APP_URL_LOCAL) ?? '';
 
 export const setURL = (url: string) => {
     axios.defaults.baseURL = `${url}/api`;
