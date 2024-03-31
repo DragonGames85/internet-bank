@@ -5,6 +5,7 @@ import { FC } from 'react';
 import { IoArrowDownCircle, IoArrowUpCircle } from 'react-icons/io5';
 import { MdOutlineDisabledByDefault } from 'react-icons/md';
 import { IoEyeOutline } from 'react-icons/io5';
+import { useSWRConfig } from 'swr';
 const AccCard: FC<Account> = ({ balance, id, currency }) => {
     function add(e: React.MouseEvent<HTMLElement>) {
         const result = Number(prompt('Сколько хотите положить?'));
@@ -44,6 +45,7 @@ const AccCard: FC<Account> = ({ balance, id, currency }) => {
             value: transferValue,
         });
     }
+    const { mutate } = useSWRConfig();
 
     const buttonStyle =
         'flex-center gap-2 border-1 rounded-full p-2 text-xl bg-white hover:bg-gray-200 dark:bg-bgColor2Dark dark:hover:bg-bgColor3Dark';
@@ -54,7 +56,7 @@ const AccCard: FC<Account> = ({ balance, id, currency }) => {
                 <div className={`text-3xl text-cyan-500 flex items-center gap-2`}>
                     <Link
                         href={`/accounts/${id}`}
-                        className="underline underline-offset-[6px] p-2 bg-black dark:bg-bgColor2Dark border-white border-1 rounded-xl"
+                        className="underline underline-offset-[6px] p-2 bg-bgColor3 dark:bg-bgColor2Dark border-white border-1 rounded-xl"
                     >
                         {id}
                     </Link>
@@ -62,6 +64,7 @@ const AccCard: FC<Account> = ({ balance, id, currency }) => {
                         onClick={async () => {
                             if (confirm('Закрыть счёт?')) {
                                 await api.accounts.delete(id);
+                                mutate('/api/accounts');
                             } else {
                                 return;
                             }
