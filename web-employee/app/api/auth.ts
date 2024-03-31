@@ -6,14 +6,24 @@ export class authApi {
         setURL(authAppUrl);
         return axios.post<{ token: string; userId: string; id: string }>('/auth/login', user).then(res => res.data);
     }
-    public register(user: { login: string; name: string; password: string }) {
+    public register(user: { login: string; name: string; password: string }, role: 'Customer' | 'Employee') {
         setURL(authAppUrl);
-        return axios
-            .post<{ token: string; userId: string }>('/auth/register', { ...user, role: 'Customer' })
-            .then(res => res.data);
+        return axios.post<{ token: string; userId: string }>('/auth/register', { ...user, role }).then(res => res.data);
     }
-    public options(userId: string, options: { theme: 'light' | 'dark'; hidden_accounts: string[] }) {
+    public setTheme(isLightTheme: boolean) {
         setURL(authAppUrl);
-        return axios.put('/auth/options', { userId, options }).then(res => res.data);
+        return axios.post('/Settings/config', { isLightTheme }).then(res => res.data);
+    }
+    public hiddenAccounts() {
+        setURL(authAppUrl);
+        return axios.get('/Settings/hideAccount', {}).then(res => res.data);
+    }
+    public hideAccount(accountId: string) {
+        setURL(authAppUrl);
+        return axios.post(`/Settings/hideAccount?accountId=${accountId}`).then(res => res.data);
+    }
+    public showAccount(accountId: string) {
+        setURL(authAppUrl);
+        return axios.delete(`/Settings/hideAccount?accountId=${accountId}`).then(res => res.data);
     }
 }

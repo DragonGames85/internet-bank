@@ -8,7 +8,7 @@ export class operationsApi {
         return axios.get<Operation[]>(`/Operation/account/${accountId}`).then(res => res.data);
     }
 
-    public post(operation: {
+    public create(operation: {
         name: string;
         value: number;
         receiveAccountNumber?: string;
@@ -16,8 +16,6 @@ export class operationsApi {
         currencyName: string;
     }) {
         setURL(coreAppUrl);
-        return () => {
-            axios.post('/Operation', operation);
-        };
+        return axios.post('/Operation', operation);
     }
 }

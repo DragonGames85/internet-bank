@@ -6,46 +6,50 @@ import { IoArrowDownCircle, IoArrowUpCircle } from 'react-icons/io5';
 import { MdOutlineDisabledByDefault } from 'react-icons/md';
 import { IoEyeOutline } from 'react-icons/io5';
 import { useSWRConfig } from 'swr';
-const AccCard: FC<Account> = ({ balance, id, currency }) => {
-    function add(e: React.MouseEvent<HTMLElement>) {
+const AccCard: FC<Account & { isHidden: boolean }> = ({ balance, id, currency, number, isHidden }) => {
+    const { mutate } = useSWRConfig();
+
+    async function add(e: React.MouseEvent<HTMLElement>) {
         const result = Number(prompt('Сколько хотите положить?'));
-        api.operations.post({
+        await api.operations.create({
             currencyName: currency.name,
             name: 'Пополнение',
-            receiveAccountNumber: id,
+            receiveAccountNumber: number,
             value: result,
         });
+        mutate('/api/accounts');
     }
-    function remove(e: React.MouseEvent<HTMLElement>) {
+    async function remove(e: React.MouseEvent<HTMLElement>) {
         const result = Number(prompt('Сколько хотите снять?'));
         if (balance - result < 0) {
             alert('Счёт не может быть отрицательным');
             return;
         }
-        api.operations.post({
+        await api.operations.create({
             currencyName: currency.name,
             name: 'Снятие',
-            sendAccountNumber: id,
+            sendAccountNumber: number,
             value: result,
         });
+        mutate('/api/accounts');
     }
 
-    function transfer(e: React.MouseEvent<HTMLElement>) {
-        const transferId = prompt('ID счёта на перевод') ?? '';
+    async function transfer(e: React.MouseEvent<HTMLElement>) {
+        const transferId = prompt('Number счёта на перевод') ?? '';
         const transferValue = Number(prompt('Сколько хотите перевести?'));
         if (balance - transferValue < 0) {
             alert('Счёт не может быть отрицательным');
             return;
         }
-        api.operations.post({
+        await api.operations.create({
             currencyName: currency.name,
             name: 'Снятие',
-            sendAccountNumber: id,
+            sendAccountNumber: number,
             receiveAccountNumber: transferId,
             value: transferValue,
         });
+        mutate('/api/accounts');
     }
-    const { mutate } = useSWRConfig();
 
     const buttonStyle =
         'flex-center gap-2 border-1 rounded-full p-2 text-xl bg-white hover:bg-gray-200 dark:bg-bgColor2Dark dark:hover:bg-bgColor3Dark';
@@ -73,9 +77,14 @@ const AccCard: FC<Account> = ({ balance, id, currency }) => {
                         className="text-4xl mt-1 cursor-pointer"
                     />
                 </div>
-                <p className={`w-full py-2 text-xl text-ellipsis`}>Баланс: {balance} руб</p>
+                <p className={`w-full py-2 text-xl text-ellipsis`}>Баланс: {isHidden ? 'СКРЫТ' : balance} руб</p>
                 <button
-                    onClick={() => {}}
+                    onClick={async () => {
+                        if (isHidden) await api.auth.showAccount(id);
+                        else await api.auth.hideAccount(id);
+                        mutate('/api/accounts');    
+                        mutate('/api/hide/accounts');
+                    }}
                     className="text-xl border-2 rounded-full p-2 flex gap-2 items-center bg-white hover:bg-gray-200 dark:bg-bgColor3 dark:hover:bg-gray-400"
                 >
                     Скрыть

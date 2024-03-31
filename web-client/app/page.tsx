@@ -6,13 +6,15 @@ import Image from 'next/image';
 
 import { useSession } from 'next-auth/react';
 import Login from './components/Login';
+import { parseJwt } from './helpers/parseJwt';
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 export default function Home() {
     const { data: session } = useSession();
+    const [token, _] = useLocalStorage('token', '');
+    const user = token ? parseJwt(token) : {};
 
-    console.log('SESSION', session);
-
-    return session ? (
+    return session || token ? (
         <div className="flex flex-col w-full items-center gap-12">
             <Image
                 width={400}
@@ -22,7 +24,7 @@ export default function Home() {
                 className="rounded-full border-[3px] object-cover pointer-events-none text-2xl select-none"
             />
             <div className="flex flex-col gap-2">
-                <p className="text-xl">Вы авторизированны</p>
+                <p className="text-xl">Вы авторизированны - {user.name}</p>
             </div>
         </div>
     ) : (

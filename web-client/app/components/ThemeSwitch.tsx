@@ -4,16 +4,26 @@ import { PiSunDimFill } from 'react-icons/pi';
 import { BiSolidMoon } from 'react-icons/bi';
 import { useTheme } from 'next-themes';
 import { api } from '../api';
+import { useEffect } from 'react';
 
 const ThemeSwitch: React.FC<{ className?: string }> = ({ className }) => {
     const { theme, setTheme } = useTheme();
 
     const toggleTheme = async () => {
         try {
-            // api.auth.options('1', { theme: theme === 'light' ? 'dark' : 'light', hidden_accounts: [] });
+            api.auth.setTheme(theme !== 'light');
             setTheme(theme === 'light' ? 'dark' : 'light');
         } catch (error) {}
     };
+
+    useEffect(() => {
+        try {
+            const userLocal = JSON.parse(localStorage.getItem('user') ?? '{}');
+            setTheme(userLocal.isLightTheme == 'True' ? 'light' : 'dark');
+        } catch (err) {
+            console.error(err);
+        }
+    }, []);
 
     const isActive = theme === 'light';
 

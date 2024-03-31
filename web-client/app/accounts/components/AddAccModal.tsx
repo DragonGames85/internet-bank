@@ -12,8 +12,9 @@ const AddAccModal = ({ isOpen, onClose }: ModalProps) => {
     };
 
     const { errors, handleSubmit, mutate, onModalClose, onSubmit, register } = useModalFetch<Inputs>(async data => {
+        const userId = JSON.parse(localStorage.getItem('user') ?? '').userId;
         try {
-            await api.accounts.post(data);
+            await api.accounts.post({ ...data, userId });
             mutate('/api/accounts');
         } catch (error) {}
     }, onClose);
@@ -34,8 +35,56 @@ const AddAccModal = ({ isOpen, onClose }: ModalProps) => {
                 <div className="p-4 flex flex-col">
                     <p>Введите валюта</p>
                     <select {...register('currencyName', { required: true })}>
-                        <option value={'RUB'}>Рубли</option>
-                        <option value={'USD'}>Доллары</option>
+                        {[
+                            'RUB',
+                            'AUD',
+                            'AZN',
+                            'GBP',
+                            'AMD',
+                            'BYN',
+                            'BGN',
+                            'BRL',
+                            'HUF',
+                            'VND',
+                            'HKD',
+                            'GEL',
+                            'DKK',
+                            'AED',
+                            'USD',
+                            'EUR',
+                            'EGP',
+                            'INR',
+                            'IDR',
+                            'KZT',
+                            'CAD',
+                            'QAR',
+                            'KGS',
+                            'CNY',
+                            'MDL',
+                            'NZD',
+                            'NOK',
+                            'PLN',
+                            'RON',
+                            'XDR',
+                            'SGD',
+                            'TJS',
+                            'THB',
+                            'TRY',
+                            'TMT',
+                            'UZS',
+                            'UAH',
+                            'CZK',
+                            'SEK',
+                            'CHF',
+                            'RSD',
+                            'ZAR',
+                            'KRW',
+                            'JPY',
+                        ].map(val => (
+                            <option key={val} value={val}>
+                                {val}
+                            </option>
+                        ))}
                     </select>
                     {errors.type && <span className="text-red-600">Это поле обязательно!</span>}
                 </div>

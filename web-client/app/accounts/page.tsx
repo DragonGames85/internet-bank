@@ -9,6 +9,7 @@ import { animationVariants } from '../config';
 import { useBankFetch } from '../hooks/useBankFetch';
 import AccCard from './components/AccCard';
 import AddAccModal from './components/AddAccModal';
+import useSWR from 'swr';
 
 const Credits: FC = () => {
     const [isAddOpen, openAdd] = useState(false);
@@ -23,6 +24,8 @@ const Credits: FC = () => {
             currency: { id: '1', name: 'RUB', symbol: 'USD' },
         },
     ];
+
+    const { data: hideAccs } = useSWR<Account[]>('/api/hide/accounts', api.auth.hiddenAccounts);
 
     const { result: accounts, mock } = useBankFetch<Account[]>('/api/accounts', api.accounts.getAll, mockAccounts);
 
@@ -58,7 +61,7 @@ const Credits: FC = () => {
                             variants={animationVariants.item}
                             className={`flex items-center justify-between border-[1px] rounded-3xl p-6 h-auto gap-1 bg-bgColor2 dark:bg-bgColorDark`}
                         >
-                            <AccCard {...acc} />
+                            <AccCard {...acc} isHidden={!!hideAccs?.find(element => element.id == acc.id) ?? false} />
                         </motion.li>
                     ))}
                 </motion.ul>

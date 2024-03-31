@@ -5,7 +5,7 @@ import { creditAppUrl, setURL } from '../config';
 export class creditsApi {
     public getAll() {
         setURL(creditAppUrl);
-        return axios.get<Credit[]>('/getTarrifs').then(res => res.data);
+        return axios.get<Credit[]>('/getTariffs').then(res => res.data);
     }
     public get(id: string) {
         setURL(creditAppUrl);
@@ -17,11 +17,17 @@ export class creditsApi {
     }
     public post(credit: Omit<Credit, 'id'> & Partial<Credit>) {
         setURL(creditAppUrl);
-        return axios.post('/createCreditTariff', credit).then(res => res.data);
+        return axios
+            .post('/createCreditTariff', {
+                ...credit,
+                paymentType: Number(credit.paymentType),
+                rateType: Number(credit.rateType),
+            })
+            .then(res => res.data);
     }
     public delete(id: string) {
         setURL(creditAppUrl);
-        return axios.delete(`/deleteCredit/${id}`).then(res => res.data);
+        return axios.delete(`/delete/${id}`).then(res => res.data);
     }
     // * Просроченные кредиты
     public expired(userId: string) {

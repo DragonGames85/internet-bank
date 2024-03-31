@@ -5,7 +5,7 @@ import { creditAppUrl, setURL } from '../config';
 export class creditsApi {
     public getAll() {
         setURL(creditAppUrl);
-        return axios.get<Credit[]>('/getTarrifs').then(res => res.data);
+        return axios.get<Credit[]>('/getTariffs').then(res => res.data);
     }
     public sub(credit: {
         userId: string;

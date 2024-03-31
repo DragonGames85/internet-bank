@@ -11,9 +11,14 @@ export class accountsApi {
         setURL(coreAppUrl);
         return axios.get<Account>(`/Account/${id}`).then(res => res.data);
     }
-    public post(account: { type: number; currencyName: string }) {
+    public post(account: { type: number; currencyName: string; userId: string }) {
         setURL(coreAppUrl);
-        return axios.post('/Account', account).then(res => res.data);
+        return axios
+            .post(`/Account?userId=${account.userId}`, {
+                type: Number(account.type),
+                currencyName: account.currencyName,
+            })
+            .then(res => res.data);
     }
     public delete(id: string) {
         setURL(coreAppUrl);
