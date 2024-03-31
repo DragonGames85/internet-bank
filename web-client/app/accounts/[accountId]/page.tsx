@@ -46,7 +46,7 @@ const Accounts = ({ params }: { params: { accountId: string } }) => {
                         <h2 className="text-2xl">{`Счёт "${account.id}"`}</h2>
                         <div className="flex flex-col items-center sm:flex-row justify-between h-full py-4 w-full rounded-3xl self-center text-xl overflow-hidden text-ellipsis">
                             <p>Владелец: {account.user.name == '' ? user.name : account.user.name}</p>
-                            <p>Баланс: {account.balance}$</p>
+                            <p>Баланс: {account.balance} {account.currency.symbol}</p>
                         </div>
                     </div>
                     <OperationList accId={account.id} />

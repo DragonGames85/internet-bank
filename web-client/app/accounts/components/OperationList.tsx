@@ -38,13 +38,15 @@ const OperationList: FC<{ accId: string }> = ({ accId }) => {
             </div>
             {operations?.map(operation => (
                 <div className="flex flex-col sm:flex-row justify-between h-full bg-slate-600 py-4 mt-4 w-full 2xl:w-[60%] self-center text-xl overflow-hidden text-ellipsis items-center relative px-6 border-[1px] rounded-3xl">
-                    <p>Сумма: {operation.value}$</p>
+                    <p>
+                        Сумма: {operation.value} {operation.currency.symbol}
+                    </p>
                     <p
                         className={`h-full ${
-                            !!operation.value ? 'bg-green-400' : 'bg-red-400'
+                            operation.name == 'Пополнение' ? 'bg-green-400' : 'bg-red-400'
                         } sm:absolute right-0 w-full sm:w-[40%] md:w-[35%] lg:w-[20%] flex items-center justify-center font-bold`}
                     >
-                        {!!operation.value ? 'ПОПОЛНЕНИЕ' : 'СНЯТИЕ'}
+                        {operation.name == 'Пополнение' ? 'Пополнение' : 'СНЯТИЕ'}
                     </p>
                 </div>
             ))}

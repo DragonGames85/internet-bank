@@ -77,7 +77,7 @@ const AccCard: FC<Account & { isHidden: boolean }> = ({ balance, id, currency, n
                         className="text-4xl mt-1 cursor-pointer"
                     />
                 </div>
-                <p className={`w-full py-2 text-xl text-ellipsis`}>Баланс: {isHidden ? 'СКРЫТ' : balance} руб</p>
+                <p className={`w-full py-2 text-xl text-ellipsis`}>Баланс: {isHidden ? 'СКРЫТ' : balance} {currency.symbol}</p>
                 <button
                     onClick={async () => {
                         if (isHidden) await api.auth.showAccount(id);
