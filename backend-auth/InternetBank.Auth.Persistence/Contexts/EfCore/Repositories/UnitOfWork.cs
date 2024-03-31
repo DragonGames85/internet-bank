@@ -1,7 +1,11 @@
 ﻿using InternetBank.Auth.Application.Interfaces.Repositories;
+using InternetBank.Auth.Application.Interfaces.Repositories.ConfigRepositories;
+using InternetBank.Auth.Application.Interfaces.Repositories.HideAccountRepositories;
 using InternetBank.Auth.Application.Interfaces.Repositories.RoleRepositories;
 using InternetBank.Auth.Application.Interfaces.Repositories.UserRepositories;
 using InternetBank.Auth.Domain.Common;
+using InternetBank.Auth.Persistence.Contexts.EfCore.Repositories.ConfigRepositories;
+using InternetBank.Auth.Persistence.Contexts.EfCore.Repositories.HideAccountRepositories;
 using InternetBank.Auth.Persistence.Contexts.EfCore.Repositories.RoleRepositories;
 using InternetBank.Auth.Persistence.Contexts.EfCore.Repositories.UserRepositories;
 using System.Collections;
@@ -13,6 +17,8 @@ public class UnitOfWork : IUnitOfWork
     private readonly ApplicationDbContext _dbContext;
     public IUserRepository UserRepository { get; }
     public IRoleRepository RoleRepository { get; }
+    public IConfigRepository ConfigRepository { get; }
+    public IHideAccountRepository HideAccountRepository { get; }
     private Hashtable _repositories;
 
     public UnitOfWork(ApplicationDbContext dbContext)
@@ -20,6 +26,8 @@ public class UnitOfWork : IUnitOfWork
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         UserRepository = new UserRepository(dbContext);
         RoleRepository = new RoleRepository(dbContext);
+        ConfigRepository = new ConfigRepository(dbContext);
+        HideAccountRepository = new HideAccountRepository(dbContext);
     }
 
     public IGenericRepository<T> Repository<T>() where T : BaseAuditableEntity

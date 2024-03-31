@@ -21,6 +21,13 @@ public class UserRepository : IUserRepository
             .ToListAsync();
     }
 
+    public async Task<User?> GetUserByIdIncludedConfig(Guid id)
+    {
+        return await _context.Users
+            .Include(e => e.UserConfig)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<User?> GetUserByLoginPasswordIncludedRoles(LoginUserDto dto)
     {
         return await _context.Users

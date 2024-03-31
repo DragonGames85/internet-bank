@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -91,7 +90,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/core/swagger/v1/swagger.json", "My API V1"); // "/swagger/v1/swagger.json"
+        c.SwaggerEndpoint("/core/swagger/v1/swagger.json", "Core API V1"); // "/swagger/v1/swagger.json"
         c.RoutePrefix = "core/swagger";
     });
 }

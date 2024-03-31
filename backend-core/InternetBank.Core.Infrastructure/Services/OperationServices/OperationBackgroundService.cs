@@ -30,7 +30,7 @@ public class OperationBackgroundService : BackgroundService
         {
             try
             {
-                var factory = new ConnectionFactory() { HostName = "localhost", UserName = "user", Password = "password", Port = 5672 };
+                var factory = new ConnectionFactory() { HostName = "rabbitmq", UserName = "user", Password = "password", Port = 5672 };
                 _connection = factory.CreateConnection();
                 _channel = _connection.CreateModel();
 

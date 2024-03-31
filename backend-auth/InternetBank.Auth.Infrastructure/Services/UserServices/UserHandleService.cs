@@ -1,5 +1,7 @@
 ﻿using InternetBank.Auth.Application.DTOs.TokenDTOs;
 using InternetBank.Auth.Application.DTOs.UserDTOs;
+using InternetBank.Auth.Application.Features.Currencies.Queries;
+using InternetBank.Auth.Application.Features.Settings.Commands;
 using InternetBank.Auth.Application.Features.Users.Commands;
 using InternetBank.Auth.Application.Interfaces.Services.UserServices;
 using MediatR;
@@ -21,7 +23,11 @@ public class UserHandleService : IUserHandleService
     {
         await _mediator.Send(new CreateUserCommand(dto));
 
-        return await _userAuthService.LoginUser(new LoginUserDto(dto.Login, dto.Password));
+        var dtoToken = await _userAuthService.LoginUser(new LoginUserDto(dto.Login, dto.Password));
+
+        await _mediator.Send(new CreateConfigCommand(dtoToken.UserId));
+
+        return dtoToken;
     }
 
     public Task ToggleBanUser(Guid id)

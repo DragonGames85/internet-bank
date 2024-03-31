@@ -18,7 +18,7 @@ public class JwtTokenService : IJwtTokenService
         _configuration = configuration;
     }
 
-    public Task<TokenDto> GenerateToken(UserDto user)
+    public Task<TokenDto> GenerateToken(UserWithConfigDto user)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -32,6 +32,7 @@ public class JwtTokenService : IJwtTokenService
             new Claim("name", user.Name),
             new Claim("role", user.Role),
             new Claim("isBanned", user.IsBanned.ToString()),
+            new Claim("isLightTheme", user?.Config?.IsLightTheme != null ? user.Config.IsLightTheme.ToString() : "True"),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 
