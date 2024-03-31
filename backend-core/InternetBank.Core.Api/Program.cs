@@ -101,7 +101,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // WebSocket
-app.MapHub<OperationHub>("/operationHub");
+app.MapHub<OperationHub>("/core/operationHub");
 
 app.MapControllers();
 
