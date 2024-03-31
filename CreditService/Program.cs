@@ -59,8 +59,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); // "/credit/swagger/v1/swagger.json"
-        // c.RoutePrefix = "credit/swagger";
+        c.SwaggerEndpoint("/credit/swagger/v1/swagger.json", "My API V1"); // "/swagger/v1/swagger.json"
+        c.RoutePrefix = "credit/swagger";
     });
 }
 

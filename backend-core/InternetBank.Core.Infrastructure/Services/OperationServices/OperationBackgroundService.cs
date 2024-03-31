@@ -64,36 +64,45 @@ public class OperationBackgroundService : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         stoppingToken.ThrowIfCancellationRequested();
-
-        var consumer = new EventingBasicConsumer(_channel);
-        consumer.Received += (ch, ea) =>
+        if (_channel != null)
         {
-            var content = Encoding.UTF8.GetString(ea.Body.ToArray());
-
-            var dto = JsonSerializer.Deserialize<CreateOperationDto>(content);
-
-            try
+            var consumer = new EventingBasicConsumer(_channel);
+            consumer.Received += (ch, ea) =>
             {
-                _operationHandleService.CreateOperation(dto);
+                var content = Encoding.UTF8.GetString(ea.Body.ToArray());
 
-                _channel.BasicAck(ea.DeliveryTag, false);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error processing message");
-                _channel.BasicNack(ea.DeliveryTag, false, true);
-            }
-        };
+                var dto = JsonSerializer.Deserialize<CreateOperationDto>(content);
 
-        _channel.BasicConsume(queue: "operationsQueue", autoAck: false, consumer: consumer);
+                try
+                {
+                    _operationHandleService.CreateOperation(dto);
 
-        await Task.CompletedTask;
+                    _channel.BasicAck(ea.DeliveryTag, false);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error processing message");
+                    _channel.BasicNack(ea.DeliveryTag, false, true);
+                }
+            };
+
+            _channel.BasicConsume(queue: "operationsQueue", autoAck: false, consumer: consumer);
+        }
+        else
+        {
+            Console.WriteLine("Connection to RabbitMQ failed, _channel is null.");
+        }
+
+        await Task.Delay(Timeout.Infinite, stoppingToken);
     }
 
     public override void Dispose()
     {
-        _channel.Close();
-        _connection.Close();
+        if (_channel != null && _connection != null)
+        {
+            _channel.Close();
+            _connection.Close();
+        }
         base.Dispose();
     }
 }
