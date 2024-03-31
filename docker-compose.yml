@@ -12,6 +12,7 @@ services:
     container_name: sqlpreview
     hostname: sqlpreview
     restart: unless-stopped
+
   rabbitmq:
     image: "rabbitmq:3-management"
     hostname: "rabbitmq"
