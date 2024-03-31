@@ -5,5 +5,5 @@ namespace InternetBank.Auth.Application.Interfaces.Services.JwtTokenServices;
 
 public interface IJwtTokenService
 {
-    Task<TokenDto> GenerateToken(UserDto user);
+    Task<TokenDto> GenerateToken(UserWithConfigDto user);
 }

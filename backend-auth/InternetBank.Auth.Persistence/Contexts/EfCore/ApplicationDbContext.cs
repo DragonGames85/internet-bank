@@ -12,6 +12,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<User> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
+    public DbSet<HideAccount> HideAccounts => Set<HideAccount>();
+    public DbSet<Config> Configs => Set<Config>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

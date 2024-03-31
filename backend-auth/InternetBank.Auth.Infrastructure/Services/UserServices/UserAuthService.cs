@@ -23,7 +23,9 @@ public class UserAuthService : IUserAuthService
         var user = await _mediator.Send(new GetUserByCredentialsQuery(dto)) 
             ?? throw new Exception("Login or password isn't correct.");
 
-        var token = await _jwtTokenService.GenerateToken(user);
+        var userWithConfig = await _mediator.Send(new GetUserIncludedConfigQuery(user.Id));
+
+        var token = await _jwtTokenService.GenerateToken(userWithConfig);
 
         return token;
     }

@@ -7,4 +7,5 @@ public interface IUserRepository
 {
     Task<List<User>> GetAllUsersIncludedRoles();
     Task<User?> GetUserByLoginPasswordIncludedRoles(LoginUserDto dto);
+    Task<User?> GetUserByIdIncludedConfig(Guid id);
 }

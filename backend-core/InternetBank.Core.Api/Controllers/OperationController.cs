@@ -87,7 +87,7 @@ public class OperationController : ControllerBase
     }
 
 
-    [HttpPost]
+    /*
     public Task<ActionResult> CreateOperationWithMQ(CreateOperationDto dto)
     {
         try
@@ -117,10 +117,11 @@ public class OperationController : ControllerBase
         {
             return Task.FromResult<ActionResult>(BadRequest(e.Message));
         }
-    }
+    }*/
 
-/* 
-    public async Task<ActionResult> CreateOperation(CreateOperationDto dto, Guid? userId)
+
+    [HttpPost]
+    public async Task<ActionResult> CreateOperation(CreateOperationDto dto)
     {
         try
         {
@@ -133,5 +134,4 @@ public class OperationController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-*/
 }
