@@ -6,29 +6,18 @@ import { api } from '../..';
 const handler = NextAuth({
     providers: [
         CredentialsProvider({
-            // The name to display on the sign in form (e.g. "Sign in with...")
             name: 'Логин + пароль',
-            // `credentials` is used to generate a form on the sign in page.
-            // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-            // e.g. domain, username, password, 2FA token, etc.
-            // You can pass any HTML attribute to the <input> tag through the object.
             credentials: {
                 login: { label: 'Логин', type: 'text', placeholder: 'User' },
                 password: { label: 'Пароль', type: 'password' },
             },
             async authorize(credentials, req) {
-                // const user = api.auth.login(credentials ? credentials : { login: '', password: '' });
-                const user = true
-                    ? { id: '1', name: 'J Smith', email: 'jsmith@example.com' }
-                    : api.auth.login(credentials ? credentials : { login: '', password: '' });
+                const user = await api.auth.login(credentials ? credentials : { login: '', password: '' });
+
                 if (user) {
-                    // Any object returned will be saved in `user` property of the JWT
                     return user;
                 } else {
-                    // If you return null then an error will be displayed advising the user to check their details.
                     return null;
-
-                    // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
                 }
             },
         }),
@@ -37,6 +26,37 @@ const handler = NextAuth({
             clientSecret: '01c78a27d49a0b162beae18ac8dcbd059819a268',
         }),
     ],
+    callbacks: {
+        async redirect({ url, baseUrl }) {
+            if (url.startsWith('/')) return `${baseUrl}${url}`;
+            else if (new URL(url).origin === baseUrl) return url;
+            return baseUrl;
+        },
+        session: ({ session, token }) => {
+            return {
+                ...session,
+                user: {
+                    ...session.user,
+                    id: token.userId,
+                    userId: token.userId,
+                    token: token.token,
+                },
+            };
+        },
+        jwt: ({ token, user }) => {
+            if (user) {
+                const u = user as unknown as any;
+                return {
+                    ...token,
+                    id: u.userId,
+                    userId: u.userId,
+                    token: u.token,
+                };
+            }
+            return token;
+        },
+    },
 });
 
 export { handler as GET, handler as POST };
+// ? { id: '1', name: 'J Smith', email: 'jsmith@example.com' }
