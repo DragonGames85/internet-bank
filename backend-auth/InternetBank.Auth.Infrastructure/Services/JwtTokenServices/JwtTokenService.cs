@@ -28,6 +28,7 @@ public class JwtTokenService : IJwtTokenService
         var claims = new[]
         {
             new Claim("id", user.Id.ToString()),
+            new Claim("userId", user.Id.ToString()),
             new Claim("name", user.Name),
             new Claim("role", user.Role),
             new Claim("isBanned", user.IsBanned.ToString()),

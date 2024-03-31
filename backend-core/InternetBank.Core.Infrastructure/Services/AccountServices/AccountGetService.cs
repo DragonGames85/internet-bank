@@ -14,9 +14,9 @@ public class AccountGetService : IAccountGetService
         _mediator = mediator;
     }
 
-    public async Task<List<AccountDto>> GetAccounts(Guid userId)
+    public async Task<List<AccountDto>> GetAccounts(Guid userId, string name)
     {
-        var result = await _mediator.Send(new GetUserAccountsQuery(userId));
+        var result = await _mediator.Send(new GetUserAccountsQuery(userId, name));
 
         return result;
     }

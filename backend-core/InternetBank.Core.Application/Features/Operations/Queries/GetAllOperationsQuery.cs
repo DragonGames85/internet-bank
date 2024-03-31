@@ -25,7 +25,6 @@ public class GetAllOperationsQueryHandler : IRequestHandler<GetAllOperationsQuer
         var operations = await _unitOfWork.OperationRepository.GetAllOperationsIncludeAccounts();
 
         var dtoOperations = new List<OperationDto>();
-        var dtoUser = new UserDto(Guid.NewGuid(), "Benjamin Batton");
         
         foreach (var operation in operations)
         {
@@ -34,22 +33,25 @@ public class GetAllOperationsQueryHandler : IRequestHandler<GetAllOperationsQuer
             ShortAccountDto? dtoRecieveAccount = null;
             ShortAccountDto? dtoSendAccount = null;
 
-            if (operation.ReceiveAccount != null)
+            var dtoRecieveUser = new UserDto(operation?.ReceiveAccount?.CreatedBy ?? Guid.NewGuid(), "");
+            var dtoSendUser = new UserDto(operation?.SendAccount?.CreatedBy ?? Guid.NewGuid(), "");
+
+            if (operation?.ReceiveAccount != null)
             {
                 dtoRecieveAccount = new ShortAccountDto(
                     operation.ReceiveAccount.Id,
                     operation.ReceiveAccount.Number,
                     operation.ReceiveAccount.Type,
-                    dtoUser,
+                    dtoRecieveUser,
                     dtoCurrency);
             }
-            if (operation.SendAccount != null)
+            if (operation?.SendAccount != null)
             {
                 dtoSendAccount = new ShortAccountDto(
                     operation.SendAccount.Id,
                     operation.SendAccount.Number,
                     operation.SendAccount.Type,
-                    dtoUser,
+                    dtoSendUser,
                     dtoCurrency);
             }
 

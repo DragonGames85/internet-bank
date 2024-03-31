@@ -3,16 +3,19 @@ using InternetBank.Core.Application.DTOs.CurrencyDTOs;
 using InternetBank.Core.Application.DTOs.UserDTOs;
 using InternetBank.Core.Application.Interfaces.Repositories;
 using MediatR;
+using System.Xml.Linq;
 
 namespace InternetBank.Core.Application.Features.Accounts.Queries;
 
 public class GetAccountQuery : IRequest<AccountDto>
 {
     public Guid Id { get; set; }
+    public string Name { get; set; }
 
-    public GetAccountQuery(Guid id)
+    public GetAccountQuery(Guid id, string name = "")
     {
         Id = id;
+        Name = name;
     }
 }
 
@@ -31,7 +34,7 @@ public class GetAccountQueryHandler : IRequestHandler<GetAccountQuery, AccountDt
             ?? throw new NullReferenceException("Account is not found.");
         
         var dtoCurrency = new CurrencyDto(account.AccountCurrency.Id, account.AccountCurrency.Name, account.AccountCurrency.Symbol);
-        var dtoUser = new UserDto(Guid.NewGuid(), "Benjamin Batton");
+        var dtoUser = new UserDto(account.CreatedBy ?? request.Id, request.Name);
 
         return new AccountDto(
             account.Id,

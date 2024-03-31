@@ -9,10 +9,12 @@ namespace InternetBank.Core.Application.Features.Accounts.Queries;
 public class GetUserAccountsQuery : IRequest<List<AccountDto>>
 {
     public Guid Id { get; set; }
+    public string Name { get; set; }
 
-    public GetUserAccountsQuery(Guid id)
+    public GetUserAccountsQuery(Guid id, string name)
     {
         Id = id;
+        Name = name;
     }
 }
 
@@ -34,7 +36,7 @@ public class GetUserAccountsQueryHandler : IRequestHandler<GetUserAccountsQuery,
         foreach (var account in accounts)
         {
             var dtoCurrency = new CurrencyDto(account.AccountCurrency.Id, account.AccountCurrency.Name, account.AccountCurrency.Symbol);
-            var dtoUser = new UserDto(Guid.NewGuid(), "Benjamin Batton");
+            var dtoUser = new UserDto(request.Id, request.Name);
 
             dtoAccounts.Add(new AccountDto(
                 account.Id,
