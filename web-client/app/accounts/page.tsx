@@ -1,20 +1,18 @@
 'use client';
 import { motion } from 'framer-motion';
 import { FC, useState } from 'react';
-import { MdAddCircleOutline } from 'react-icons/md';
-import useSWR from 'swr';
-import { api } from '../api';
-import { animationVariants } from '../config';
 import { FaKey } from 'react-icons/fa';
+import { MdAddCircleOutline } from 'react-icons/md';
+import { api } from '../api';
+import { Account } from '../api/types';
+import { animationVariants } from '../config';
+import { useBankFetch } from '../hooks/useBankFetch';
 import AccCard from './components/AccCard';
 import AddAccModal from './components/AddAccModal';
-import { Account } from '../api/types';
+import useSWR from 'swr';
 
 const Credits: FC = () => {
     const [isAddOpen, openAdd] = useState(false);
-    const [mocked, mock] = useState(false);
-
-    const { data } = useSWR('/api/accounts', api.accounts.getAll);
 
     const mockAccounts: Account[] = [
         {
@@ -27,7 +25,9 @@ const Credits: FC = () => {
         },
     ];
 
-    const accounts = mocked ? mockAccounts : data;
+    const { data: hideAccs } = useSWR<Account[]>('/api/hide/accounts', api.auth.hiddenAccounts);
+
+    const { result: accounts, mock } = useBankFetch<Account[]>('/api/accounts', api.accounts.getAll, mockAccounts);
 
     return (
         <>
@@ -48,7 +48,7 @@ const Credits: FC = () => {
                     <FaKey color={'fuchsia'} />
                 </button>
             </div>
-            {accounts && accounts.length && (
+            {accounts && !!accounts.length && (
                 <motion.ul
                     className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-12 pt-5"
                     variants={animationVariants.container}
@@ -61,7 +61,7 @@ const Credits: FC = () => {
                             variants={animationVariants.item}
                             className={`flex items-center justify-between border-[1px] rounded-3xl p-6 h-auto gap-1 bg-bgColor2 dark:bg-bgColorDark`}
                         >
-                            <AccCard {...acc} />
+                            <AccCard {...acc} isHidden={!!hideAccs?.find(element => element.id == acc.id) ?? false} />
                         </motion.li>
                     ))}
                 </motion.ul>

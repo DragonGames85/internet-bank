@@ -13,6 +13,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.18",
     "axios": "^1.6.7",
+    "dotenv": "^16.4.5",
     "concurrently": "^8.2.2",
     "express": "^4.18.3",
     "framer-motion": "^11.0.5",
