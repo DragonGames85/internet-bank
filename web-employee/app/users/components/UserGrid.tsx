@@ -57,7 +57,7 @@ const UserGrid: FC<IUserGrid> = ({ users, isCoop, choseUser, deleteUser, openEdi
                                 {user.name}
                             </p>
                             <div className="flex gap-2 items-center z-[2]">
-                                {!user.isBanned && (
+                                {!user.isBanned && !isCoop && (
                                     <>
                                         <RiFolderInfoLine
                                             cursor={'pointer'}
