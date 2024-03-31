@@ -1,22 +1,20 @@
 'use client';
 
 import { useState } from 'react';
+import { FaKey } from 'react-icons/fa';
 import { MdAddCircleOutline } from 'react-icons/md';
-import useSWR, { useSWRConfig } from 'swr';
+import { useSWRConfig } from 'swr';
 import { api } from '../api';
 import { User } from '../api/types';
+import { useBankFetch } from '../hooks/useBankFetch';
 import AddModal from './components/AddModal';
 import EditModal from './components/EditModal';
 import UserGrid from './components/UserGrid';
-import { FaKey } from 'react-icons/fa';
 
 const Users = () => {
-    const { data, error } = useSWR<User[]>('/api/users', api.users.getAll);
-
     const [isCoop, setIsCoop] = useState(false);
     const [isAddOpen, openAdd] = useState(false);
     const [isEditOpen, openEdit] = useState(false);
-    const [mocked, mock] = useState(false);
     const [user, choseUser] = useState<User>();
 
     const mockedUsers: User[] = [
@@ -61,7 +59,7 @@ const Users = () => {
         },
     ];
 
-    const users = mocked ? mockedUsers : data;
+    const { result: users, error, mock } = useBankFetch<User[]>('/api/users', api.users.getAll, mockedUsers);
 
     const { mutate } = useSWRConfig();
     const handleDelete = async () => {

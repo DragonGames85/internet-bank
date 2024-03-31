@@ -1,17 +1,16 @@
 'use client';
 import { motion } from 'framer-motion';
 import { FC, useState } from 'react';
+import { FaKey } from 'react-icons/fa';
 import { MdAddCircleOutline, MdOutlineDisabledByDefault } from 'react-icons/md';
-import useSWR, { useSWRConfig } from 'swr';
+import { useSWRConfig } from 'swr';
 import { api } from '../api';
 import { Credit } from '../api/types';
 import { animationVariants } from '../config';
+import { useBankFetch } from '../hooks/useBankFetch';
 import AddCredModal from './components/AddCredModal';
-import { FaKey } from 'react-icons/fa';
 
 const Credits: FC = () => {
-    const { data, error } = useSWR<Credit[]>('/api/credits', api.credits.getAll);
-    const [mocked, mock] = useState(false);
     const mockCredits: Credit[] = [
         {
             id: '1',
@@ -39,12 +38,13 @@ const Credits: FC = () => {
         },
     ];
 
-    const credits = mocked ? mockCredits : data;
-
     const [isAddOpen, openAdd] = useState(false);
     const [credit, choseCredit] = useState<Credit>();
 
+    const { result: credits, error, mock } = useBankFetch<Credit[]>('/api/credits', api.credits.getAll, mockCredits);
+
     const { mutate } = useSWRConfig();
+
     const handleDelete = async () => {
         if (!credit) return;
         const isYes = confirm('Вы уверены, что хотите удалить ' + credit.name + '?');
