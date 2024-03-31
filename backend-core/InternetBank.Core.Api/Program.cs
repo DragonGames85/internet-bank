@@ -1,5 +1,6 @@
 using InternetBank.Core.Application.Extensions;
 using InternetBank.Core.Infrastructure.Extensions;
+using InternetBank.Core.Infrastructure.Hubs.OperationHubs;
 using InternetBank.Core.Persistence.Contexts.EfCore;
 using InternetBank.Core.Persistence.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,6 +11,15 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Cors
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy => policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
 
 // Layers
 builder.Services.AddApplicationLayer();
@@ -28,7 +38,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
 
@@ -41,29 +51,26 @@ builder.Services.AddEndpointsApiExplorer();
 // Add Swagger
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Core API", Version = "v1" });
 
-    // ��������� Swagger ��� ������������� ������ �����������
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    var securityScheme = new OpenApiSecurityScheme
     {
+        Name = "JWT Authentication",
+        Description = "Enter JWT Bearer token **_only_**",
         In = ParameterLocation.Header,
-        Description = "����������, ������� ����� � ��������� 'Bearer '",
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
-    });
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+    c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] { }
-        }
+        {securityScheme, new string[] { }}
     });
 });
 
@@ -84,13 +91,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/core/swagger/v1/swagger.json", "My API V1");
+        c.SwaggerEndpoint("/core/swagger/v1/swagger.json", "My API V1"); // "/swagger/v1/swagger.json"
         c.RoutePrefix = "core/swagger";
     });
 }
 
+app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+// WebSocket
+app.MapHub<OperationHub>("/operationHub");
 
 app.MapControllers();
 

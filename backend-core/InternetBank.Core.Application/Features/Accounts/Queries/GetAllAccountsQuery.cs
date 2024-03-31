@@ -28,7 +28,7 @@ public class GetAllAccountsQueryHandler : IRequestHandler<GetAllAccountsQuery, L
         foreach (var account in accounts)
         {
             var dtoCurrency = new CurrencyDto(account.AccountCurrency.Id, account.AccountCurrency.Name, account.AccountCurrency.Symbol);
-            var dtoUser = new UserDto(Guid.NewGuid(), "Benjamin Batton");
+            var dtoUser = new UserDto(account.CreatedBy ?? Guid.NewGuid(), "");
 
             dtoAccounts.Add(new AccountDto(
                 account.Id,

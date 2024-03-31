@@ -20,12 +20,15 @@ public class JwtTokenService : IJwtTokenService
 
     public Task<TokenDto> GenerateToken(UserDto user)
     {
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+        Console.WriteLine(_configuration["Jwt:Key"]);
 
         var claims = new[]
         {
             new Claim("id", user.Id.ToString()),
+            new Claim("userId", user.Id.ToString()),
             new Claim("name", user.Name),
             new Claim("role", user.Role),
             new Claim("isBanned", user.IsBanned.ToString()),
@@ -35,8 +38,9 @@ public class JwtTokenService : IJwtTokenService
         var token = new JwtSecurityToken(
             issuer: _configuration["Jwt:Issuer"],
             audience: _configuration["Jwt:Audience"],
+            notBefore: DateTime.UtcNow,
             claims: claims,
-            expires: DateTime.Now.AddMinutes(10080),
+            expires: DateTime.UtcNow.AddMinutes(10080),
             signingCredentials: credentials
         );
 

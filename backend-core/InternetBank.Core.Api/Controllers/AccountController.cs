@@ -1,5 +1,7 @@
 using InternetBank.Core.Application.DTOs.AccountDTOs;
 using InternetBank.Core.Application.Interfaces.Services.AccountServices;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -19,12 +21,13 @@ public class AccountController : ControllerBase
     }
 
     [HttpGet("my")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<ActionResult<List<AccountDto>>> GetMyAccounts()
     {
         try
         {
-            var userIdClaim = User.FindFirst("id")
-                ?? throw new Exception("Id is not found.");
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId")
+                ?? throw new Exception("userId is not found.");
 
             var result = await _accountGetService.GetAccounts(Guid.Parse(userIdClaim.Value));
 

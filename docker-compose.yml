@@ -13,6 +13,16 @@ services:
     hostname: sqlpreview
     restart: unless-stopped
 
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    hostname: "rabbitmq"
+    environment:
+      RABBITMQ_DEFAULT_USER: "user"
+      RABBITMQ_DEFAULT_PASS: "password"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
   authcomponent:
     image: authcomponent    
     environment:
@@ -29,7 +39,7 @@ services:
       - sqlserver
     restart: on-failure
     volumes:
-      - ./other/certificate.pfx:/https/certificate.pfx
+      - ./other/combined_certificate.pfx:/https/certificate.pfx
 
   corecomponent:
     image: corecomponent
@@ -47,7 +57,7 @@ services:
       - sqlserver
     restart: on-failure
     volumes:
-      - ./other/certificate.pfx:/https/certificate.pfx
+      - ./other/combined_certificate.pfx:/https/certificate.pfx
 
   creditcomponent:
     image: creditcomponent
@@ -65,7 +75,7 @@ services:
       - sqlserver
     restart: on-failure
     volumes:
-      - ./other/certificate.pfx:/https/certificate.pfx
+      - ./other/combined_certificate.pfx:/https/certificate.pfx
 
   clientcomponent:
     image: clientcomponent

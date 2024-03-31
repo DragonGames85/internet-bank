@@ -9,7 +9,6 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 // Cors
 builder.Services.AddCors(options =>
 {
@@ -18,7 +17,6 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
-
 
 // Layers
 builder.Services.AddApplicationLayer();
@@ -52,7 +50,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext?.Database.Migrate();
+    dbContext?.Database?.Migrate();
 }
 
 app.UseCors();
@@ -64,7 +62,7 @@ if (app.Environment.IsDevelopment())
     
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/auth/swagger/v1/swagger.json", "My API V1");
+        c.SwaggerEndpoint("/auth/swagger/v1/swagger.json", "My API V1"); // "/swagger/v1/swagger.json"
         c.RoutePrefix = "auth/swagger";
     });
 }
