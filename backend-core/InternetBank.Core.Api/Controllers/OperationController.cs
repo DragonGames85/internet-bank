@@ -28,10 +28,10 @@ public class OperationController : ControllerBase
     {
         try
         {
-            var userIdClaim = User.FindFirst("userId")
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId")
                 ?? throw new Exception("userId is not found.");
 
-            var result = await _operationGetService.GetOperationsByUserId(Guid.NewGuid());
+            var result = await _operationGetService.GetOperationsByUserId(Guid.Parse(userIdClaim.Value));
 
             return Ok(result);
         }
@@ -46,7 +46,7 @@ public class OperationController : ControllerBase
     {
         try
         {
-            var result = await _operationGetService.GetOperationsByUserId(Guid.NewGuid());
+            var result = await _operationGetService.GetOperationsByUserId(userId);
 
             return Ok(result);
         }
@@ -61,7 +61,7 @@ public class OperationController : ControllerBase
     {
         try
         {
-            var result = await _operationGetService.GetOperationsByAccountId(Guid.NewGuid());
+            var result = await _operationGetService.GetOperationsByAccountId(accountId);
 
             return Ok(result);
         }
