@@ -48,19 +48,25 @@ using (var scope = app.Services.CreateScope())
     dbContext?.Database.Migrate();
 }
 
-//using var serviceScope = app.Services.CreateScope();
-//var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-//dbContext?.Database.Migrate();
-
 app.UseCors();
+
+// Swagger settings
+var isProduction = Environment.GetEnvironmentVariable("IS_PRODUCTION");
+var isValid = bool.TryParse(isProduction, out bool isProd);
+var routeSwaggerJson = isValid && isProd
+    ? "/credit/swagger/v1/swagger.json"
+    : "/swagger/v1/swagger.json";
+var routeSwaggerPrefix = isValid && isProd
+    ? "credit/swagger"
+    : "swagger";
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/credit/swagger/v1/swagger.json", "My API V1"); // "/swagger/v1/swagger.json"
-        c.RoutePrefix = "credit/swagger";
+        c.SwaggerEndpoint(routeSwaggerJson, "My API V1");
+        c.RoutePrefix = routeSwaggerPrefix;
     });
 }
 
