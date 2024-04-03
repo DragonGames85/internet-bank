@@ -1,9 +1,10 @@
 'use client';
 
 import axios from 'axios';
-import { SessionProvider, signOut, useSession } from 'next-auth/react';
-import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import { SessionProvider, signOut } from 'next-auth/react';
+import { ThemeProvider as NextThemesProvider, useTheme } from 'next-themes';
 import { type ThemeProviderProps } from 'next-themes/dist/types';
+import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { SWRConfig } from 'swr';
 import { parseJwt } from './helpers/parseJwt';
@@ -18,22 +19,26 @@ const AuthSessionProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 const SwrProvider = ({ children }: { children: React.ReactNode }) => {
-    const { data: session } = useSession() as { data: any };
+    const { setTheme } = useTheme();
+    const token = useSearchParams().get('token') ?? '';
     const [localToken, setToken] = useLocalStorage('token', '');
     const [_, setUser] = useLocalStorage('user', '');
 
     useEffect(() => {
-        if (localToken) axios.defaults.headers.common['Authorization'] = `Bearer ${localToken}`;
-        if (session && session.user) {
-            const token = session.user.token;
-            console.log('SESSION', { session, parsedUser: parseJwt(token) });
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        if (token || localToken) {
+            const tkn = token ?? localToken;
+            const userLocal = parseJwt(token);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${tkn}`;
+            setTheme(userLocal.isLightTheme == 'True' ? 'light' : 'dark');
+        }
+        if (token) {
+            localStorage.setItem('token', token);
             setToken(token);
             setUser(JSON.stringify(parseJwt(token)));
         }
-    }, [session, localToken]);
+    }, [token, localToken]);
 
-    const user = localToken ? parseJwt(localToken) : {};
+    const user = token || localToken ? parseJwt(token ?? localToken) : {};
 
     if (user.isBanned == 'True')
         return (

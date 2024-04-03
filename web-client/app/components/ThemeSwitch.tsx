@@ -1,10 +1,9 @@
 'use client';
 
-import { PiSunDimFill } from 'react-icons/pi';
-import { BiSolidMoon } from 'react-icons/bi';
 import { useTheme } from 'next-themes';
+import { BiSolidMoon } from 'react-icons/bi';
+import { PiSunDimFill } from 'react-icons/pi';
 import { api } from '../api';
-import { useEffect } from 'react';
 
 const ThemeSwitch: React.FC<{ className?: string }> = ({ className }) => {
     const { theme, setTheme } = useTheme();
@@ -16,14 +15,14 @@ const ThemeSwitch: React.FC<{ className?: string }> = ({ className }) => {
         } catch (error) {}
     };
 
-    useEffect(() => {
-        try {
-            const userLocal = JSON.parse(localStorage.getItem('user') ?? '{}');
-            setTheme(userLocal.isLightTheme == 'True' ? 'light' : 'dark');
-        } catch (err) {
-            console.error(err);
-        }
-    }, []);
+    // useEffect(() => {
+    //     try {
+    //         const userLocal = JSON.parse(localStorage.getItem('user') ?? '{}');
+    //         setTheme(userLocal.isLightTheme == 'True' ? 'light' : 'dark');
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // }, []);
 
     const isActive = theme === 'light';
 

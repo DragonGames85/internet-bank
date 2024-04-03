@@ -1,6 +1,6 @@
 'use client';
 import axios from 'axios';
-import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { api } from '../api';
 
@@ -17,6 +17,8 @@ const Login = () => {
         formState: { errors },
         reset,
     } = useForm<RegisterType>();
+
+    const navigate = useRouter();
 
     const onRegister: SubmitHandler<RegisterType> = async data => {
         const { token, userId } = await api.auth.register(data);
@@ -55,7 +57,10 @@ const Login = () => {
             <h2 className="mt-16 text-3xl">ИЛИ</h2>
             <button
                 className="border-2 rounded-full bg-bgColor2 dark:bg-bgColor3Dark text-3xl text-center self-center p-4 px-16 mt-16"
-                onClick={() => signIn()}
+                onClick={() => {
+                    const homeUrl = window.origin.replace('http://', '').replace('https://', '');
+                    navigate.push(`http://localhost:3000?home=${homeUrl}`);
+                }}
             >
                 ВОЙТИ
             </button>

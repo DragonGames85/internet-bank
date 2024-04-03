@@ -1,20 +1,19 @@
 'use client';
-import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { FiUsers } from 'react-icons/fi';
 import { MdCreditCard } from 'react-icons/md';
 import { PiUserRectangleBold } from 'react-icons/pi';
-import ThemeSwitch from './ThemeSwitch';
-import { FiUsers } from 'react-icons/fi';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { useRouter } from 'next/navigation';
+import ThemeSwitch from './ThemeSwitch';
 
 export const HeaderComp = () => {
-    const [token, _] = useLocalStorage('token', '');
-    const { data: session } = useSession();
     const router = useRouter();
+    const token = useSearchParams().get('token') ?? '';
+    const [localToken, _] = useLocalStorage('token', '');
 
     const links =
-        session || token
+        token || localToken
             ? [
                   {
                       name: 'ПРОФИЛЬ',
@@ -55,14 +54,13 @@ export const HeaderComp = () => {
                     </Button>
                 ))}
             </div>
-            {(session || token) && (
+            {(token || localToken) && (
                 <>
                     <button
                         onClick={() => {
                             localStorage.removeItem('token');
                             localStorage.removeItem('user');
-                            signOut();
-                            router.push('/')
+                            router.push('/');
                         }}
                         className="border-2 rounded-full px-4 lg:px-16 bg-bgColor2 dark:bg-bgColor3Dark text-3xl"
                     >

@@ -4,18 +4,17 @@ import human from '@/assets/human.png';
 
 import Image from 'next/image';
 
-import { useSession } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
 import Login from './components/Login';
 import { parseJwt } from './helpers/parseJwt';
 import { useLocalStorage } from './hooks/useLocalStorage';
 
 export default function Home() {
-    const [token, _] = useLocalStorage('token', '');
-    const { data: session } = useSession();
+    const token = useSearchParams().get('token') ?? '';
+    const [localToken, _] = useLocalStorage('token', '');
+    const user = localToken ? parseJwt(localToken) : {};
 
-    const user = token ? parseJwt(token) : {};
-
-    return session || token ? (
+    return token || localToken ? (
         <div className="flex flex-col w-full items-center gap-12">
             <Image
                 width={400}
