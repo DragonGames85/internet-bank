@@ -29,7 +29,7 @@ const SwrProvider = ({ children }: { children: React.ReactNode }) => {
             setTheme(userLocal.isLightTheme == 'True' ? 'light' : 'dark');
             localStorage.setItem('token', resultToken);
             setToken(resultToken);
-            setUser(userLocal);
+            setUser(JSON.stringify(userLocal));
         }
     }, [token, localToken]);
 
