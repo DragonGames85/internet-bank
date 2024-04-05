@@ -60,9 +60,9 @@ const AccCard: FC<Account & { isHidden: boolean }> = ({ balance, id, currency, n
                 <div className={`text-3xl text-cyan-500 flex items-center gap-2`}>
                     <Link
                         href={`/accounts/${id}`}
-                        className="underline underline-offset-[6px] p-2 bg-bgColor3 dark:bg-bgColor2Dark border-white border-1 rounded-xl"
+                        className="underline underline-offset-[6px] p-2 bg-slate-200 dark:bg-bgColor2Dark border-white border-1 rounded-xl"
                     >
-                        {id}
+                        {number}
                     </Link>
                     <MdOutlineDisabledByDefault
                         onClick={async () => {
@@ -77,12 +77,14 @@ const AccCard: FC<Account & { isHidden: boolean }> = ({ balance, id, currency, n
                         className="text-4xl mt-1 cursor-pointer"
                     />
                 </div>
-                <p className={`w-full py-2 text-xl text-ellipsis`}>Баланс: {isHidden ? 'СКРЫТ' : balance} {currency.symbol}</p>
+                <p className={`w-full py-2 text-xl text-ellipsis`}>
+                    Баланс: {isHidden ? 'СКРЫТ' : balance + ` ${currency.symbol}`}
+                </p>
                 <button
                     onClick={async () => {
                         if (isHidden) await api.auth.showAccount(id);
                         else await api.auth.hideAccount(id);
-                        mutate('/api/accounts');    
+                        mutate('/api/accounts');
                         mutate('/api/hide/accounts');
                     }}
                     className="text-xl border-2 rounded-full p-2 flex gap-2 items-center bg-white hover:bg-gray-200 dark:bg-bgColor3 dark:hover:bg-gray-400"
