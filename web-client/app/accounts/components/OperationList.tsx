@@ -1,10 +1,15 @@
 import { api } from '@/app/api';
 import { Operation } from '@/app/api/types';
 import { useBankFetch } from '@/app/hooks/useBankFetch';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { FaKey } from 'react-icons/fa';
+import { useSWRConfig } from 'swr';
 
 const OperationList: FC<{ accId: string }> = ({ accId }) => {
+    // const user = JSON.parse(localStorage.getItem('user') ?? '');
+
+    // const { mutate } = useSWRConfig();
+
     const mockedOperations: Operation[] = [
         {
             id: '1',
@@ -23,6 +28,41 @@ const OperationList: FC<{ accId: string }> = ({ accId }) => {
         () => api.operations.getAll(accId),
         mockedOperations
     );
+
+    // const [operations, setOperations] = useState([]);
+
+    // useEffect(() => {
+    //     const ws = new WebSocket(`ws://bayanshonhodoev.ru/core/operationHub?userId=${user.id}`);
+
+    //     ws.onopen = () => {
+    //         console.log('WebSocket Connection Established');
+    //     };
+
+    //     ws.onmessage = event => {
+    //         if (event.data === 'ReceiveOperationsUpdate') {
+    //             mutate(`/api/operations/${accId}`);
+    //             // fetchOperations();
+    //         }
+    //         // const operation = JSON.parse(event.data);
+    //         // console.log(operation);
+    //         // setOperations(prevOperations => [...prevOperations, operation]);
+    //     };
+
+    //     ws.onclose = e => {
+    //         console.log(e);
+    //         console.log('WebSocket Connection Closed');
+    //     };
+
+    //     ws.onerror = error => {
+    //         console.log('WebSocket Error: ', error);
+    //     };
+
+    //     return () => {
+    //         ws.close();
+    //     };
+    // }, []);
+
+    // return <></>;
 
     return (
         <>

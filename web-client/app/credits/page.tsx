@@ -1,12 +1,12 @@
 'use client';
 import { motion } from 'framer-motion';
 import { FC, useState } from 'react';
-import { FaFlagCheckered, FaKey } from 'react-icons/fa';
+import { FaKey } from 'react-icons/fa';
 import { FaMoneyBillTransfer } from 'react-icons/fa6';
-import { animationVariants } from '../config';
 import useSWR from 'swr';
 import { api } from '../api';
-import { Credit } from '../api/types';
+import { Credit, CurrencyArray, CurrencySymbol, User } from '../api/types';
+import { animationVariants } from '../config';
 
 const Credits: FC = () => {
     const { data } = useSWR('/api/credits', api.credits.getAll);
@@ -82,34 +82,37 @@ const Credits: FC = () => {
                             >
                                 {cred.name}
                             </p>
-                            <p className={`w-full py-2 text-xl text-ellipsis`}>Ставка {cred.percent}%</p>
+                            <p className={`dark:text-white text-black w-full`}>Ставка {cred.percent}%</p>
+                            <p className={`dark:text-white text-black w-full`}>Процент пенни: {cred.pennyPercent}%</p>
+                            <p className={`dark:text-white text-black w-full`}>
+                                Мин период: {cred.minRepaymentPeriod} мес.
+                            </p>
+                            <p className={`dark:text-white text-black w-full`}>
+                                Макс период: {cred.maxRepaymentPeriod} мес.
+                            </p>
+                            <p className={`dark:text-white text-black w-full`}>Мин сумма: {cred.minCreditSum}</p>
+                            <p className={`dark:text-white text-black w-full`}>Макс сумма: {cred.maxCreditSum}</p>
                         </div>
-                        <div>
-                            <button
-                                onClick={async () => {
-                                    await api.credits.close(cred.id);
-                                }}
-                                className="flex items-center gap-2 border-[1px] rounded-full p-2 px-4 text-xl text-red-500 bg-white dark:bg-mainText"
-                            >
-                                Погасить <FaFlagCheckered />
-                            </button>
-                            <button
-                                onClick={async () => {
-                                    const result = Number(prompt('Сколько хотите взять?'));
-                                    await api.credits.sub({
-                                        userId: localStorage.getItem('userId') ?? '1',
-                                        currency: 'RUB',
-                                        value: result,
-                                        tariffId: cred.id,
-                                        repaymentPeriod: 24,
-                                        paymentPeriod: 1,
-                                    });
-                                }}
-                                className="flex items-center gap-2 border-[1px] rounded-full p-2 px-4 text-xl text-purple-400 bg-white dark:bg-mainText"
-                            >
-                                Взять <FaMoneyBillTransfer />
-                            </button>
-                        </div>
+                        <button
+                            onClick={async () => {
+                                const result = Number(prompt('Сколько хотите взять?'));
+                                const repaymentPeriod = Number(prompt('На сколько месяцев хотите взять?'));
+                                let currencyResult = prompt('Валюта? (напр. RUB)') as CurrencySymbol;
+                                const userLocal: User = JSON.parse(localStorage.getItem('user') ?? '');
+                                currencyResult = CurrencyArray.includes(currencyResult) ? currencyResult : 'RUB';
+                                await api.credits.sub({
+                                    userId: userLocal ? userLocal.id : '1',
+                                    currency: currencyResult,
+                                    value: result,
+                                    tariffId: cred.id,
+                                    repaymentPeriod,
+                                    paymentPeriod: 1,
+                                });
+                            }}
+                            className="flex items-center gap-2 border-[1px] rounded-full p-2 px-4 text-xl text-purple-400 bg-white dark:bg-mainText"
+                        >
+                            Взять <FaMoneyBillTransfer />
+                        </button>
                     </motion.li>
                 ))}
             </motion.ul>

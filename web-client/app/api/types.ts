@@ -25,6 +25,7 @@ export interface Credit {
     paymentType: number;
     pennyPercent: number;
     rateType: number;
+    tariffName?: string;
 }
 
 export interface Operation {
@@ -44,6 +45,7 @@ export interface Currency {
 }
 
 export type CurrencySymbol =
+    | 'RUB'
     | 'AUD'
     | 'AZN'
     | 'GBP'
@@ -87,3 +89,58 @@ export type CurrencySymbol =
     | 'ZAR'
     | 'KRW'
     | 'JPY';
+
+export interface User {
+    id: string;
+    name: string;
+    isBanned: boolean;
+    role: 'Employee' | 'Customer'; // сотрудник или клиент
+    creditRating?: number;
+}
+
+export const CurrencyArray = [
+                            'RUB',
+                            'AUD',
+                            'AZN',
+                            'GBP',
+                            'AMD',
+                            'BYN',
+                            'BGN',
+                            'BRL',
+                            'HUF',
+                            'VND',
+                            'HKD',
+                            'GEL',
+                            'DKK',
+                            'AED',
+                            'USD',
+                            'EUR',
+                            'EGP',
+                            'INR',
+                            'IDR',
+                            'KZT',
+                            'CAD',
+                            'QAR',
+                            'KGS',
+                            'CNY',
+                            'MDL',
+                            'NZD',
+                            'NOK',
+                            'PLN',
+                            'RON',
+                            'XDR',
+                            'SGD',
+                            'TJS',
+                            'THB',
+                            'TRY',
+                            'TMT',
+                            'UZS',
+                            'UAH',
+                            'CZK',
+                            'SEK',
+                            'CHF',
+                            'RSD',
+                            'ZAR',
+                            'KRW',
+                            'JPY',
+                        ]

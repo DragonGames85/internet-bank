@@ -26,6 +26,7 @@ const SwrProvider = ({ children }: { children: React.ReactNode }) => {
             const userLocal = parseJwt(resultToken);
             axios.defaults.headers.common['Authorization'] = `Bearer ${resultToken}`;
             setTheme(userLocal.isLightTheme == 'True' ? 'light' : 'dark');
+            localStorage.setItem('theme', userLocal.isLightTheme == 'True' ? 'light' : 'dark');
             localStorage.setItem('token', resultToken);
             setToken(resultToken);
             setUser(JSON.stringify(userLocal));
