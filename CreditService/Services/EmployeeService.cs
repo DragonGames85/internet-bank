@@ -11,14 +11,17 @@ namespace CreditService.Services
         Task CreateNewTariff(AddCreditTariffModel model);
         Task<List<UserCreditModel>> GetUserCredits(Guid userId);
         Task<UserCreditDetailsModel> GetCreditDetails(Guid creditId);
+        Task<Double> GetUserCreditRating(Guid userId);
         Task DeleteCredit(Guid creditId);
     }
     public class EmployeeService: IEmployeeService
     {
         private readonly ICreditEmployeeRepository _creditEmployeeRepository;
-        public EmployeeService(ICreditEmployeeRepository creditEmployeeRepository)
+        private readonly ICreditRepository _creditRepository;
+        public EmployeeService(ICreditEmployeeRepository creditEmployeeRepository, ICreditRepository creditRepository)
         {
             _creditEmployeeRepository = creditEmployeeRepository;
+            _creditRepository = creditRepository;
         }
         public async Task CreateNewTariff(AddCreditTariffModel model)
         {
@@ -28,7 +31,7 @@ namespace CreditService.Services
             {
                 Name = model.Name,
                 Percent = model.Percent,
-                CurrencyId = model.Currency,
+                Currency = model.Currency,
                 MaxCreditSum = model.MaxCreditSum,
                 MinCreditSum = model.MinCreditSum,
                 MinRepaymentPeriod = model.MinRepaymentPeriod,
@@ -120,6 +123,44 @@ namespace CreditService.Services
             await _creditEmployeeRepository.DeleteCredit(credit);
 
         }
+        public async Task<Double> GetUserCreditRating(Guid userId)
+        {
+            var userCredits = await _creditEmployeeRepository.GetUserCredits(userId);
+            if (userCredits.Count == 0) { return 0; }
 
+            var closedCredit = 1;
+            var notClosedCredit = 1;
+            var numberOverduePayments = 1;
+            var numberClosedPayments = 1;
+            foreach (var credit in userCredits)
+            {
+                if (credit.Status == Model.Enum.StatusEnum.Closed)
+                {
+                    closedCredit += 1;
+                }
+                if(credit.Status == Model.Enum.StatusEnum.Opened)
+                {
+                    notClosedCredit += 1;
+                }
+                var overduePayments = await _creditRepository.GetOverduePayments(credit.Id);
+
+                if (overduePayments.Count != 0)
+                {
+                    numberOverduePayments += overduePayments.Count;
+                }
+
+                var closedPayments = await _creditEmployeeRepository.GetClosedPayments(credit.Id);
+
+                if (closedPayments.Count != 0)
+                {
+                    numberClosedPayments += closedPayments.Count;
+                }
+
+            }
+            // 40 5
+            var percent = 52 - (numberOverduePayments / numberClosedPayments) + (notClosedCredit / closedCredit);
+
+            return percent;
+        }
     }
 }

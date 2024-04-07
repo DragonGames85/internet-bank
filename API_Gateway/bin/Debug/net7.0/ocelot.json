@@ -1,0 +1,44 @@
+{
+  "Routes": [
+    //Authentication Web API
+    {
+      "DownstreamPathTemplate": "/auth/api/Auth/login",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7300
+        }
+      ],
+      "UpstreamPathTemplate": "/auth/api/Auth/login",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/auth/api/Auth/register",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7300
+        }
+      ],
+      "UpstreamPathTemplate": "/auth/api/Auth/register",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/credit/api/getTariffs",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7302
+        }
+      ],
+      "UpstreamPathTemplate": "/credit/api/getTariffs",
+      "UpstreamHttpMethod": [ "GET" ]
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5020"
+  }
+}
