@@ -10,7 +10,7 @@ namespace CreditService.Model.DTO
         [Required]
         public Guid UserId { get; set; }
         [Required]
-        public Guid Currency { get; set; }
+        public string Currency { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public StatusEnum Status { get; set; }

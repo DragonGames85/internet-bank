@@ -1,5 +1,6 @@
 ﻿using CreditService.Model.DTO;
 using CreditService.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -47,6 +48,7 @@ namespace CreditService.Controllers
             }
         }
         [HttpGet]
+        [Authorize]
         [Route("getTariffs")]
         public async Task<IActionResult> GetAllCreditTariffs()
         {

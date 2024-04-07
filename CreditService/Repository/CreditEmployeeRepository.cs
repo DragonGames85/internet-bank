@@ -12,6 +12,7 @@ namespace CreditService.Repository
         Task<List<LoanPayments>> GetCreditPayments(Guid creditId);
         Task DeleteCredit(UserCreditEntity credit);
         Task<List<LoanPayments>> GetPaymentsForDay();
+        Task<List<LoanPayments>> GetClosedPayments(Guid creditId);
     }
     public class CreditEmployeeRepository: ICreditEmployeeRepository
     {
@@ -55,6 +56,11 @@ namespace CreditService.Repository
         {
             var list = await _context.Payments.Where(x => x.Date.Day == DateTime.Now.Day).ToListAsync();
             return list;
+        }
+        public async Task<List<LoanPayments>> GetClosedPayments(Guid creditId)
+        {
+            var loanList = await _context.Payments.Where(x => (x.CreditId == creditId) && (x.Status == Model.Enum.PaymentStatusEnum.Paid)).OrderBy(s => s.NumberPay).ToListAsync();
+            return loanList;
         }
     }
 }

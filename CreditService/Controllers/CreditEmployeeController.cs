@@ -1,5 +1,6 @@
 ﻿using CreditService.Model.DTO;
 using CreditService.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CreditService.Controllers
@@ -92,6 +93,28 @@ namespace CreditService.Controllers
             {
                 _logger.LogError(e, e.Message);
                 return Problem(statusCode: 404, title: "Not found", detail: e.Message);
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return Problem(statusCode: 500, title: "Something went wrong");
+            }
+        }
+        [HttpGet]
+        [Route("rating/{userId}")]
+        public async Task<IActionResult> GetOverdueLoans(Guid userId)
+        {
+            try
+            {
+                var result = await _employeeService.GetUserCreditRating(userId);
+                return Ok(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                // Catch if credits wasn't found in database
+                _logger.LogError(e, e.Message);
+                return Problem(statusCode: 404, title: e.Message);
 
             }
             catch (Exception e)

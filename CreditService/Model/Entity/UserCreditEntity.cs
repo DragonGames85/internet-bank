@@ -9,7 +9,7 @@ namespace CreditService.Model.Entity
         [Required]
         public Guid UserId { get; set; }
         [Required]
-        public Guid Currency { get; set; } = Guid.Empty;
+        public string Currency { get; set; } = "RUB";
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public StatusEnum Status { get; set; }
