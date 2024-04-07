@@ -1,7 +1,10 @@
 using CreditService;
 using CreditService.Repository;
 using CreditService.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -69,7 +72,6 @@ if (app.Environment.IsDevelopment())
         c.RoutePrefix = routeSwaggerPrefix;
     });
 }
-
 app.UseAuthorization();
 
 app.MapControllers();
