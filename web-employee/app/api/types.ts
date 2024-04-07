@@ -25,6 +25,7 @@ export interface Credit {
     paymentType: number;
     pennyPercent: number;
     rateType: number;
+    tariffName?: string;
 }
 
 export interface Operation {
@@ -42,7 +43,6 @@ export interface User {
     name: string;
     isBanned: boolean;
     role: 'Employee' | 'Customer'; // сотрудник или клиент
-    creditRating?: number;
 }
 
 export interface Currency {
@@ -52,6 +52,7 @@ export interface Currency {
 }
 
 export type CurrencySymbol =
+    | 'RUB'
     | 'AUD'
     | 'AZN'
     | 'GBP'

@@ -6,14 +6,15 @@ import Modal from '../../components/Modal';
 import useSWR from 'swr';
 import Link from 'next/link';
 
-const EditModal: FC<ModalProps & { isCoop: boolean; user: User | undefined }> = ({ isOpen, onClose, isCoop, user }) => {
-    if (!user || isCoop) {
+const InfoModal: FC<ModalProps & { isCoop: boolean; user: User | undefined }> = ({ isOpen, onClose, isCoop, user }) => {
+    if (!user) {
         return null;
     }
 
     const { data: accounts } = useSWR(`/api/accounts/${user.id}`, () => api.accounts.userAccounts(user.id));
+    const { data: credRating } = useSWR(`/api/credRating/${user.id}`, () => api.credits.getUserCredRating(user.id));
     const { data: credits } = useSWR(`/api/credits/${user.id}`, () => api.credits.getUserCredits(user.id));
-    const { data: expCredits } = useSWR(`/api/credits/${user.id}`, () => api.credits.expired(user.id));
+    const { data: expCredits } = useSWR(`/api/expired/credits/${user.id}`, () => api.credits.expired(user.id));
 
     return (
         <Modal
@@ -58,6 +59,7 @@ const EditModal: FC<ModalProps & { isCoop: boolean; user: User | undefined }> = 
                                 ))}
                             </div>
                         </div>
+                        <h3 className={`text-[rgb(255,234,73)]`}>Кред. рейтинг: {credRating ?? '??'}</h3>
                     </div>
                 </div>
             </div>
@@ -65,4 +67,4 @@ const EditModal: FC<ModalProps & { isCoop: boolean; user: User | undefined }> = 
     );
 };
 
-export default EditModal;
+export default InfoModal;

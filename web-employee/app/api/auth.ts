@@ -8,6 +8,6 @@ export class authApi {
     }
     public setTheme(isLightTheme: boolean) {
         setURL(authAppUrl);
-        return axios.post('/Settings/config', { isLightTheme }).then(res => res.data);
+        return axios.post('/Settings/config', { isLightTheme });
     }
 }

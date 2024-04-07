@@ -8,13 +8,13 @@ import { api } from '../api';
 import { User } from '../api/types';
 import { useBankFetch } from '../hooks/useBankFetch';
 import AddModal from './components/AddModal';
-import EditModal from './components/EditModal';
+import InfoModal from './components/InfoModal';
 import UserGrid from './components/UserGrid';
 
 const Users = () => {
     const [isCoop, setIsCoop] = useState(false);
     const [isAddOpen, openAdd] = useState(false);
-    const [isEditOpen, openEdit] = useState(false);
+    const [isInfoOpen, openInfo] = useState(false);
     const [user, choseUser] = useState<User>();
 
     const mockedUsers: User[] = [
@@ -22,21 +22,18 @@ const Users = () => {
             id: '1',
             isBanned: false,
             name: 'Иван',
-            creditRating: 0.1,
             role: 'Customer',
         },
         {
             id: '2',
             isBanned: false,
             name: 'Григорий',
-            creditRating: 0.1,
             role: 'Customer',
         },
         {
             id: '3',
             isBanned: true,
             name: 'Коля',
-            creditRating: 0.1,
             role: 'Customer',
         },
         {
@@ -80,10 +77,10 @@ const Users = () => {
     return (
         <>
             <AddModal isOpen={isAddOpen} onClose={() => openAdd(false)} isCoop={isCoop} />
-            <EditModal
-                isOpen={isEditOpen}
+            <InfoModal
+                isOpen={isInfoOpen}
                 onClose={() => {
-                    openEdit(false);
+                    openInfo(false);
                     choseUser(undefined);
                 }}
                 isCoop={isCoop}
@@ -139,7 +136,7 @@ const Users = () => {
                     users={users.filter(user => user.role == (isCoop ? 'Employee' : 'Customer'))}
                     choseUser={choseUser}
                     isCoop={isCoop}
-                    openEdit={() => openEdit(true)}
+                    openEdit={() => openInfo(true)}
                     deleteUser={handleDelete}
                 />
             )}

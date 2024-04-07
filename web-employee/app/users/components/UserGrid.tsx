@@ -57,7 +57,7 @@ const UserGrid: FC<IUserGrid> = ({ users, isCoop, choseUser, deleteUser, openEdi
                                 {user.name}
                             </p>
                             <div className="flex gap-2 items-center z-[2]">
-                                {!user.isBanned && !isCoop && (
+                                {!user.isBanned && (
                                     <>
                                         <RiFolderInfoLine
                                             cursor={'pointer'}
@@ -90,7 +90,7 @@ const UserGrid: FC<IUserGrid> = ({ users, isCoop, choseUser, deleteUser, openEdi
                                 />
                             </div>
                         </div>
-                        <p>Кредитный рейтинг - {user.creditRating ?? '??'}</p>
+                        {/* <p className='text-white'>Кредитный рейтинг - {user.creditRating ?? '??'}</p> */}
                     </motion.li>
                 ))}
             </motion.ul>

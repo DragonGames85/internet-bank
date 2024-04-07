@@ -115,6 +115,11 @@ const Credits: FC = () => {
                             </div>
                             <div className="h-full py-2 w-full rounded-3xl self-center text-xl overflow-hidden text-ellipsis">
                                 <p className={`text-white w-full`}>Ставка {cred.percent}%</p>
+                                <p className={`text-white w-full`}>Процент пенни: {cred.pennyPercent}%</p>
+                                <p className={`text-white w-full`}>Мин период: {cred.minRepaymentPeriod} мес.</p>
+                                <p className={`text-white w-full`}>Макс период: {cred.maxRepaymentPeriod} мес.</p>
+                                <p className={`text-white w-full`}>Мин сумма: {cred.minCreditSum}</p>
+                                <p className={`text-white w-full`}>Макс сумма: {cred.maxCreditSum}</p>
                             </div>
                         </motion.li>
                     ))}
