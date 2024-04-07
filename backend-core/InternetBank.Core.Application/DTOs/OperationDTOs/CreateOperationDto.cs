@@ -7,5 +7,4 @@ public record CreateOperationDto(
     decimal Value,
     string? ReceiveAccountNumber,
     string? SendAccountNumber,
-    TypeOperation Type,
-    string CurrencyName);
+    TypeOperation Type);

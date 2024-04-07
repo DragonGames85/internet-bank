@@ -23,14 +23,14 @@ public class OperationBackgroundService : BackgroundService
 
     private void InitRabbitMQ()
     {
-        var maxAttempts = 10;
+        var maxAttempts = 5;
         var attempt = 0;
 
         while (true)
         {
             try
             {
-                var factory = new ConnectionFactory() { HostName = "rabbitmq", UserName = "user", Password = "password", Port = 5672 };
+                var factory = new ConnectionFactory() { HostName = "localhost", UserName = "user", Password = "password", Port = 5672 };
                 _connection = factory.CreateConnection();
                 _channel = _connection.CreateModel();
 
@@ -50,7 +50,7 @@ public class OperationBackgroundService : BackgroundService
                     break;
                 }
 
-                Console.WriteLine($"Connection attempt {attempt} failed. Will try again in a minute.");
+                Console.WriteLine($"Connection attempt {attempt} failed. Will try again in a 4 seconds.");
                 Task.Delay(TimeSpan.FromSeconds(4)).Wait();
             }
             catch (Exception ex)

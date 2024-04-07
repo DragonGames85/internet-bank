@@ -28,7 +28,9 @@ public class OperationRepository : IOperationRepository
         return await _context.Operations
             .Where(e => e.SendAccountId == accountId || e.ReceiveAccountId == accountId)
             .Include(e => e.ReceiveAccount)
+            .ThenInclude(e => e.AccountCurrency)
             .Include(e => e.SendAccount)
+            .ThenInclude(e => e.AccountCurrency)
             .Include(e => e.OperationCurrency)
             .ToListAsync();
     }
@@ -38,7 +40,9 @@ public class OperationRepository : IOperationRepository
         return await _context.Operations
             .Where(e => e.CreatedBy == userId)
             .Include(e => e.ReceiveAccount)
+            .ThenInclude(e => e.AccountCurrency)
             .Include(e => e.SendAccount)
+            .ThenInclude(e => e.AccountCurrency)
             .Include(e => e.OperationCurrency)
             .ToListAsync();
     }

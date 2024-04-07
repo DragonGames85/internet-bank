@@ -8,10 +8,14 @@ namespace InternetBank.Core.Application.Features.Operations.Commands;
 public class CreateOperationCommand : IRequest
 {
     public CreateOperationDto Dto { get; set; }
+    public bool IsOneWayTransfer { get; set; }
+    public bool IsOneWayTransferReceive { get; set; }
 
-    public CreateOperationCommand(CreateOperationDto dto)
+    public CreateOperationCommand(CreateOperationDto dto, bool isOneWayTransfer, bool isOneWayTransferReceive)
     {
         Dto = dto;
+        IsOneWayTransfer = isOneWayTransfer;
+        IsOneWayTransferReceive = isOneWayTransferReceive;
     }
 }
 
@@ -32,14 +36,6 @@ public class CreateOperationCommandHandler : IRequestHandler<CreateOperationComm
         var sendAccount = request.Dto.SendAccountNumber != null 
             ? await _unitOfWork.AccountRepository.GetAccountByNumber(request.Dto.SendAccountNumber) 
             : null;
-        var currency = await _unitOfWork.CurrencyRepository.GetCurrencyByName(request.Dto.CurrencyName)
-            ?? throw new NullReferenceException("Currency is not found.");
-
-        if ((sendAccount != null && sendAccount.CurrencyId != currency.Id)
-            || (recieveAccount != null && recieveAccount.CurrencyId != currency.Id))
-        {
-            throw new Exception("Accounts and Operation have different currencies.");
-        }
 
         var operation = Operation.Create(
             recieveAccount?.Id,
@@ -47,14 +43,35 @@ public class CreateOperationCommandHandler : IRequestHandler<CreateOperationComm
             request.Dto.Name,
             request.Dto.Value,
             request.Dto.Type);
+        if (sendAccount != null)
+            operation.CreatedBy = sendAccount.CreatedBy; 
+        else if (recieveAccount != null)
+            operation.CreatedBy = recieveAccount.CreatedBy;
 
         if (recieveAccount != null)
             operation.ReceiveAccount = recieveAccount;
         if (sendAccount != null)
             operation.SendAccount = sendAccount;
-        operation.OperationCurrency = currency;
 
-        if (sendAccount != null)
+        var isOneWayTransfer = request.IsOneWayTransfer;
+        var isOneWayTransferReceive = request.IsOneWayTransferReceive;
+
+        if (isOneWayTransfer)
+        {
+            if (recieveAccount != null && isOneWayTransferReceive)
+                operation.OperationCurrency = recieveAccount.AccountCurrency;
+            else if (sendAccount != null && !isOneWayTransferReceive)
+                operation.OperationCurrency = sendAccount.AccountCurrency;
+        }
+        else
+        {
+            if (recieveAccount != null)
+                operation.OperationCurrency = recieveAccount.AccountCurrency;
+            else if (sendAccount != null)
+                operation.OperationCurrency = sendAccount.AccountCurrency;
+        }
+
+        if (sendAccount != null && ((isOneWayTransfer && !isOneWayTransferReceive) || !isOneWayTransfer))
         {
             if (sendAccount.Balance - operation.Value < 0)
                 throw new Exception("There is not enough balance in the account.");
@@ -62,7 +79,7 @@ public class CreateOperationCommandHandler : IRequestHandler<CreateOperationComm
             sendAccount.Balance -= operation.Value;
             await _unitOfWork.Repository<Account>().UpdateAsync(sendAccount);
         }
-        if (recieveAccount != null)
+        if (recieveAccount != null && ((isOneWayTransfer && isOneWayTransferReceive) || !isOneWayTransfer))
         {
             recieveAccount.Balance += operation.Value;
             await _unitOfWork.Repository<Account>().UpdateAsync(recieveAccount);
