@@ -112,3 +112,10 @@ services:
     ports:
       - "3001:80"
 
+  webauthcomponent:
+    image: webauthcomponent
+    build:
+      context: ./web-auth
+      dockerfile: Dockerfile
+    ports:
+      - "3002:80"

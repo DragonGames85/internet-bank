@@ -37,8 +37,8 @@ export default function Home(props: { searchParams: { home: string } }) {
             const { token } = await axios
                 .post<{ token: string }>('https://bayanshonhodoev.ru/auth/api/auth/login', data)
                 .then(res => res.data);
-            localStorage.setItem('token', token);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            // localStorage.setItem('token', token);
+            // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             navigate.push('http://' + (props.searchParams.home ?? 'localhost:3001') + `?token=${token}`);
         } catch (error) {
             console.log(error);
@@ -50,8 +50,8 @@ export default function Home(props: { searchParams: { home: string } }) {
             const { token } = await axios
                 .post<{ token: string }>('https://bayanshonhodoev.ru/auth/api/auth/register', data)
                 .then(res => res.data);
-            localStorage.setItem('token', token);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            // localStorage.setItem('token', token);
+            // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             navigate.push('http://' + (props.searchParams.home ?? 'localhost:3001') + `?token=${token}`);
         } catch (error) {
             console.log(error);
