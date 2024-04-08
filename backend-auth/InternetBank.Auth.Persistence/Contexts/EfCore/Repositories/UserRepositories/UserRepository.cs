@@ -25,7 +25,7 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users
             .Include(e => e.UserConfig)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(e => e.Id == id);
     }
 
     public async Task<User?> GetUserByLoginPasswordIncludedRoles(LoginUserDto dto)
