@@ -48,7 +48,6 @@ namespace CreditService.Controllers
             }
         }
         [HttpGet]
-        [Authorize]
         [Route("getTariffs")]
         public async Task<IActionResult> GetAllCreditTariffs()
         {
