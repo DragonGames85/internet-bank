@@ -1,5 +1,6 @@
 ﻿using InternetBank.Core.Application.Interfaces.Repositories.AccountRepositories;
 using InternetBank.Core.Domain.Entities;
+using InternetBank.Core.Domain.Enumerations;
 using Microsoft.EntityFrameworkCore;
 
 namespace InternetBank.Core.Persistence.Contexts.EfCore.Repositories.AccountRepositories;
@@ -40,5 +41,12 @@ public class AccountRepository : IAccountRepository
         return await _context.Accounts
             .Include(e => e.AccountCurrency)
             .FirstOrDefaultAsync(e => e.Id == id);
+    }
+
+    public async Task<Account?> GetMasterAccountWithValue(decimal value)
+    {
+        return await _context.Accounts
+            .Include(e => e.AccountCurrency)
+            .FirstOrDefaultAsync(e => e.Type == TypeAccount.Master && e.Balance >= value);
     }
 }

@@ -42,7 +42,6 @@ public static class InfrastructureServiceCollectionExtension
 
     private static void AddWebSockets(this IServiceCollection services)
     {
-        services.AddSignalR();
         services.AddSingleton<IOperationNotificationService, OperationNotificationService>();
     }
 

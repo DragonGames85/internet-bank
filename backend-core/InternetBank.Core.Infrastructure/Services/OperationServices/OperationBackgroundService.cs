@@ -75,7 +75,7 @@ public class OperationBackgroundService : BackgroundService
 
                 try
                 {
-                    _operationHandleService.CreateOperation(dto);
+                    _operationHandleService.CreateOperation(dto, false);
 
                     _channel.BasicAck(ea.DeliveryTag, false);
                 }

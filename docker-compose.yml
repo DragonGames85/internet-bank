@@ -83,13 +83,15 @@ services:
   clientcomponent:
     image: clientcomponent
     environment:
-      - NEXT_PUBLIC_PRODUCTION_MODE=false
+      - NEXT_PUBLIC_PRODUCTION_MODE=true
       - NEXT_PUBLIC_AUTH_APP_URL_LOCAL=http://localhost:7300/auth
       - NEXT_PUBLIC_AUTH_APP_URL_PROD=https://bayanshonhodoev.ru/auth
       - NEXT_PUBLIC_CORE_APP_URL_LOCAL=http://localhost:7301/core
       - NEXT_PUBLIC_CORE_APP_URL_PROD=https://bayanshonhodoev.ru/core
       - NEXT_PUBLIC_CREDIT_APP_URL_LOCAL=http://localhost:7302/credit
       - NEXT_PUBLIC_CREDIT_APP_URL_PROD=https://bayanshonhodoev.ru/credit
+      - NEXT_PUBLIC_CLIENT_APP_URL_LOCAL=http://localhost:3000
+      - NEXT_PUBLIC_CLIENT_APP_URL_PROD=https://bayanshonhodoev.ru/client
     build:
       context: ./web-client
       dockerfile: Dockerfile
@@ -99,13 +101,17 @@ services:
   employeecomponent:
     image: employeecomponent
     environment:
-      - NEXT_PUBLIC_PRODUCTION_MODE=false
+      - NEXT_PUBLIC_PRODUCTION_MODE=true
       - NEXT_PUBLIC_AUTH_APP_URL_LOCAL=http://localhost:7300/auth
       - NEXT_PUBLIC_AUTH_APP_URL_PROD=https://bayanshonhodoev.ru/auth
       - NEXT_PUBLIC_CORE_APP_URL_LOCAL=http://localhost:7301/core
       - NEXT_PUBLIC_CORE_APP_URL_PROD=https://bayanshonhodoev.ru/core
       - NEXT_PUBLIC_CREDIT_APP_URL_LOCAL=http://localhost:7302/credit
       - NEXT_PUBLIC_CREDIT_APP_URL_PROD=https://bayanshonhodoev.ru/credit
+      - NEXT_PUBLIC_WEBAUTH_APP_URL_LOCAL=http://localhost:3002
+      - NEXT_PUBLIC_WEBAUTH_APP_URL_PROD=https://bayanshonhodoev.ru/webauth
+      - NEXT_PUBLIC_EMPLOYEE_APP_URL_LOCAL=http://localhost:3001
+      - NEXT_PUBLIC_EMPLOYEE_APP_URL_PROD=https://bayanshonhodoev.ru/employee
     build:
       context: ./web-employee
       dockerfile: Dockerfile
@@ -114,6 +120,16 @@ services:
 
   webauthcomponent:
     image: webauthcomponent
+    environment:
+      - NEXT_PUBLIC_PRODUCTION_MODE=true
+      - NEXT_PUBLIC_AUTH_APP_URL_LOCAL=http://localhost:7300/auth
+      - NEXT_PUBLIC_AUTH_APP_URL_PROD=https://bayanshonhodoev.ru/auth
+      - NEXT_PUBLIC_CLIENT_APP_URL_LOCAL=http://localhost:3000
+      - NEXT_PUBLIC_CLIENT_APP_URL_PROD=https://bayanshonhodoev.ru/client
+      - NEXT_PUBLIC_EMPLOYEE_APP_URL_LOCAL=http://localhost:3001
+      - NEXT_PUBLIC_EMPLOYEE_APP_URL_PROD=https://bayanshonhodoev.ru/employee
+      - NEXT_PUBLIC_WEBAUTH_APP_URL_LOCAL=http://localhost:3002
+      - NEXT_PUBLIC_WEBAUTH_APP_URL_PROD=https://bayanshonhodoev.ru/webauth
     build:
       context: ./web-auth
       dockerfile: Dockerfile

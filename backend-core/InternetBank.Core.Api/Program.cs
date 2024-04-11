@@ -44,6 +44,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddControllers();
 
+builder.Services.AddSignalR();
+
 builder.Services.AddEndpointsApiExplorer();
 
 
@@ -110,9 +112,10 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// WebSocket
-app.MapHub<OperationHub>("/core/operationHub");
 
 app.MapControllers();
+
+// WebSocket
+app.MapHub<OperationHub>("/core/operationHub");
 
 app.Run();

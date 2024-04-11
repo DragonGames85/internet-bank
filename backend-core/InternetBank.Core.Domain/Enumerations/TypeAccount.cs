@@ -3,5 +3,6 @@
 public enum TypeAccount
 {
     Debit,
-    Credit
+    Credit,
+    Master,
 }

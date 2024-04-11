@@ -5,5 +5,5 @@ namespace InternetBank.Core.Application.Interfaces.Services.OperationServices;
 
 public interface IOperationHandleService
 {
-    Task CreateOperation(CreateOperationDto dto);
+    Task CreateOperation(CreateOperationDto dto, bool isCreditOperation);
 }

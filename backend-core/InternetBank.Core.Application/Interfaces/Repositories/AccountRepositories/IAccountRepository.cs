@@ -8,4 +8,5 @@ public interface IAccountRepository
     public Task<IEnumerable<Account>> GetAllAccountsIncludedCurrency();
     public Task<Account?> GetAccountByNumber(string number);
     public Task<Account?> GetAccountIncludedCurrencyById(Guid id);
+    public Task<Account?> GetMasterAccountWithValue(decimal value);
 }

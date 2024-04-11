@@ -22,8 +22,28 @@ public class OperationHandleService : IOperationHandleService
         _cbrClient = cbrClient;
     }
 
-    public async Task CreateOperation(CreateOperationDto dto)
+    public async Task CreateOperation(CreateOperationDto dto, bool isCreditOperation = false)
     {
+        if (isCreditOperation)
+        {
+            if (!(dto.ReceiveAccountNumber != null && dto.SendAccountNumber == null))
+                throw new Exception("Incorrect credit operation.");
+
+            var currencyConvert = await _cbrClient.GetCurrencyConvert()
+                ?? throw new Exception("Couldn't get the exchange rate.");
+            currencyConvert.Rates.Add("RUB", 1);
+
+            var clientAccount = await _mediator.Send(new GetAccountByNumberQuery(dto.ReceiveAccountNumber));
+
+            var clientValue = dto.Value;
+            var creditValueInRub = clientValue / currencyConvert.Rates[clientAccount.Currency.Name];
+
+            await _mediator.Send(new CreateMasterCreditOperationCommand(new CreateOperationDto("Снятие с мастер счёта", creditValueInRub, dto.ReceiveAccountNumber, null, dto.Type)));
+            await _mediator.Send(new CreateOperationCommand(dto, false, false));
+
+            return;
+        }
+
         if (dto.SendAccountNumber != null && dto.ReceiveAccountNumber != null && await _mediator.Send(new IsAccountsWithDifferentCurrenciesQuery(dto.SendAccountNumber, dto.ReceiveAccountNumber)))
         {
             var currencyConvert = await _cbrClient.GetCurrencyConvert()

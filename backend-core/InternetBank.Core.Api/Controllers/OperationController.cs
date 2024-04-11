@@ -121,11 +121,11 @@ public class OperationController : ControllerBase
 
 
     [HttpPost]
-    public async Task<ActionResult> CreateOperation(CreateOperationDto dto)
+    public async Task<ActionResult> CreateOperation(CreateOperationDto dto, bool isCreditOperation = false)
     {
         try
         {
-            await _operationHandleService.CreateOperation(dto);
+            await _operationHandleService.CreateOperation(dto, isCreditOperation);
 
             return Ok();
         }
