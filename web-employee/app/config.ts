@@ -56,5 +56,6 @@ export const employeeAppUrl =
 
 
 export const setURL = (url: string) => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token') ?? ''}`;
     axios.defaults.baseURL = `${url}/api`;
 };
