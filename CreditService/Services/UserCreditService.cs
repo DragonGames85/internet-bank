@@ -16,12 +16,14 @@ namespace CreditService.Services
     }
     public class UserCreditService : IUserCreditService
     {
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly ICreditRepository _creditRepository;
         private readonly ICreditEmployeeRepository _employeeRepository;
-        public UserCreditService(ICreditRepository creditRepository, ICreditEmployeeRepository employeeRepository)
+        public UserCreditService(ICreditRepository creditRepository, ICreditEmployeeRepository employeeRepository, IHttpClientFactory httpClientFactory)
         {
             _creditRepository = creditRepository;
             _employeeRepository = employeeRepository;
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task<List<CreditTariffModel>> GetAllCreditTariffs()
@@ -75,13 +77,24 @@ namespace CreditService.Services
             };
 
             await _creditRepository.AddCredit(credit);
+
+            var coreClient = _httpClientFactory.CreateClient();
+
+            Account data = new Account
+            {
+                Type = 1,
+            };
+
+           JsonContent content = JsonContent.Create(data);
+
+            var result = await coreClient.PostAsync($"https://bayanshonhodoev.ru/core/api/Account/?userId={model.UserId}", content);
             if (tariff.PaymentType == Model.Enum.PaymentTypeEnum.DifferentiatedPayment)
             {
                 await CalculationOfPaymentsForDifferentiatedPayments(tariff, credit);
             }
 
             if (tariff.PaymentType == Model.Enum.PaymentTypeEnum.AnnuityPayment)
-            {
+            { 
                 await CalculationOfPaymentsForAnnuityDaysPayment(tariff, credit);
             }
         }
@@ -183,5 +196,9 @@ namespace CreditService.Services
             return loanList;
         }
     }
-
+    class Account
+    {
+        public string CurrencyName { get; set; } = "RUB";
+        public int Type { get; set; }
+    }
 }
