@@ -1,10 +1,12 @@
 ﻿using InternetBank.Core.Application.Interfaces.Services.AccountServices;
 using InternetBank.Core.Application.Interfaces.Services.CurrencyServices;
 using InternetBank.Core.Application.Interfaces.Services.OperationServices;
+using InternetBank.Core.Infrastructure.Providers;
 using InternetBank.Core.Infrastructure.Refit.Interfaces.Cbr;
 using InternetBank.Core.Infrastructure.Services.AccountServices;
 using InternetBank.Core.Infrastructure.Services.CurrencyServices;
 using InternetBank.Core.Infrastructure.Services.OperationServices;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Refit;
@@ -43,6 +45,7 @@ public static class InfrastructureServiceCollectionExtension
     private static void AddWebSockets(this IServiceCollection services)
     {
         services.AddSingleton<IOperationNotificationService, OperationNotificationService>();
+        services.AddTransient<IUserIdProvider, CustomUserIdProvider>();
     }
 
     private static void AddMessageQueue(this IServiceCollection services)

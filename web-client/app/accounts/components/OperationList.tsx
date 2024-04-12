@@ -34,7 +34,7 @@ const OperationList: FC<{ accId: string }> = ({ accId }) => {
     useEffect(() => {
         const userId = JSON.parse(localStorage.getItem('user') ?? '').userId;
 
-        const ws = new WebSocket(`wss://localhost:7401/operationHub?userId=${userId}`);
+        const ws = new WebSocket(`wss://bayanshonhodoev.ru/core/operationHub?userId=${userId}`);
 
         ws.onopen = () => {
             console.log('WebSocket Connection Established');

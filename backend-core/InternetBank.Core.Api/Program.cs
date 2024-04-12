@@ -114,12 +114,10 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.UseHttpsRedirection();
-
 app.MapControllers();
 
 // WebSocket
-app.MapHub<OperationHub>("/operationHub");
-app.MapHub<TestOperationHub>("/testOperationHub");
+app.MapHub<OperationHub>("/core/operationHub");
+app.MapHub<TestOperationHub>("/core/testOperationHub");
 
 app.Run();
