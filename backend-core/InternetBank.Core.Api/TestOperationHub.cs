@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace InternetBank.Core.Infrastructure.Hubs.OperationHubs;
+namespace InternetBank.Core.Api;
 
-public class OperationHub : Hub
+public class TestOperationHub : Hub
 {
     public override async Task OnConnectedAsync()
     {
@@ -15,8 +15,8 @@ public class OperationHub : Hub
         await Clients.All.SendAsync("RecieveOperationUpdate", message);
     }
 
-    public async Task SendMessage(string message)
+    public async Task SendMessage(string user, string message)
     {
-        await Clients.Caller.SendAsync("ReceiveMessage", "Ответ на ваше сообщение: " + message);
+        await Clients.All.SendAsync("ReceiveMessage", user, message);
     }
 }

@@ -1,8 +1,11 @@
 ﻿using InternetBank.Core.Application.DTOs.OperationDTOs;
 using InternetBank.Core.Application.Interfaces.Services.OperationServices;
+using InternetBank.Core.Infrastructure.Hubs.OperationHubs;
+using Microsoft.AspNet.SignalR.Messaging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System.Text;
@@ -15,11 +18,13 @@ public class OperationController : ControllerBase
 {
     private readonly IOperationGetService _operationGetService;
     private readonly IOperationHandleService _operationHandleService;
+    private readonly IHubContext<OperationHub> _hubContext;
 
-    public OperationController(IOperationGetService operationGetService, IOperationHandleService operationHandleService)
+    public OperationController(IOperationGetService operationGetService, IOperationHandleService operationHandleService, IHubContext<OperationHub> hubContext)
     {
         _operationGetService = operationGetService;
         _operationHandleService = operationHandleService;
+        _hubContext = hubContext;
     }
 
     [HttpGet("my")]
@@ -133,5 +138,12 @@ public class OperationController : ControllerBase
         {
             return BadRequest(e.Message);
         }
+    }
+
+    [HttpPost("sendMessage")]
+    public async Task<ActionResult> SendMessage()
+    {
+        await _hubContext.Clients.All.SendAsync("ReceiveOperationsUpdate", "Sheesh");
+        return Ok();
     }
 }

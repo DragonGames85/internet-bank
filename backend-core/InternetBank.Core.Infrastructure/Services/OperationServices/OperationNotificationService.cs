@@ -13,8 +13,11 @@ public class OperationNotificationService : IOperationNotificationService
         _hubContext = hubContext;
     }
 
-    public async Task NotifyAllClientsAsync(string message)
+    public async Task NotifyClientsAsync(string? receiverUserId = null, string? senderUserId = null)
     {
-        await _hubContext.Clients.All.SendAsync("ReceiveOperationsUpdate", message);
+        if (receiverUserId != null)
+            await _hubContext.Clients.User(receiverUserId).SendAsync("ReceiveOperationsUpdate");
+        if (senderUserId != null)
+            await _hubContext.Clients.User(senderUserId).SendAsync("ReceiveOperationsUpdate");
     }
 }

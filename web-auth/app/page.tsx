@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import ClockTime from './helpers/ClockTime';
 import { parseJwt } from './helpers/parseJwt';
 import { useLocalStorage } from './helpers/useLocalStorage';
+import { authAppUrl, employeeAppUrl } from '@/config';
 
 export default function Home(props: { searchParams: { home: string } }) {
     type LoginType = {
@@ -35,11 +36,11 @@ export default function Home(props: { searchParams: { home: string } }) {
     const onLogin: SubmitHandler<LoginType> = async data => {
         try {
             const { token } = await axios
-                .post<{ token: string }>('https://bayanshonhodoev.ru/auth/api/auth/login', data)
+                .post<{ token: string }>(`${authAppUrl}/api/auth/login`, data)
                 .then(res => res.data);
             // localStorage.setItem('token', token);
             // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            navigate.push('http://' + (props.searchParams.home ?? 'localhost:3001') + `?token=${token}`);
+            navigate.push((props.searchParams.home ? 'http://' + props.searchParams.home : employeeAppUrl) + `?token=${token}`);
         } catch (error) {
             console.log(error);
         }
@@ -48,11 +49,11 @@ export default function Home(props: { searchParams: { home: string } }) {
     const onRegister: SubmitHandler<RegisterType> = async data => {
         try {
             const { token } = await axios
-                .post<{ token: string }>('https://bayanshonhodoev.ru/auth/api/auth/register', data)
+                .post<{ token: string }>(`${authAppUrl}/api/auth/register`, data)
                 .then(res => res.data);
             // localStorage.setItem('token', token);
             // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            navigate.push('http://' + (props.searchParams.home ?? 'localhost:3001') + `?token=${token}`);
+            navigate.push((props.searchParams.home ? 'http://' + props.searchParams.home : employeeAppUrl) + `?token=${token}`);
         } catch (error) {
             console.log(error);
         }
@@ -73,7 +74,7 @@ export default function Home(props: { searchParams: { home: string } }) {
                 <button
                     onClick={() => {
                         console.log(props.searchParams.home);
-                        navigate.push('http://' + (props.searchParams.home ?? 'localhost:3001') + `?token=${token}`);
+                        navigate.push((props.searchParams.home ? 'http://' + props.searchParams.home : employeeAppUrl) + `?token=${token}`);
                     }}
                     className="bg-green-400 rounded-full px-4 py-2 mb-16 font-bold"
                 >

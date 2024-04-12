@@ -1,8 +1,10 @@
+using InternetBank.Core.Api;
 using InternetBank.Core.Application.Extensions;
 using InternetBank.Core.Infrastructure.Extensions;
 using InternetBank.Core.Infrastructure.Hubs.OperationHubs;
 using InternetBank.Core.Persistence.Contexts.EfCore;
 using InternetBank.Core.Persistence.Extensions;
+using Microsoft.AspNet.SignalR.Messaging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -41,13 +43,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-
 builder.Services.AddControllers();
 
 builder.Services.AddSignalR();
 
 builder.Services.AddEndpointsApiExplorer();
-
 
 // Add Swagger
 builder.Services.AddSwaggerGen(c =>
@@ -107,15 +107,19 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseRouting();
 
 app.UseAuthentication();
+
+app.UseRouting();
+
 app.UseAuthorization();
 
+app.UseHttpsRedirection();
 
 app.MapControllers();
 
 // WebSocket
-app.MapHub<OperationHub>("/core/operationHub");
+app.MapHub<OperationHub>("/operationHub");
+app.MapHub<TestOperationHub>("/testOperationHub");
 
 app.Run();

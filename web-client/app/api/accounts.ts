@@ -5,6 +5,8 @@ import { coreAppUrl, setURL } from '../config';
 export class accountsApi {
     public getAll() {
         setURL(coreAppUrl);
+        let token = localStorage.getItem("token");
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         return axios.get<Account[]>(`/Account/my`).then(res => res.data);
     }
     public get(id: string) {

@@ -8,7 +8,7 @@ import { useSWRConfig } from 'swr';
 const OperationList: FC<{ accId: string }> = ({ accId }) => {
     // const user = JSON.parse(localStorage.getItem('user') ?? '');
 
-    // const { mutate } = useSWRConfig();
+    const { mutate } = useSWRConfig();
 
     const mockedOperations: Operation[] = [
         {
@@ -31,38 +31,38 @@ const OperationList: FC<{ accId: string }> = ({ accId }) => {
 
     // const [operations, setOperations] = useState([]);
 
-    // useEffect(() => {
-    //     const ws = new WebSocket(`ws://bayanshonhodoev.ru/core/operationHub?userId=${user.id}`);
+    useEffect(() => {
+        const userId = JSON.parse(localStorage.getItem('user') ?? '').userId;
 
-    //     ws.onopen = () => {
-    //         console.log('WebSocket Connection Established');
-    //     };
+        const ws = new WebSocket(`wss://localhost:7401/operationHub?userId=${userId}`);
 
-    //     ws.onmessage = event => {
-    //         if (event.data === 'ReceiveOperationsUpdate') {
-    //             mutate(`/api/operations/${accId}`);
-    //             // fetchOperations();
-    //         }
-    //         // const operation = JSON.parse(event.data);
-    //         // console.log(operation);
-    //         // setOperations(prevOperations => [...prevOperations, operation]);
-    //     };
+        ws.onopen = () => {
+            console.log('WebSocket Connection Established');
+            
+            const message = JSON.stringify({"protocol":"json","version":1});
+            ws.send(message + '\u001E');
+        };
 
-    //     ws.onclose = e => {
-    //         console.log(e);
-    //         console.log('WebSocket Connection Closed');
-    //     };
+        ws.onmessage = event => {
+            console.log(`We got ${event.data}`);
+            if (event.data === 'ReceiveOperationsUpdate') {
+                mutate(`/api/operations/${accId}`);
+            }
+        };
 
-    //     ws.onerror = error => {
-    //         console.log('WebSocket Error: ', error);
-    //     };
+        ws.onclose = e => {
+            console.log(e);
+            console.log('WebSocket Connection Closed');
+        };
 
-    //     return () => {
-    //         ws.close();
-    //     };
-    // }, []);
+        ws.onerror = error => {
+            console.log('WebSocket Error: ', error);
+        };
 
-    // return <></>;
+        return () => {
+            ws.close();
+        };
+    }, []);
 
     return (
         <>

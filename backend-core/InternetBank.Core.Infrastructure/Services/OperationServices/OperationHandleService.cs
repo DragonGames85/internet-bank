@@ -65,7 +65,12 @@ public class OperationHandleService : IOperationHandleService
             await _mediator.Send(new CreateOperationCommand(dto, false, false));
         }
 
+        var receiveAccount = await _mediator.Send(new GetAccountByNumberQuery(dto.ReceiveAccountNumber ?? string.Empty));
+        var sendAccount = await _mediator.Send(new GetAccountByNumberQuery(dto.SendAccountNumber ?? string.Empty));
 
-        await _notificationService.NotifyAllClientsAsync("refreshOperationData");
+        var receiverUserId = receiveAccount?.User?.Id.ToString();
+        var senderUserId = sendAccount?.User?.Id.ToString();
+
+        await _notificationService.NotifyClientsAsync(receiverUserId, senderUserId);
     }
 }

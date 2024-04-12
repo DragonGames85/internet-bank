@@ -48,6 +48,10 @@ export const coreAppUrl =
     (productionMode ? process.env.NEXT_PUBLIC_CORE_APP_URL_PROD : process.env.NEXT_PUBLIC_CORE_APP_URL_LOCAL) ?? '';
 export const creditAppUrl =
     (productionMode ? process.env.NEXT_PUBLIC_CREDIT_APP_URL_PROD : process.env.NEXT_PUBLIC_CREDIT_APP_URL_LOCAL) ?? '';
+export const webauthAppUrl =
+    (productionMode ? process.env.NEXT_PUBLIC_WEBAUTH_APP_URL_PROD : process.env.NEXT_PUBLIC_WEBAUTH_APP_URL_LOCAL) ?? '';
+export const clientAppUrl =
+    (productionMode ? process.env.NEXT_PUBLIC_CLIENT_APP_URL_PROD : process.env.NEXT_PUBLIC_CLIENT_APP_URL_LOCAL) ?? '';
 
 export const setURL = (url: string) => {
     axios.defaults.baseURL = `${url}/api`;

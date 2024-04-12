@@ -5,7 +5,7 @@ import { ThemeProvider as NextThemesProvider, useTheme } from 'next-themes';
 import { type ThemeProviderProps } from 'next-themes/dist/types';
 import { useSearchParams } from 'next/navigation';
 import router from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect, useReducer } from 'react';
 import { SWRConfig } from 'swr';
 import { parseJwt } from './helpers/parseJwt';
 import { useLocalStorage } from './hooks/useLocalStorage';
@@ -21,7 +21,7 @@ const SwrProvider = ({ children }: { children: React.ReactNode }) => {
     const [_, setUser] = useLocalStorage('user', '');
 
     const resultToken = token ?? localToken;
-
+    
     useEffect(() => {
         if (resultToken) {
             const userLocal = parseJwt(resultToken);
@@ -53,22 +53,22 @@ const SwrProvider = ({ children }: { children: React.ReactNode }) => {
             </div>
         );
 
-    if (user.role == 'Customer')
-        return (
-            <div className="mt-52 flex-center flex-col gap-4">
-                <h1 className="text-center text-3xl text-danger">ВЫ НЕ СОТРУДНИК</h1>
-                <button
-                    onClick={() => {
-                        localStorage.removeItem('token');
-                        localStorage.removeItem('user');
-                        router.push('/');
-                    }}
-                    className="text-center text-3xl text-black dark:text-white p-2 border-1 rounded-full border-purple-500"
-                >
-                    ВЫЙТИ
-                </button>
-            </div>
-        );
+    // if (user.role == 'Customer')
+    //     return (
+    //         <div className="mt-52 flex-center flex-col gap-4">
+    //             <h1 className="text-center text-3xl text-danger">ВЫ НЕ СОТРУДНИК</h1>
+    //             <button
+    //                 onClick={() => {
+    //                     localStorage.removeItem('token');
+    //                     localStorage.removeItem('user');
+    //                     router.push('/');
+    //                 }}
+    //                 className="text-center text-3xl text-black dark:text-white p-2 border-1 rounded-full border-purple-500"
+    //             >
+    //                 ВЫЙТИ
+    //             </button>
+    //         </div>
+    //     );
 
     return (
         <SWRConfig

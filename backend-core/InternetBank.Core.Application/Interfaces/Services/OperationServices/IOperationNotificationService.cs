@@ -2,5 +2,5 @@
 
 public interface IOperationNotificationService
 {
-    Task NotifyAllClientsAsync(string message);
+    Task NotifyClientsAsync(string? receiverUserId = null, string? senderUserId = null);
 }
