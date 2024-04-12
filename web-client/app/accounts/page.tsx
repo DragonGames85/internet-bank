@@ -25,7 +25,7 @@ const Credits: FC = () => {
         },
     ];
 
-    const { data: hideAccs } = useSWR<Account[]>('/api/hide/accounts', api.auth.hiddenAccounts);
+    const { data: hideAccs } = useSWR<{id: string}[]>('/api/hide/accounts', api.auth.hiddenAccounts);
 
     const { result: accounts, mock } = useBankFetch<Account[]>('/api/accounts', api.accounts.getAll, mockAccounts);
 
@@ -61,7 +61,7 @@ const Credits: FC = () => {
                             variants={animationVariants.item}
                             className={`flex items-center justify-between border-[1px] rounded-3xl p-6 h-auto gap-1 bg-bgColor2 dark:bg-bgColorDark`}
                         >
-                            <AccCard {...acc} isHidden={hideAccs?.length !== 0 && hideAccs?.length !== undefined ? (!!hideAccs?.find((element: { id: string; }) => element.id == acc.id) ?? false) : false} />
+                            <AccCard {...acc} isHidden={(!!hideAccs?.find((element) => element.id == acc.id) ?? false) } />
                         </motion.li>
                     ))}
                 </motion.ul>

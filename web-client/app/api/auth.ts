@@ -8,7 +8,7 @@ export class authApi {
     }
     public hiddenAccounts() {
         setURL(authAppUrl);
-        return axios.get('/Settings/hideAccount', {});
+        return axios.get('/Settings/hideAccount', {}).then(res=> res.data);
     }
     public hideAccount(accountId: string) {
         setURL(authAppUrl);
