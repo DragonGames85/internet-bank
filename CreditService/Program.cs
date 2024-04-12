@@ -35,6 +35,7 @@ builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<ICreditEmployeeRepository, CreditEmployeeRepository>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddHostedService<MyHostedService>();
+builder.Services.AddHttpClient();
 //var logger = new LoggerConfiguration()
 //  .ReadFrom.Configuration(builder.Configuration)
 //  .Enrich.FromLogContext()
