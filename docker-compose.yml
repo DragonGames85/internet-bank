@@ -26,7 +26,7 @@ services:
   authcomponent:
     image: authcomponent    
     environment:
-      - IS_PRODUCTION=true
+      - IS_PRODUCTION=false
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty.123
@@ -45,7 +45,7 @@ services:
   corecomponent:
     image: corecomponent
     environment:
-      - IS_PRODUCTION=true
+      - IS_PRODUCTION=false
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty.123
@@ -64,7 +64,7 @@ services:
   creditcomponent:
     image: creditcomponent
     environment:
-      - IS_PRODUCTION=true
+      - IS_PRODUCTION=false
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty.123
