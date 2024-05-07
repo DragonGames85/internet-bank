@@ -13,6 +13,8 @@ import { useState } from 'react';
 import { faker } from '@faker-js/faker';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 import { Line } from 'react-chartjs-2';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
     const [statusCodes, setStatusCodes] = useState<number[]>([]);
@@ -41,6 +43,7 @@ export default function Home() {
                 return [...prev, prev[prev.length - 1] + 1];
             }
         });
+        toast.success(`Новый запрос: ${randomStatus}`);
     };
 
     const data = {
@@ -64,6 +67,7 @@ export default function Home() {
             >
                 Мокнуть запрос
             </button>
+            <ToastContainer />
         </main>
     );
 }
