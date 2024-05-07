@@ -135,3 +135,13 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3002:3002"
+ 
+  webmonitorcomponent:
+    image: webmonitorcomponent
+    environment:
+      - NEXT_PUBLIC_PRODUCTION_MODE=true
+    build:
+      context: ./web-monitor
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
