@@ -26,6 +26,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddApplicationLayer();
 builder.Services.AddInfrastructureLayer(builder.Configuration);
 builder.Services.AddPersistenceLayer(builder.Configuration);
+builder.Services.AddScoped<IMonitoring, Monitoring>();
+builder.Services.AddHttpClient();
 
 // Configure JWT Bearer
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

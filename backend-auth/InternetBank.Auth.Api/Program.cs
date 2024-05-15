@@ -1,3 +1,4 @@
+using InternetBank.Auth.Api;
 using InternetBank.Auth.Application.Extensions;
 using InternetBank.Auth.Infrastructure.Extensions;
 using InternetBank.Auth.Persistence.Contexts.EfCore;
@@ -41,6 +42,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IMonitoring, Monitoring>();
+builder.Services.AddHttpClient();
 
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();

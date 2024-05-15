@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using monitoring_service.Models.DTO;
+using monitoring_service.Models.Enum;
 using monitoring_service.Services;
 using System.Diagnostics;
 
@@ -50,11 +51,11 @@ namespace monitoring_service.Controllers
         }
         [HttpGet]
         [Route("credit/tracing")]
-        public async Task<IActionResult> GetCreditTracing(DateTime begin, DateTime end)
+        public async Task<IActionResult> GetCreditTracing(DateTime begin, DateTime end, [FromQuery] TracingType type)
         {
             try
             {
-                var result = await _monitoringService.GetCreditTracing(begin, end);
+                var result = await _monitoringService.GetCreditTracing(begin, end, type);
                 return Ok(result);
             }
             catch (Exception e)

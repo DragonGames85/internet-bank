@@ -1,8 +1,10 @@
-﻿using InternetBank.Core.Application.DTOs.AccountDTOs;
+﻿using InternetBank.Core.Api;
+using InternetBank.Core.Application.DTOs.AccountDTOs;
 using InternetBank.Core.Application.DTOs.CurrencyDTOs;
 using InternetBank.Core.Application.Interfaces.Services.CurrencyServices;
 using InternetBank.Core.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace WebApiCoreApplication.Controllers;
 
@@ -12,24 +14,36 @@ public class CurrencyController : ControllerBase
 {
     private readonly ICurrencyGetService _currencyGetService;
     private readonly ICurrencyHandleService _currencyHandleService;
+    private readonly IMonitoring _monitoring;
 
-    public CurrencyController(ICurrencyGetService currencyGetService, ICurrencyHandleService currencyHandleService)
+    public CurrencyController(ICurrencyGetService currencyGetService, ICurrencyHandleService currencyHandleService, IMonitoring monitoring)
     {
         _currencyGetService = currencyGetService;
         _currencyHandleService = currencyHandleService;
+        _monitoring = monitoring;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<CurrencyDto>>> GetCurrencies()
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
         try
         {
             var result = await _currencyGetService.GetCurrencies();
+
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Currency", "GET", 200, 1, "");
 
             return Ok(result);
         }
         catch (Exception e)
         {
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Currency", "GET", 400, 0, e.Message);
+
             return BadRequest(e.Message);
         }
     }
@@ -37,14 +51,24 @@ public class CurrencyController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateCurrency(ShortCurrencyDto dto)
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
         try
         {
             await _currencyHandleService.CreateCurrency(dto);
+
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Currency", "POST", 200, 1, "");
 
             return Ok();
         }
         catch (Exception e)
         {
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Currency", "POST", 400, 0, e.Message);
+
             return BadRequest(e.Message);
         }
     }
@@ -52,14 +76,24 @@ public class CurrencyController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> EditCurrency(Guid id, ShortCurrencyDto dto)
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
         try
         {
             await _currencyHandleService.EditCurrency(id, dto);
+
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Currency/{id}", "PUT", 200, 1, "");
 
             return Ok();
         }
         catch (Exception e)
         {
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Currency/{id}", "PUT", 400, 0, e.Message);
+
             return BadRequest(e.Message);
         }
     }
@@ -67,14 +101,24 @@ public class CurrencyController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteCurrency(Guid id)
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
         try
         {
             await _currencyHandleService.DeleteCurrency(id);
+
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Currency/{id}", "DELETE", 200, 1, "");
 
             return Ok();
         }
         catch (Exception e)
         {
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Currency/{id}", "DELETE", 400, 0, e.Message);
+
             return BadRequest(e.Message);
         }
     }
@@ -82,6 +126,8 @@ public class CurrencyController : ControllerBase
     [HttpPost("all")]
     public async Task<ActionResult> CreateAllCurrency()
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
         try
         {
             await _currencyHandleService.CreateCurrency(new ShortCurrencyDto("RUB", "₽"));
@@ -129,10 +175,18 @@ public class CurrencyController : ControllerBase
             await _currencyHandleService.CreateCurrency(new ShortCurrencyDto("KRW", "₩"));
             await _currencyHandleService.CreateCurrency(new ShortCurrencyDto("JPY", "¥"));
 
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Currency/all", "POST", 200, 1, "");
+
             return Ok();
         }
         catch (Exception e)
         {
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Currency/all", "POST", 400, 0, e.Message);
+
             return BadRequest(e.Message);
         }
     }

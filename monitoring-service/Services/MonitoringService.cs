@@ -9,7 +9,7 @@ namespace monitoring_service.Services
     {
         Task CreateTracing(TracingDTO model);
         Task<List<GetTracingDto>> GetAllTracing(DateTime begin, DateTime end);
-        Task<List<GetTracingDto>> GetCreditTracing(DateTime begin, DateTime end);
+        Task<List<GetTracingDto>> GetCreditTracing(DateTime begin, DateTime end, TracingType type);
     }
     public class MonitoringService: IMonitoringService
     {
@@ -60,7 +60,7 @@ namespace monitoring_service.Services
             }
             return tracing_list;
         }
-        public async Task<List<GetTracingDto>> GetCreditTracing(DateTime begin, DateTime end)
+        public async Task<List<GetTracingDto>> GetCreditTracing(DateTime begin, DateTime end, TracingType type)
         {
             var list = await _context.Tracing
                  .Where(x => (x.Created_At <= end) && (x.Created_At >= begin) && (x.Service == Models.Enum.ServiceEnum.Credit))

@@ -3,6 +3,7 @@ using CreditService.Model.DTO;
 using CreditService.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace CreditService.Controllers
 {
@@ -24,34 +25,37 @@ namespace CreditService.Controllers
         [Route("createCreditTariff")]
         public async Task<IActionResult> CreateNewTariff(AddCreditTariffModel model)
         {
-            var startSendRequest = DateTime.Now;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             try
             {
                 await _employeeService.CreateNewTariff(model);
                 _logger.LogInformation($"Succesful create new tariff");
 
-                var endSendRequest = DateTime.Now;
-                var time = endSendRequest - startSendRequest;
+                stopwatch.Stop();
+                TimeSpan executionTime = stopwatch.Elapsed;
 
-                _monitoring.MonitoringService(time, "credit/api/createCreditTariff", "POST", 200, 1, "Succesful create new tariff");
+                _monitoring.MonitoringService(executionTime, "credit/api/createCreditTariff", "POST", 200, 1, "Succesful create new tariff");
                 return Ok();
             }
             catch (ArgumentException e)
             {
                 _logger.LogError(e, e.Message);
-                var endSendRequest = DateTime.Now;
-                var time = endSendRequest - startSendRequest;
 
-                _monitoring.MonitoringService(time, "credit/api/createCreditTariff", "POST", 400, 0, e.Message);
+                stopwatch.Stop();
+                TimeSpan executionTime = stopwatch.Elapsed;
+
+                _monitoring.MonitoringService(executionTime, "credit/api/createCreditTariff", "POST", 400, 0, e.Message);
                 return Problem(statusCode: 400, title: "Bad request", detail: e.Message);
             }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
-                var endSendRequest = DateTime.Now;
-                var time = endSendRequest - startSendRequest;
 
-                _monitoring.MonitoringService(time, "credit/api/createCreditTariff", "POST", 500, 0, e.Message);
+                stopwatch.Stop();
+                TimeSpan executionTime = stopwatch.Elapsed;
+
+                _monitoring.MonitoringService(executionTime, "credit/api/createCreditTariff", "POST", 500, 0, e.Message);
                 return Problem(statusCode: 500, title: "Something went wrong");
             }
         }
@@ -59,33 +63,37 @@ namespace CreditService.Controllers
         [Route("getUserCredits/{userId}")]
         public async Task<IActionResult> GetUserCredits(Guid userId)
         {
-            var startSendRequest = DateTime.Now;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             try
             {
                 var results = await _employeeService.GetUserCredits(userId);
-                var endSendRequest = DateTime.Now;
-                var time = endSendRequest - startSendRequest;
 
-                _monitoring.MonitoringService(time, "credit/api/getUserCredits/{userId}", "GET", 200, 1, "Succesful get user credits");
+                stopwatch.Stop();
+                TimeSpan executionTime = stopwatch.Elapsed;
+
+                _monitoring.MonitoringService(executionTime, "credit/api/getUserCredits/{userId}", "GET", 200, 1, "Succesful get user credits");
                 return Ok(results);
             }
             catch (KeyNotFoundException e)
             {
                 _logger.LogError(e, e.Message);
-                var endSendRequest = DateTime.Now;
-                var time = endSendRequest - startSendRequest;
 
-                _monitoring.MonitoringService(time, "credit/api/getUserCredits/{userId}", "GET", 404, 0, e.Message);
+                stopwatch.Stop();
+                TimeSpan executionTime = stopwatch.Elapsed;
+
+                _monitoring.MonitoringService(executionTime, "credit/api/getUserCredits/{userId}", "GET", 404, 0, e.Message);
                 return Problem(statusCode: 404, title: "Not found", detail: e.Message);
 
             }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
-                var endSendRequest = DateTime.Now;
-                var time = endSendRequest - startSendRequest;
 
-                _monitoring.MonitoringService(time, "credit/api/getUserCredits/{userId}", "GET", 500, 0, e.Message);
+                stopwatch.Stop();
+                TimeSpan executionTime = stopwatch.Elapsed;
+
+                _monitoring.MonitoringService(executionTime, "credit/api/getUserCredits/{userId}", "GET", 500, 0, e.Message);
                 return Problem(statusCode: 500, title: "Something went wrong");
             }
         }
@@ -93,21 +101,37 @@ namespace CreditService.Controllers
         [Route("getCredit/{creditId}")]
         public async Task<IActionResult> GetUserCredit(Guid creditId)
         {
-            var startSendRequest = DateTime.Now;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             try
             {
                 var results = await _employeeService.GetCreditDetails(creditId);
+
+                stopwatch.Stop();
+                TimeSpan executionTime = stopwatch.Elapsed;
+
+                _monitoring.MonitoringService(executionTime, "credit/api/getCredit/{creditId}", "GET", 200, 1, "Succesful get credit details");
                 return Ok(results);
             }
             catch (KeyNotFoundException e)
             {
                 _logger.LogError(e, e.Message);
+
+                stopwatch.Stop();
+                TimeSpan executionTime = stopwatch.Elapsed;
+
+                _monitoring.MonitoringService(executionTime, "credit/api/getCredit/{creditId}", "GET", 404, 0, e.Message);
                 return Problem(statusCode: 404, title: "Not found", detail: e.Message);
 
             }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
+
+                stopwatch.Stop();
+                TimeSpan executionTime = stopwatch.Elapsed;
+
+                _monitoring.MonitoringService(executionTime, "credit/api/getCredit/{creditId}", "GET", 500, 0, e.Message);
                 return Problem(statusCode: 500, title: "Something went wrong");
             }
         }
@@ -115,21 +139,37 @@ namespace CreditService.Controllers
         [Route("delete/{creditId}")]
         public async Task<IActionResult> DeleteUserCredit(Guid creditId)
         {
-            var startSendRequest = DateTime.Now;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             try
             {
                 await _employeeService.DeleteCredit(creditId);
+
+                stopwatch.Stop();
+                TimeSpan executionTime = stopwatch.Elapsed;
+
+                _monitoring.MonitoringService(executionTime, "credit/api/delete/{creditId}", "DELETE", 200, 1, "Delete user credit");
                 return Ok();
             }
             catch (KeyNotFoundException e)
             {
                 _logger.LogError(e, e.Message);
+
+                stopwatch.Stop();
+                TimeSpan executionTime = stopwatch.Elapsed;
+
+                _monitoring.MonitoringService(executionTime, "credit/api/delete/{creditId}", "DELETE", 404, 0, e.Message);
                 return Problem(statusCode: 404, title: "Not found", detail: e.Message);
 
             }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
+
+                stopwatch.Stop();
+                TimeSpan executionTime = stopwatch.Elapsed;
+
+                _monitoring.MonitoringService(executionTime, "credit/api/delete/{creditId}", "DELETE", 500, 0, e.Message);
                 return Problem(statusCode: 500, title: "Something went wrong");
             }
         }
@@ -137,22 +177,38 @@ namespace CreditService.Controllers
         [Route("rating/{userId}")]
         public async Task<IActionResult> GetOverdueLoans(Guid userId)
         {
-            var startSendRequest = DateTime.Now;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             try
             {
                 var result = await _employeeService.GetUserCreditRating(userId);
+
+                stopwatch.Stop();
+                TimeSpan executionTime = stopwatch.Elapsed;
+
+                _monitoring.MonitoringService(executionTime, "credit/api/rating/{userId}", "GET", 200, 1, "Get overdue loans");
                 return Ok(result);
             }
             catch (KeyNotFoundException e)
             {
                 // Catch if credits wasn't found in database
                 _logger.LogError(e, e.Message);
+
+                stopwatch.Stop();
+                TimeSpan executionTime = stopwatch.Elapsed;
+
+                _monitoring.MonitoringService(executionTime, "credit/api/rating/{userId}", "GET", 404, 0, e.Message);
                 return Problem(statusCode: 404, title: e.Message);
 
             }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
+
+                stopwatch.Stop();
+                TimeSpan executionTime = stopwatch.Elapsed;
+
+                _monitoring.MonitoringService(executionTime, "credit/api/rating/{userId}", "GET", 404, 0, e.Message);
                 return Problem(statusCode: 500, title: "Something went wrong");
             }
         }
