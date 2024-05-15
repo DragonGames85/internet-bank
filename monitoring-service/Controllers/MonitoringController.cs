@@ -51,12 +51,61 @@ namespace monitoring_service.Controllers
         }
         [HttpGet]
         [Route("credit/tracing")]
-        public async Task<IActionResult> GetCreditTracing(DateTime begin, DateTime end, [FromQuery] TracingType type)
+        public async Task<IActionResult> GetCreditTracing(DateTime begin, DateTime end, TracingEnum? type)
         {
             try
             {
                 var result = await _monitoringService.GetCreditTracing(begin, end, type);
                 return Ok(result);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return Problem(statusCode: 500, title: "Something went wrong");
+            }
+        }
+        [HttpGet]
+        [Route("core/tracing")]
+        public async Task<IActionResult> GetCoreTracing(DateTime begin, DateTime end, TracingEnum? type)
+        {
+            try
+            {
+                var result = await _monitoringService.GetCoreTracing(begin, end, type);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return Problem(statusCode: 500, title: "Something went wrong");
+            }
+        }
+        [HttpGet]
+        [Route("auth/tracing")]
+        public async Task<IActionResult> GetAuthTracing(DateTime begin, DateTime end, TracingEnum? type)
+        {
+            try
+            {
+                var result = await _monitoringService.GetAuthTracing(begin, end, type);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return Problem(statusCode: 500, title: "Something went wrong");
+            }
+        }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteTracing(DateTime begin, DateTime end, ServiceEnum? type)
+        {
+            try
+            {
+                await _monitoringService.DeleteTracing(begin, end, type);
+                return Ok();
+            }
+            catch(KeyNotFoundException e)
+            {
+                _logger.LogError(e, e.Message);
+                return Problem(statusCode: 404, title: "Not found", detail: e.Message);
             }
             catch (Exception e)
             {
