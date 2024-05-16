@@ -1,4 +1,5 @@
 using CreditService;
+using CreditService.Logger;
 using CreditService.Repository;
 using CreditService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,20 +29,16 @@ builder.Services.AddSwaggerGen();
 
 var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(connection));
-
+builder.Services.AddHealthChecks();
 builder.Services.AddScoped<IUserCreditService, UserCreditService>();
 builder.Services.AddScoped<ICreditRepository, CreditRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<ICreditEmployeeRepository, CreditEmployeeRepository>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddHostedService<MyHostedService>();
+builder.Services.AddScoped<IMonitoring, Monitoring>();
 builder.Services.AddHttpClient();
-//var logger = new LoggerConfiguration()
-//  .ReadFrom.Configuration(builder.Configuration)
-//  .Enrich.FromLogContext()
-//  .CreateLogger();
-//builder.Logging.ClearProviders();
-//builder.Logging.AddSerilog(logger);
+
 
 var app = builder.Build();
 
@@ -73,8 +70,10 @@ if (app.Environment.IsDevelopment())
         c.RoutePrefix = routeSwaggerPrefix;
     });
 }
-app.UseAuthorization();
 
+app.UseAuthorization();
+app.MapHealthChecks("/health");
 app.MapControllers();
+
 
 app.Run();

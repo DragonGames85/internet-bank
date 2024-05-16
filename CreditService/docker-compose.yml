@@ -1,8 +1,0 @@
-version: '3.4'
-
-services:
-  creditservice:
-    image: ${DOCKER_REGISTRY-}creditservice
-    build:
-      context: .
-      dockerfile: Dockerfile

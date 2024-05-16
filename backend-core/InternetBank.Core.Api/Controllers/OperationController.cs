@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
+using System.Diagnostics;
 using System.Text;
 
 namespace InternetBank.Core.Api.Controllers;
@@ -19,29 +20,42 @@ public class OperationController : ControllerBase
     private readonly IOperationGetService _operationGetService;
     private readonly IOperationHandleService _operationHandleService;
     private readonly IHubContext<OperationHub> _hubContext;
+    private readonly IMonitoring _monitoring;
 
-    public OperationController(IOperationGetService operationGetService, IOperationHandleService operationHandleService, IHubContext<OperationHub> hubContext)
+    public OperationController(IOperationGetService operationGetService, IOperationHandleService operationHandleService, IHubContext<OperationHub> hubContext, IMonitoring monitoring)
     {
         _operationGetService = operationGetService;
         _operationHandleService = operationHandleService;
         _hubContext = hubContext;
+        _monitoring = monitoring;
     }
 
     [HttpGet("my")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<ActionResult<List<OperationDto>>> GetMyOperations()
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
         try
         {
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId")
-                ?? throw new Exception("userId is not found.");
+                ??  throw new Exception("userId is not found."); 
 
             var result = await _operationGetService.GetOperationsByUserId(Guid.Parse(userIdClaim.Value));
+
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Operation/my", "GET", 200, 1, "");
 
             return Ok(result);
         }
         catch (Exception e)
         {
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Operation/my", "GET", 400, 0, e.Message);
+
             return BadRequest(e.Message);
         }
     }
@@ -49,14 +63,25 @@ public class OperationController : ControllerBase
     [HttpGet("user/{userId}")]
     public async Task<ActionResult<List<OperationDto>>> GetOperationsByUserId(Guid userId)
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
         try
         {
             var result = await _operationGetService.GetOperationsByUserId(userId);
+
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Operation/user/{userId}", "GET", 200, 1, "");
 
             return Ok(result);
         }
         catch (Exception e)
         {
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Operation/user/{userId}", "GET", 400, 0, e.Message);
+
             return BadRequest(e.Message);
         }
     }
@@ -64,14 +89,25 @@ public class OperationController : ControllerBase
     [HttpGet("account/{accountId}")]
     public async Task<ActionResult<List<OperationDto>>> GetOperationsByAccountId(Guid accountId)
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
         try
         {
             var result = await _operationGetService.GetOperationsByAccountId(accountId);
+
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Operation/account/{accountId}", "GET", 200, 1, "");
 
             return Ok(result);
         }
         catch (Exception e)
         {
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Operation/account/{accountId}", "GET", 400, 0, e.Message);
+
             return BadRequest(e.Message);
         }
     }
@@ -79,14 +115,25 @@ public class OperationController : ControllerBase
     [HttpGet("all")]
     public async Task<ActionResult<List<OperationDto>>> GetAllOperations()
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
         try
         {
             var result = await _operationGetService.GetAllOperations();
+
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Operation/all", "GET", 200, 1, "");
 
             return Ok(result);
         }
         catch (Exception e)
         {
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Operation/all", "GET", 400, 0, e.Message);
+
             return BadRequest(e.Message);
         }
     }
@@ -128,14 +175,25 @@ public class OperationController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateOperation(CreateOperationDto dto, bool isCreditOperation = false)
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
         try
         {
             await _operationHandleService.CreateOperation(dto, isCreditOperation);
+
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Operation", "POST", 200, 1, "");
 
             return Ok();
         }
         catch (Exception e)
         {
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Operation", "POST", 400, 0, e.Message);
+
             return BadRequest(e.Message);
         }
     }
@@ -143,7 +201,26 @@ public class OperationController : ControllerBase
     [HttpPost("sendMessage")]
     public async Task<ActionResult> SendMessage()
     {
-        await _hubContext.Clients.All.SendAsync("ReceiveOperationsUpdate", "Sheesh");
-        return Ok();
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+        try
+        {
+            await _hubContext.Clients.All.SendAsync("ReceiveOperationsUpdate", "Sheesh");
+            
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Operation/sendMessage", "POST", 200, 1, "");
+
+            return Ok();
+        }
+        catch(Exception e)
+        {
+
+            stopwatch.Stop();
+            TimeSpan executionTime = stopwatch.Elapsed;
+            _monitoring.MonitoringService(executionTime, "core/api/Operation/sendMessage", "POST", 400, 0, e.Message);
+
+            return BadRequest(e.Message);
+        }
     }
 }
