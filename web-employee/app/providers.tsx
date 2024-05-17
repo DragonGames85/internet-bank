@@ -53,22 +53,22 @@ const SwrProvider = ({ children }: { children: React.ReactNode }) => {
             </div>
         );
 
-    // if (user.role == 'Customer')
-    //     return (
-    //         <div className="mt-52 flex-center flex-col gap-4">
-    //             <h1 className="text-center text-3xl text-danger">ВЫ НЕ СОТРУДНИК</h1>
-    //             <button
-    //                 onClick={() => {
-    //                     localStorage.removeItem('token');
-    //                     localStorage.removeItem('user');
-    //                     router.push('/');
-    //                 }}
-    //                 className="text-center text-3xl text-black dark:text-white p-2 border-1 rounded-full border-purple-500"
-    //             >
-    //                 ВЫЙТИ
-    //             </button>
-    //         </div>
-    //     );
+    if (user.role == 'Customer')
+        return (
+            <div className="mt-52 flex-center flex-col gap-4">
+                <h1 className="text-center text-3xl text-danger">ВЫ НЕ СОТРУДНИК</h1>
+                <button
+                    onClick={() => {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                        router.push('/');
+                    }}
+                    className="text-center text-3xl text-black dark:text-white p-2 border-1 rounded-full border-purple-500"
+                >
+                    ВЫЙТИ
+                </button>
+            </div>
+        );
 
     return (
         <SWRConfig

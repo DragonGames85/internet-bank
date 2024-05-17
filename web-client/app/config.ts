@@ -52,6 +52,9 @@ export const webauthAppUrl =
     (productionMode ? process.env.NEXT_PUBLIC_WEBAUTH_APP_URL_PROD : process.env.NEXT_PUBLIC_WEBAUTH_APP_URL_LOCAL) ?? '';
 export const clientAppUrl =
     (productionMode ? process.env.NEXT_PUBLIC_CLIENT_APP_URL_PROD : process.env.NEXT_PUBLIC_CLIENT_APP_URL_LOCAL) ?? '';
+export const coreWebsocketAppUrl =
+    (productionMode ? process.env.NEXT_PUBLIC_CORE_APP_WEBSOCKET_URL_PROD : process.env.NEXT_PUBLIC_CORE_APP_WEBSOCKET_URL_LOCAL ?? '');
+
 
 export const setURL = (url: string) => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token') ?? ''}`;

@@ -40,7 +40,20 @@
 
             JsonContent content = JsonContent.Create(data);
 
-            coreClient.PostAsync($"https://localhost:7129/monitoring/api/tracing", content);
+            var isProduction = Environment.GetEnvironmentVariable("IS_PRODUCTION");
+            var isValid = bool.TryParse(isProduction, out bool isProd);
+            if (!isValid)
+            {
+                coreClient.PostAsync($"https://localhost:7129/monitoring/api/tracing", content);
+            }
+            else if (isProd)
+            {
+                coreClient.PostAsync($"https://bayanshonhodoev.ru/monitoring/api/tracing", content);
+            }
+            else
+            {
+                coreClient.PostAsync($"https://localhost:7403/monitoring/api/tracing", content);
+            }
         }
     }
 }

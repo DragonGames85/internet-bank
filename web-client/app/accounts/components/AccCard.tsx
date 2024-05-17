@@ -17,6 +17,7 @@ const AccCard: FC<Account & { isHidden: boolean }> = ({ balance, id, currency, n
             receiveAccountNumber: number,
             value: result,
         });
+        console.log(number);
         mutate('/api/accounts');
     }
     async function remove(e: React.MouseEvent<HTMLElement>) {

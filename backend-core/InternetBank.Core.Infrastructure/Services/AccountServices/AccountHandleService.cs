@@ -14,9 +14,9 @@ public class AccountHandleService : IAccountHandleService
         _mediator = mediator;
     }
 
-    public async Task CreateAccount(CreateAccountDto dto, Guid userId)
+    public async Task CreateAccount(CreateAccountDto dto, Guid userId, int? value = 0)
     {
-        await _mediator.Send(new CreateAccountCommand(dto, userId));
+        await _mediator.Send(new CreateAccountCommand(dto, userId, value));
     }
 
     public async Task CloseAccount(Guid id)

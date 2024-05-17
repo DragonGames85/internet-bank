@@ -80,14 +80,35 @@ services:
     volumes:
       - ./other/combined_certificate.pfx:/https/certificate.pfx
 
+  monitoringcomponent:
+    image: monitoringcomponent
+    environment:
+      - IS_PRODUCTION=false
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty.123
+      - ASPNETCORE_URLS=https://+:7403;http://+:7303
+    build:
+      context: ./CreditService
+      dockerfile: Dockerfile
+    ports:
+      - "7303:7303"
+    depends_on:
+      - sqlserver
+    restart: on-failure
+    volumes:
+      - ./other/combined_certificate.pfx:/https/certificate.pfx
+
   clientcomponent:
     image: clientcomponent
     environment:
-      - NEXT_PUBLIC_PRODUCTION_MODE=true
+      - NEXT_PUBLIC_PRODUCTION_MODE=false
       - NEXT_PUBLIC_AUTH_APP_URL_LOCAL=http://localhost:7300/auth
       - NEXT_PUBLIC_AUTH_APP_URL_PROD=https://bayanshonhodoev.ru/auth
       - NEXT_PUBLIC_CORE_APP_URL_LOCAL=http://localhost:7301/core
       - NEXT_PUBLIC_CORE_APP_URL_PROD=https://bayanshonhodoev.ru/core
+      - NEXT_PUBLIC_CORE_APP_WEBSOCKET_URL_LOCAL=ws://localhost:7301/core
+      - NEXT_PUBLIC_CORE_APP_WEBSOCKET_URL_PROD=ws://bayanshonhodoev.ru/core
       - NEXT_PUBLIC_CREDIT_APP_URL_LOCAL=http://localhost:7302/credit
       - NEXT_PUBLIC_CREDIT_APP_URL_PROD=https://bayanshonhodoev.ru/credit
       - NEXT_PUBLIC_CLIENT_APP_URL_LOCAL=http://localhost:3000
@@ -101,7 +122,7 @@ services:
   employeecomponent:
     image: employeecomponent
     environment:
-      - NEXT_PUBLIC_PRODUCTION_MODE=true
+      - NEXT_PUBLIC_PRODUCTION_MODE=false
       - NEXT_PUBLIC_AUTH_APP_URL_LOCAL=http://localhost:7300/auth
       - NEXT_PUBLIC_AUTH_APP_URL_PROD=https://bayanshonhodoev.ru/auth
       - NEXT_PUBLIC_CORE_APP_URL_LOCAL=http://localhost:7301/core
@@ -121,7 +142,7 @@ services:
   webauthcomponent:
     image: webauthcomponent
     environment:
-      - NEXT_PUBLIC_PRODUCTION_MODE=true
+      - NEXT_PUBLIC_PRODUCTION_MODE=false
       - NEXT_PUBLIC_AUTH_APP_URL_LOCAL=http://localhost:7300/auth
       - NEXT_PUBLIC_AUTH_APP_URL_PROD=https://bayanshonhodoev.ru/auth
       - NEXT_PUBLIC_CLIENT_APP_URL_LOCAL=http://localhost:3000
@@ -139,7 +160,9 @@ services:
   webmonitorcomponent:
     image: webmonitorcomponent
     environment:
-      - NEXT_PUBLIC_PRODUCTION_MODE=true
+      - NEXT_PUBLIC_PRODUCTION_MODE=false
+      - NEXT_PUBLIC_MONITORING_APP_URL_LOCAL=http://localhost:7303/monitoring
+      - NEXT_PUBLIC_MONITORING_APP_URL_PROD=https://bayanshonhodoev.ru/monitoring
     build:
       context: ./web-monitor
       dockerfile: Dockerfile

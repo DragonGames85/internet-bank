@@ -7,17 +7,23 @@ namespace InternetBank.Core.Infrastructure.Services.OperationServices;
 public class OperationNotificationService : IOperationNotificationService
 {
     private readonly IHubContext<OperationHub> _hubContext;
+    private readonly IServiceProvider _serviceProvider;
 
-    public OperationNotificationService(IHubContext<OperationHub> hubContext)
+    public OperationNotificationService(IHubContext<OperationHub> hubContext, IServiceProvider serviceProvider)
     {
         _hubContext = hubContext;
+        _serviceProvider = serviceProvider;
     }
 
     public async Task NotifyClientsAsync(string? receiverUserId = null, string? senderUserId = null)
     {
-        if (receiverUserId != null)
-            await _hubContext.Clients.User(receiverUserId).SendAsync("ReceiveOperationsUpdate");
-        if (senderUserId != null)
-            await _hubContext.Clients.User(senderUserId).SendAsync("ReceiveOperationsUpdate");
+        var hub = (OperationHub)_serviceProvider.GetService(typeof(OperationHub));
+        if (hub != null)
+        {
+            if (receiverUserId != null)
+                await hub.SendToUserOperationUpdate("ReceiveOperationsUpdate", receiverUserId);
+            if (senderUserId != null)
+                await hub.SendToUserOperationUpdate("ReceiveOperationsUpdate", senderUserId);
+        }
     }
 }

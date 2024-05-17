@@ -1,9 +1,16 @@
 using InternetBank.Auth.Api;
+using InternetBank.Auth.Application.DTOs.RoleDTOs;
+using InternetBank.Auth.Application.DTOs.UserDTOs;
 using InternetBank.Auth.Application.Extensions;
+using InternetBank.Auth.Application.Interfaces.Services.RoleServices;
+using InternetBank.Auth.Application.Interfaces.Services.UserServices;
 using InternetBank.Auth.Infrastructure.Extensions;
+using InternetBank.Auth.Infrastructure.Services.RoleServices;
+using InternetBank.Auth.Infrastructure.Services.UserServices;
 using InternetBank.Auth.Persistence.Contexts.EfCore;
 using InternetBank.Auth.Persistence.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -79,7 +86,37 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
     dbContext?.Database?.Migrate();
+
+    if (dbContext != null)
+    {
+        var roleGetService = scope.ServiceProvider.GetRequiredService<IRoleGetService>();
+        if (!roleGetService.GetAllRoles().Result.Any())
+        {
+            var roleHandleService = scope.ServiceProvider.GetRequiredService<IRoleHandleService>();
+
+            var roleEmployee = "Employee";
+            var roleCustomer = "Customer";
+            await roleHandleService.CreateRole(roleEmployee);
+            await roleHandleService.CreateRole(roleCustomer);
+
+            dbContext.SaveChanges();
+        }
+
+        var userGetService = scope.ServiceProvider.GetRequiredService<IUserGetService>();
+        if (!userGetService.GetAllUsers().Result.Any())
+        {
+            var userHandleService = scope.ServiceProvider.GetRequiredService<IUserHandleService>();
+            
+            var userEmployee = new CreateUserDto("coop", "coop", "coop", "Employee");
+            var userCustomer = new CreateUserDto("add123", "add123", "add123", "Customer");
+            await userHandleService.CreateUser(userEmployee);
+            await userHandleService.CreateUser(userCustomer);
+
+            dbContext.SaveChanges();
+        }
+    }
 }
 
 app.UseCors();

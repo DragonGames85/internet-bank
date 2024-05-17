@@ -10,10 +10,12 @@ public class CreateAccountCommand : IRequest
 {
     public CreateAccountDto Dto { get; set; }
     public Guid UserId { get; set; }
-    public CreateAccountCommand(CreateAccountDto dto, Guid userId)
+    public int Value { get; set; }
+    public CreateAccountCommand(CreateAccountDto dto, Guid userId, int? value = 0)
     {
         Dto = dto;
         UserId = userId;
+        Value = value ?? 0;
     }
 }
 
@@ -36,6 +38,7 @@ public class CreateAccountCommandHandler : IRequestHandler<CreateAccountCommand>
             CardNumberGenerator.Generate(),
             request.Dto.Type);
 
+        account.Balance = request.Value;
         account.AccountCurrency = currency;
 
         await _unitOfWork.Repository<Account>().AddAsync(account);

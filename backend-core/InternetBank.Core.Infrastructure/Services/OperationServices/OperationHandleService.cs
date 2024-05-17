@@ -1,4 +1,5 @@
-﻿using InternetBank.Core.Application.DTOs.OperationDTOs;
+﻿using InternetBank.Core.Application.DTOs.AccountDTOs;
+using InternetBank.Core.Application.DTOs.OperationDTOs;
 using InternetBank.Core.Application.Features.Accounts.Queries;
 using InternetBank.Core.Application.Features.Operations.Commands;
 using InternetBank.Core.Application.Interfaces.Services.OperationServices;
@@ -65,8 +66,12 @@ public class OperationHandleService : IOperationHandleService
             await _mediator.Send(new CreateOperationCommand(dto, false, false));
         }
 
-        var receiveAccount = await _mediator.Send(new GetAccountByNumberQuery(dto.ReceiveAccountNumber ?? string.Empty));
-        var sendAccount = await _mediator.Send(new GetAccountByNumberQuery(dto.SendAccountNumber ?? string.Empty));
+        AccountDto? receiveAccount = null;
+        AccountDto? sendAccount = null;
+        if (dto.ReceiveAccountNumber != null)
+            receiveAccount = await _mediator.Send(new GetAccountByNumberQuery(dto.ReceiveAccountNumber ?? string.Empty));
+        if (dto.SendAccountNumber != null)
+            sendAccount = await _mediator.Send(new GetAccountByNumberQuery(dto.SendAccountNumber ?? string.Empty));
 
         var receiverUserId = receiveAccount?.User?.Id.ToString();
         var senderUserId = sendAccount?.User?.Id.ToString();

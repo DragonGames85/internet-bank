@@ -1,15 +1,19 @@
 using InternetBank.Core.Api;
 using InternetBank.Core.Application.Extensions;
+using InternetBank.Core.Application.Interfaces.Services.CurrencyServices;
 using InternetBank.Core.Infrastructure.Extensions;
 using InternetBank.Core.Infrastructure.Hubs.OperationHubs;
+using InternetBank.Core.Infrastructure.Services.CurrencyServices;
 using InternetBank.Core.Persistence.Contexts.EfCore;
 using InternetBank.Core.Persistence.Extensions;
 using Microsoft.AspNet.SignalR.Messaging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using WebApiCoreApplication.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +52,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddControllers();
 
 builder.Services.AddSignalR();
+builder.Services.AddSingleton<OperationHub>();
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -84,7 +89,19 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
     dbContext?.Database?.Migrate();
+
+    if (dbContext != null)
+    {
+        var currencyGetService = scope.ServiceProvider.GetRequiredService<ICurrencyGetService>();
+        if (!currencyGetService.GetCurrencies().Result.Any())
+        {
+            var currencyHandleService = scope.ServiceProvider.GetRequiredService<ICurrencyHandleService>();
+            await currencyHandleService.CreateAllCurrency();
+            dbContext.SaveChanges();
+        }
+    }
 }
 
 app.UseCors();

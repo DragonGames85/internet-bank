@@ -16,7 +16,11 @@ public static class PersistenceServiceCollectionExtension
 
     private static void AddEfCoreMicrosoftSqlServerDbContext(this IServiceCollection services, IConfiguration configuration)
     {
-        var conStr = configuration["ConnectionStrings:InternetBankAuthDb"];
+        var isProduction = Environment.GetEnvironmentVariable("IS_PRODUCTION");
+        var isValid = bool.TryParse(isProduction, out bool isProd);
+        var conStr = isValid && isProd
+            ? configuration["ConnectionStrings:InternetBankAuthDb"]
+            : configuration["ConnectionStrings:InternetBankAuthDbLocal"];
         services.AddSqlServer<ApplicationDbContext>(conStr);
     }
 

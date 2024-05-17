@@ -19,11 +19,13 @@ namespace CreditService.Services
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ICreditRepository _creditRepository;
         private readonly ICreditEmployeeRepository _employeeRepository;
-        public UserCreditService(ICreditRepository creditRepository, ICreditEmployeeRepository employeeRepository, IHttpClientFactory httpClientFactory)
+        private readonly IConfiguration _configuration;
+        public UserCreditService(ICreditRepository creditRepository, ICreditEmployeeRepository employeeRepository, IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             _creditRepository = creditRepository;
             _employeeRepository = employeeRepository;
             _httpClientFactory = httpClientFactory;
+            _configuration = configuration;
         }
 
         public async Task<List<CreditTariffModel>> GetAllCreditTariffs()
@@ -80,14 +82,22 @@ namespace CreditService.Services
 
             var coreClient = _httpClientFactory.CreateClient();
 
-            Account data = new Account
+            var dataAccount = new Account
             {
                 Type = 1,
+                CurrencyName = "RUB"
             };
 
-           JsonContent content = JsonContent.Create(data);
+            JsonContent contentAccount = JsonContent.Create(dataAccount);
 
-            var result = await coreClient.PostAsync($"https://bayanshonhodoev.ru/core/api/Account/?userId={model.UserId}", content);
+            var isProduction = Environment.GetEnvironmentVariable("IS_PRODUCTION");
+            var isValid = bool.TryParse(isProduction, out bool isProd);
+            var coreAppUrl = isValid && isProd
+                ? _configuration["ConnectionStrings:CoreAppUrlProd"]
+                : _configuration["ConnectionStrings:CoreClientUrlLocal"];
+
+            await coreClient.PostAsync($"{coreAppUrl}/api/Account?userId={model.UserId}&value={model.Value}", contentAccount);
+
             if (tariff.PaymentType == Model.Enum.PaymentTypeEnum.DifferentiatedPayment)
             {
                 await CalculationOfPaymentsForDifferentiatedPayments(tariff, credit);
@@ -97,6 +107,7 @@ namespace CreditService.Services
             { 
                 await CalculationOfPaymentsForAnnuityDaysPayment(tariff, credit);
             }
+            
         }
         private async Task CalculationOfPaymentsForDifferentiatedPayments(CreditTariff tariff, UserCreditEntity credit)
         {
@@ -199,6 +210,6 @@ namespace CreditService.Services
     class Account
     {
         public string CurrencyName { get; set; } = "RUB";
-        public int Type { get; set; }
+        public int Type { get; set; } = 1;
     }
 }

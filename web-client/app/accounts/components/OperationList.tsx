@@ -1,6 +1,8 @@
 import { api } from '@/app/api';
 import { Operation } from '@/app/api/types';
+import { coreWebsocketAppUrl } from '@/app/config';
 import { useBankFetch } from '@/app/hooks/useBankFetch';
+import { HubConnectionBuilder } from '@microsoft/signalr';
 import { FC, useEffect, useState } from 'react';
 import { FaKey } from 'react-icons/fa';
 import { useSWRConfig } from 'swr';
@@ -8,7 +10,7 @@ import { useSWRConfig } from 'swr';
 const OperationList: FC<{ accId: string }> = ({ accId }) => {
     // const user = JSON.parse(localStorage.getItem('user') ?? '');
 
-    const { mutate } = useSWRConfig();
+    //const { mutate } = useSWRConfig();
 
     const mockedOperations: Operation[] = [
         {
@@ -23,7 +25,7 @@ const OperationList: FC<{ accId: string }> = ({ accId }) => {
         },
     ];
 
-    const { result: operations, mock } = useBankFetch<Operation[]>(
+    const { result: operations, mock, mutate } = useBankFetch<Operation[]>(
         `/api/operations/${accId}`,
         () => api.operations.getAll(accId),
         mockedOperations
@@ -34,7 +36,9 @@ const OperationList: FC<{ accId: string }> = ({ accId }) => {
     useEffect(() => {
         const userId = JSON.parse(localStorage.getItem('user') ?? '').userId;
 
-        const ws = new WebSocket(`wss://bayanshonhodoev.ru/core/operationHub?userId=${userId}`);
+        const url = coreWebsocketAppUrl;
+
+        const ws = new WebSocket(`${url}/operationHub?userId=${userId}`);
 
         ws.onopen = () => {
             console.log('WebSocket Connection Established');
@@ -45,8 +49,8 @@ const OperationList: FC<{ accId: string }> = ({ accId }) => {
 
         ws.onmessage = event => {
             console.log(`We got ${event.data}`);
-            if (event.data === 'ReceiveOperationsUpdate') {
-                mutate(`/api/operations/${accId}`);
+            if (JSON.stringify(event.data).includes("ReceiveOperationsUpdate")) {
+                mutate();
             }
         };
 

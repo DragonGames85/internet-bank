@@ -129,13 +129,13 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateAccount(CreateAccountDto dto, Guid? userId)
+    public async Task<ActionResult> CreateAccount(CreateAccountDto dto, Guid? userId, int? value = 0)
     {
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
         try
         {
-            await _accountHandleService.CreateAccount(dto, userId ?? Guid.NewGuid());
+            await _accountHandleService.CreateAccount(dto, userId ?? Guid.NewGuid(), value);
 
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
