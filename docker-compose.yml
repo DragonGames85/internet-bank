@@ -26,7 +26,7 @@ services:
   authcomponent:
     image: authcomponent    
     environment:
-      - IS_PRODUCTION=false
+      - IS_PRODUCTION=true
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty.123
@@ -45,7 +45,7 @@ services:
   corecomponent:
     image: corecomponent
     environment:
-      - IS_PRODUCTION=false
+      - IS_PRODUCTION=true
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty.123
@@ -64,7 +64,7 @@ services:
   creditcomponent:
     image: creditcomponent
     environment:
-      - IS_PRODUCTION=false
+      - IS_PRODUCTION=true
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty.123
@@ -83,7 +83,7 @@ services:
   monitoringcomponent:
     image: monitoringcomponent
     environment:
-      - IS_PRODUCTION=false
+      - IS_PRODUCTION=true
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty.123
@@ -102,7 +102,7 @@ services:
   clientcomponent:
     image: clientcomponent
     environment:
-      - NEXT_PUBLIC_PRODUCTION_MODE=false
+      - NEXT_PUBLIC_PRODUCTION_MODE=true
       - NEXT_PUBLIC_AUTH_APP_URL_LOCAL=http://localhost:7300/auth
       - NEXT_PUBLIC_AUTH_APP_URL_PROD=https://bayanshonhodoev.ru/auth
       - NEXT_PUBLIC_CORE_APP_URL_LOCAL=http://localhost:7301/core
@@ -122,7 +122,7 @@ services:
   employeecomponent:
     image: employeecomponent
     environment:
-      - NEXT_PUBLIC_PRODUCTION_MODE=false
+      - NEXT_PUBLIC_PRODUCTION_MODE=true
       - NEXT_PUBLIC_AUTH_APP_URL_LOCAL=http://localhost:7300/auth
       - NEXT_PUBLIC_AUTH_APP_URL_PROD=https://bayanshonhodoev.ru/auth
       - NEXT_PUBLIC_CORE_APP_URL_LOCAL=http://localhost:7301/core
@@ -142,7 +142,7 @@ services:
   webauthcomponent:
     image: webauthcomponent
     environment:
-      - NEXT_PUBLIC_PRODUCTION_MODE=false
+      - NEXT_PUBLIC_PRODUCTION_MODE=true
       - NEXT_PUBLIC_AUTH_APP_URL_LOCAL=http://localhost:7300/auth
       - NEXT_PUBLIC_AUTH_APP_URL_PROD=https://bayanshonhodoev.ru/auth
       - NEXT_PUBLIC_CLIENT_APP_URL_LOCAL=http://localhost:3000
@@ -160,7 +160,7 @@ services:
   webmonitorcomponent:
     image: webmonitorcomponent
     environment:
-      - NEXT_PUBLIC_PRODUCTION_MODE=false
+      - NEXT_PUBLIC_PRODUCTION_MODE=true
       - NEXT_PUBLIC_MONITORING_APP_URL_LOCAL=http://localhost:7303/monitoring
       - NEXT_PUBLIC_MONITORING_APP_URL_PROD=https://bayanshonhodoev.ru/monitoring
     build:
