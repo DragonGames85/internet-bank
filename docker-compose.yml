@@ -68,12 +68,12 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty.123
-      - ASPNETCORE_URLS=https://+:7402;http://+:7302
+      - ASPNETCORE_URLS=https://+:7403;http://+:7303
     build:
       context: ./CreditService
       dockerfile: Dockerfile
     ports:
-      - "7302:7302"
+      - "7303:7303"
     depends_on:
       - sqlserver
     restart: on-failure
@@ -87,12 +87,12 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/certificate.pfx
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty.123
-      - ASPNETCORE_URLS=https://+:7403;http://+:7303
+      - ASPNETCORE_URLS=https://+:7402;http://+:7302
     build:
       context: ./CreditService
       dockerfile: Dockerfile
     ports:
-      - "7303:7303"
+      - "7302:7302"
     depends_on:
       - sqlserver
     restart: on-failure
@@ -109,7 +109,7 @@ services:
       - NEXT_PUBLIC_CORE_APP_URL_PROD=https://bayanshonhodoev.ru/core
       - NEXT_PUBLIC_CORE_APP_WEBSOCKET_URL_LOCAL=ws://localhost:7301/core
       - NEXT_PUBLIC_CORE_APP_WEBSOCKET_URL_PROD=ws://bayanshonhodoev.ru/core
-      - NEXT_PUBLIC_CREDIT_APP_URL_LOCAL=http://localhost:7302/credit
+      - NEXT_PUBLIC_CREDIT_APP_URL_LOCAL=http://localhost:7303/credit
       - NEXT_PUBLIC_CREDIT_APP_URL_PROD=https://bayanshonhodoev.ru/credit
       - NEXT_PUBLIC_CLIENT_APP_URL_LOCAL=http://localhost:3000
       - NEXT_PUBLIC_CLIENT_APP_URL_PROD=https://bayanshonhodoev.ru/client
@@ -127,7 +127,7 @@ services:
       - NEXT_PUBLIC_AUTH_APP_URL_PROD=https://bayanshonhodoev.ru/auth
       - NEXT_PUBLIC_CORE_APP_URL_LOCAL=http://localhost:7301/core
       - NEXT_PUBLIC_CORE_APP_URL_PROD=https://bayanshonhodoev.ru/core
-      - NEXT_PUBLIC_CREDIT_APP_URL_LOCAL=http://localhost:7302/credit
+      - NEXT_PUBLIC_CREDIT_APP_URL_LOCAL=http://localhost:7303/credit
       - NEXT_PUBLIC_CREDIT_APP_URL_PROD=https://bayanshonhodoev.ru/credit
       - NEXT_PUBLIC_WEBAUTH_APP_URL_LOCAL=http://localhost:3002
       - NEXT_PUBLIC_WEBAUTH_APP_URL_PROD=https://bayanshonhodoev.ru/webauth
@@ -161,7 +161,7 @@ services:
     image: webmonitorcomponent
     environment:
       - NEXT_PUBLIC_PRODUCTION_MODE=true
-      - NEXT_PUBLIC_MONITORING_APP_URL_LOCAL=http://localhost:7303/monitoring
+      - NEXT_PUBLIC_MONITORING_APP_URL_LOCAL=http://localhost:7302/monitoring
       - NEXT_PUBLIC_MONITORING_APP_URL_PROD=https://bayanshonhodoev.ru/monitoring
     build:
       context: ./web-monitor
