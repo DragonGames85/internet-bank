@@ -43,6 +43,7 @@ export const animationVariants = {
 };
 
 const productionMode = process.env.NEXT_PUBLIC_PRODUCTION_MODE === 'true';
+const productionModeClient = process.env.NEXT_PUBLIC_PRODUCTION_MODE_CLIENT === 'true';
 export const authAppUrl =
     (productionMode ? process.env.NEXT_PUBLIC_AUTH_APP_URL_PROD : process.env.NEXT_PUBLIC_AUTH_APP_URL_LOCAL) ?? '';
 export const coreAppUrl =
@@ -50,7 +51,7 @@ export const coreAppUrl =
 export const creditAppUrl =
     (productionMode ? process.env.NEXT_PUBLIC_CREDIT_APP_URL_PROD : process.env.NEXT_PUBLIC_CREDIT_APP_URL_LOCAL) ?? '';
 export const webauthAppUrl =
-    (productionMode ? process.env.NEXT_PUBLIC_WEBAUTH_APP_URL_PROD : process.env.NEXT_PUBLIC_WEBAUTH_APP_URL_LOCAL) ?? '';
+    (productionModeClient ? process.env.NEXT_PUBLIC_WEBAUTH_APP_URL_PROD : process.env.NEXT_PUBLIC_WEBAUTH_APP_URL_LOCAL) ?? '';
 export const employeeAppUrl =
     (productionMode ? process.env.NEXT_PUBLIC_EMPLOYEE_APP_URL_PROD : process.env.NEXT_PUBLIC_EMPLOYEE_APP_URL_LOCAL) ?? '';
 
