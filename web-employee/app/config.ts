@@ -53,7 +53,7 @@ export const creditAppUrl =
 export const webauthAppUrl =
     (productionModeClient ? process.env.NEXT_PUBLIC_WEBAUTH_APP_URL_PROD : process.env.NEXT_PUBLIC_WEBAUTH_APP_URL_LOCAL) ?? '';
 export const employeeAppUrl =
-    (productionMode ? process.env.NEXT_PUBLIC_EMPLOYEE_APP_URL_PROD : process.env.NEXT_PUBLIC_EMPLOYEE_APP_URL_LOCAL) ?? '';
+    (productionModeClient ? process.env.NEXT_PUBLIC_EMPLOYEE_APP_URL_PROD : process.env.NEXT_PUBLIC_EMPLOYEE_APP_URL_LOCAL) ?? '';
 
 
 export const setURL = (url: string) => {

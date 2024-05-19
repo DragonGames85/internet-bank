@@ -52,7 +52,7 @@ export const creditAppUrl =
 export const webauthAppUrl =
     (productionModeClient ? process.env.NEXT_PUBLIC_WEBAUTH_APP_URL_PROD : process.env.NEXT_PUBLIC_WEBAUTH_APP_URL_LOCAL) ?? '';
 export const clientAppUrl =
-    (productionMode ? process.env.NEXT_PUBLIC_CLIENT_APP_URL_PROD : process.env.NEXT_PUBLIC_CLIENT_APP_URL_LOCAL) ?? '';
+    (productionModeClient ? process.env.NEXT_PUBLIC_CLIENT_APP_URL_PROD : process.env.NEXT_PUBLIC_CLIENT_APP_URL_LOCAL) ?? '';
 export const coreWebsocketAppUrl =
     (productionMode ? process.env.NEXT_PUBLIC_CORE_APP_WEBSOCKET_URL_PROD : process.env.NEXT_PUBLIC_CORE_APP_WEBSOCKET_URL_LOCAL ?? '');
 
