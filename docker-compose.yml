@@ -89,7 +89,7 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=Qwerty.123
       - ASPNETCORE_URLS=https://+:7402;http://+:7302
     build:
-      context: ./CreditService
+      context: ./monitoring-service
       dockerfile: Dockerfile
     ports:
       - "7302:7302"
@@ -103,7 +103,7 @@ services:
     image: clientcomponent
     environment:
       - NEXT_PUBLIC_PRODUCTION_MODE=true
-      - NEXT_PUBLIC_PRODUCTION_MODE_CLIENT=false
+      - NEXT_PUBLIC_PRODUCTION_MODE_CLIENT=true
       - NEXT_PUBLIC_AUTH_APP_URL_LOCAL=http://localhost:7300/auth
       - NEXT_PUBLIC_AUTH_APP_URL_PROD=https://bayanshonhodoev.ru/auth
       - NEXT_PUBLIC_CORE_APP_URL_LOCAL=http://localhost:7301/core
@@ -124,7 +124,7 @@ services:
     image: employeecomponent
     environment:
       - NEXT_PUBLIC_PRODUCTION_MODE=true
-      - NEXT_PUBLIC_PRODUCTION_MODE_CLIENT=false
+      - NEXT_PUBLIC_PRODUCTION_MODE_CLIENT=true
       - NEXT_PUBLIC_AUTH_APP_URL_LOCAL=http://localhost:7300/auth
       - NEXT_PUBLIC_AUTH_APP_URL_PROD=https://bayanshonhodoev.ru/auth
       - NEXT_PUBLIC_CORE_APP_URL_LOCAL=http://localhost:7301/core

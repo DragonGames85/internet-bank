@@ -25,7 +25,7 @@ var isValid = bool.TryParse(isProduction, out bool isProd);
 var connection = isValid && isProd
     ? builder.Configuration.GetConnectionString("ProductionConnection")
     : builder.Configuration.GetConnectionString("LocalConnection");
-builder.Services.AddSqlServer<ApplicationDbContext>(connection);
+builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(connection));
 
 
 builder.Services.AddScoped<IMonitoringService, MonitoringService>();
@@ -36,7 +36,14 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext?.Database.Migrate();
+    try 
+    {
+        dbContext?.Database?.Migrate();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex);
+    }
 }
 
 app.UseCors();
