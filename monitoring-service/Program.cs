@@ -53,10 +53,12 @@ var routeSwaggerPrefix = isValid && isProd
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint(routeSwaggerJson, "My API V1");
+        c.RoutePrefix = routeSwaggerPrefix;
+    });
 }
-
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
