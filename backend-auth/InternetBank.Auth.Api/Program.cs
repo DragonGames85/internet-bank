@@ -1,3 +1,4 @@
+using CreditService.Logger;
 using InternetBank.Auth.Api;
 using InternetBank.Auth.Application.DTOs.RoleDTOs;
 using InternetBank.Auth.Application.DTOs.UserDTOs;
@@ -51,6 +52,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddControllers();
 builder.Services.AddScoped<IMonitoring, Monitoring>();
 builder.Services.AddHttpClient();
+builder.Services.AddScoped<IExceptionService, ExceptionService>();
 
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();

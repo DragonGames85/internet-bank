@@ -30,8 +30,7 @@ public class CurrencyController : ControllerBase
         stopwatch.Start();
         try
         {
-            var result = await _currencyGetService.GetCurrencies();
-
+            var result = await Retry.Do(() => _currencyGetService.GetCurrencies(), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "core/api/Currency", "GET", 200, 1, "");
@@ -55,8 +54,7 @@ public class CurrencyController : ControllerBase
         stopwatch.Start();
         try
         {
-            await _currencyHandleService.CreateCurrency(dto);
-
+            await Retry.Do(() => _currencyHandleService.CreateCurrency(dto), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "core/api/Currency", "POST", 200, 1, "");
@@ -80,8 +78,7 @@ public class CurrencyController : ControllerBase
         stopwatch.Start();
         try
         {
-            await _currencyHandleService.EditCurrency(id, dto);
-
+            await Retry.Do(() => _currencyHandleService.EditCurrency(id, dto), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "core/api/Currency/{id}", "PUT", 200, 1, "");
@@ -105,8 +102,7 @@ public class CurrencyController : ControllerBase
         stopwatch.Start();
         try
         {
-            await _currencyHandleService.DeleteCurrency(id);
-
+            await Retry.Do(() => _currencyHandleService.DeleteCurrency(id), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "core/api/Currency/{id}", "DELETE", 200, 1, "");

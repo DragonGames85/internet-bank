@@ -42,8 +42,7 @@ public class OperationController : ControllerBase
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId")
                 ??  throw new Exception("userId is not found."); 
 
-            var result = await _operationGetService.GetOperationsByUserId(Guid.Parse(userIdClaim.Value));
-
+            var result = await Retry.Do(() => _operationGetService.GetOperationsByUserId(Guid.Parse(userIdClaim.Value)), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "core/api/Operation/my", "GET", 200, 1, "");
@@ -68,8 +67,7 @@ public class OperationController : ControllerBase
 
         try
         {
-            var result = await _operationGetService.GetOperationsByUserId(userId);
-
+            var result = await Retry.Do(() => _operationGetService.GetOperationsByUserId(userId), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "core/api/Operation/user/{userId}", "GET", 200, 1, "");
@@ -94,8 +92,7 @@ public class OperationController : ControllerBase
 
         try
         {
-            var result = await _operationGetService.GetOperationsByAccountId(accountId);
-
+            var result = await Retry.Do(() => _operationGetService.GetOperationsByAccountId(accountId), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "core/api/Operation/account/{accountId}", "GET", 200, 1, "");
@@ -120,8 +117,7 @@ public class OperationController : ControllerBase
 
         try
         {
-            var result = await _operationGetService.GetAllOperations();
-
+            var result = await Retry.Do(() => _operationGetService.GetAllOperations(), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "core/api/Operation/all", "GET", 200, 1, "");
@@ -180,8 +176,7 @@ public class OperationController : ControllerBase
 
         try
         {
-            await _operationHandleService.CreateOperation(dto, isCreditOperation);
-
+            await Retry.Do(() => _operationHandleService.CreateOperation(dto, isCreditOperation), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "core/api/Operation", "POST", 200, 1, "");
@@ -206,7 +201,7 @@ public class OperationController : ControllerBase
         try
         {
             await _hubContext.Clients.All.SendAsync("ReceiveOperationsUpdate", "Sheesh");
-            
+            //await Retry.Do(() => _hubContext.Clients.All.SendAsync("ReceiveOperationsUpdate", "Sheesh"), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "core/api/Operation/sendMessage", "POST", 200, 1, "");

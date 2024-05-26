@@ -27,7 +27,7 @@ public class RoleController : ControllerBase
         stopwatch.Start();
         try
         {
-            var result = await _roleGetService.GetAllRoles();
+            var result = await Retry.Do(() => _roleGetService.GetAllRoles(), TimeSpan.FromSeconds(1));
 
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
@@ -52,8 +52,7 @@ public class RoleController : ControllerBase
         stopwatch.Start();
         try
         {
-            await _roleHandleService.CreateRole(name);
-
+            await Retry.Do(() => _roleHandleService.CreateRole(name), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "auth/api/Role", "POST", 200, 1, "");
@@ -77,8 +76,7 @@ public class RoleController : ControllerBase
         stopwatch.Start();
         try
         {
-            await _roleHandleService.DeleteRoleByName(name);
-
+            await Retry.Do(() => _roleHandleService.DeleteRoleByName(name), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "auth/api/Role/{name}", "DELETE", 200, 1, "");

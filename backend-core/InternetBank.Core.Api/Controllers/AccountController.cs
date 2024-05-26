@@ -35,7 +35,7 @@ public class AccountController : ControllerBase
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId")
                 ?? throw new Exception("userId is not found.");
 
-            var result = await _accountGetService.GetAccounts(Guid.Parse(userIdClaim.Value));
+            var result = await Retry.Do(() => _accountGetService.GetAccounts(Guid.Parse(userIdClaim.Value)), TimeSpan.FromSeconds(1));
 
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
@@ -60,7 +60,7 @@ public class AccountController : ControllerBase
         stopwatch.Start();
         try
         {
-            var result = await _accountGetService.GetAccounts(userId);
+            var result = await Retry.Do(() => _accountGetService.GetAccounts(userId), TimeSpan.FromSeconds(1));
 
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
@@ -85,7 +85,7 @@ public class AccountController : ControllerBase
         stopwatch.Start();
         try
         {
-            var result = await _accountGetService.GetAccount(id);
+            var result = await Retry.Do(() => _accountGetService.GetAccount(id), TimeSpan.FromSeconds(1));
 
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
@@ -110,7 +110,7 @@ public class AccountController : ControllerBase
         stopwatch.Start();
         try
         {
-            var result = await _accountGetService.GetAllAccounts();
+            var result = await Retry.Do(() => _accountGetService.GetAllAccounts(), TimeSpan.FromSeconds(1));
 
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
@@ -135,7 +135,7 @@ public class AccountController : ControllerBase
         stopwatch.Start();
         try
         {
-            await _accountHandleService.CreateAccount(dto, userId ?? Guid.NewGuid(), value);
+            await Retry.Do(() => _accountHandleService.CreateAccount(dto, userId ?? Guid.NewGuid(), value), TimeSpan.FromSeconds(1));
 
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
@@ -160,7 +160,7 @@ public class AccountController : ControllerBase
         stopwatch.Start();
         try
         {
-            await _accountHandleService.EditAccount(id, dto);
+            await Retry.Do(() => _accountHandleService.EditAccount(id, dto), TimeSpan.FromSeconds(1));
 
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
@@ -185,7 +185,7 @@ public class AccountController : ControllerBase
         stopwatch.Start();
         try
         {
-            await _accountHandleService.DeleteAccount(id);
+            await Retry.Do(() => _accountHandleService.DeleteAccount(id), TimeSpan.FromSeconds(1));
 
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;

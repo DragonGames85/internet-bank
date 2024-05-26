@@ -29,8 +29,7 @@ public class AuthController : ControllerBase
         stopwatch.Start();
         try
         {
-            var result = await _userHandleService.CreateUser(dto);
-
+            var result = await Retry.Do(() => _userHandleService.CreateUser(dto), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "auth/api/Auth/register", "POST", 200, 1, "Successful registration");
@@ -54,12 +53,11 @@ public class AuthController : ControllerBase
         stopwatch.Start();
         try
         {
+            var result = await Retry.Do(() => _userAuthService.LoginUser(dto), TimeSpan.FromSeconds(1));
+
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "auth/api/Auth/login", "POST", 200, 1, "Successful authorization");
-
-            var result = await _userAuthService.LoginUser(dto);
-
             return Ok(result);
         }
         catch (Exception e)
