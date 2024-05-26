@@ -1,8 +1,11 @@
-﻿using CreditService.Logger;
+﻿using Azure.Core;
+using CreditService.Logger;
 using CreditService.Model.DTO;
 using CreditService.Services;
+using IdentityServer4.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
@@ -10,7 +13,7 @@ using System.Net.Http;
 
 namespace CreditService.Controllers
 {
-
+    
     [ApiController]
     [Route("credit/api/")]
     public class UserCreditController : ControllerBase
@@ -18,12 +21,15 @@ namespace CreditService.Controllers
         private IUserCreditService _creditService;
         private readonly ILogger<UserCreditController> _logger;
         private IMonitoring _monitoring;
-        public UserCreditController(IUserCreditService creditService, ILogger<UserCreditController> logger, IMonitoring monitoring)
+        private IExceptionService _exceptionService;
+        public UserCreditController(IUserCreditService creditService, ILogger<UserCreditController> logger, IMonitoring monitoring, IExceptionService exceptionService)
         {
             _creditService = creditService;
             _logger = logger;
             _monitoring = monitoring;
+            _exceptionService = exceptionService;
         }
+
         [HttpPost]
         [Route("takeCredit")]
         public async Task<IActionResult> AddUserCredit(CreditModel model)
@@ -32,7 +38,7 @@ namespace CreditService.Controllers
             stopwatch.Start();
             try
             {
-                await _creditService.AddNewCredit(model);
+                await Retry.Do(() => _creditService.AddNewCredit(model), TimeSpan.FromSeconds(1)); 
                 _logger.LogInformation($"Succesful create credit");
 
                 stopwatch.Stop();
@@ -77,38 +83,88 @@ namespace CreditService.Controllers
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
+            //bool succesful_request = false;
+            //string message = "";
+            // for(int i = 0; i < 10; i++)
+            //{
+            //    try
+            //    {
+            //        await _exceptionService.GetException();
+
+            //        var result = await _creditService.GetAllCreditTariffs();
+            //        succesful_request = true;
+            //        _logger.LogInformation($"Succesful get all credit tariffs");
+            //        stopwatch.Stop();
+            //        TimeSpan executionTime = stopwatch.Elapsed;
+
+            //        _monitoring.MonitoringService(executionTime, "credit/api/getTariffs", "GET", 200, 1, "Succesful get all credit tariffs");
+            //        return Ok(result);
+            //    }
+            //    catch (KeyNotFoundException e)
+            //    {
+            //        // Catch if tariffs was not found in database
+            //        _logger.LogError(e, e.Message);
+            //        stopwatch.Stop();
+            //        TimeSpan executionTime = stopwatch.Elapsed;
+
+            //        _monitoring.MonitoringService(executionTime, "credit/api/getTariffs", "GET", 404, 0, e.Message);
+            //        return Problem(statusCode: 404, title: e.Message);
+
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        _logger.LogInformation("Retry Times " + i.ToString());
+            //        message = e.Message + ". Retry Times " + i.ToString();
+            //        _logger.LogError(message);
+
+            //        TimeSpan executionTime = stopwatch.Elapsed;
+            //        _monitoring.MonitoringService(executionTime, "credit/api/getTariffs", "GET", 500, 0, message);
+            //        await Task.Delay(500);
+            //    }
+            //}
+            //if (!succesful_request)
+            //{
+            //    _logger.LogError( message);
+
+            //    stopwatch.Stop();
+            //    TimeSpan executionTime = stopwatch.Elapsed;
+            //    _monitoring.MonitoringService(executionTime, "credit/api/getTariffs", "GET", 500, 0, message);
+
+            //    return Problem(statusCode: 500, title: "Something went wrong");
+            //}
             try
             {
-                var result = await _creditService.GetAllCreditTariffs();
+                var result = await Retry.Do(_creditService.GetAllCreditTariffs, TimeSpan.FromSeconds(1));
                 _logger.LogInformation($"Succesful get all credit tariffs");
-                stopwatch.Stop();
-                TimeSpan executionTime = stopwatch.Elapsed;
+                  stopwatch.Stop();
+                  TimeSpan executionTime = stopwatch.Elapsed;
+                 _monitoring.MonitoringService(executionTime, "credit/api/getTariffs", "GET", 200, 1, "Succesful get all credit tariffs");
 
-                _monitoring.MonitoringService(executionTime, "credit/api/getTariffs", "GET", 200, 1, "Succesful get all credit tariffs");
                 return Ok(result);
             }
             catch (KeyNotFoundException e)
             {
-                // Catch if tariffs was not found in database
-                _logger.LogError(e, e.Message);
-                stopwatch.Stop();
-                TimeSpan executionTime = stopwatch.Elapsed;
+                   // Catch if tariffs was not found in database
+                    _logger.LogError(e, e.Message);
+                    stopwatch.Stop();
+                    TimeSpan executionTime = stopwatch.Elapsed;
 
-                _monitoring.MonitoringService(executionTime, "credit/api/getTariffs", "GET", 404, 0, e.Message);
-                return Problem(statusCode: 404, title: e.Message);
+                    _monitoring.MonitoringService(executionTime, "credit/api/getTariffs", "GET", 404, 0, e.Message);
+                    return Problem(statusCode: 404, title: e.Message);
 
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
+                _logger.LogError(e.Message);
 
                 stopwatch.Stop();
                 TimeSpan executionTime = stopwatch.Elapsed;
-                _monitoring.MonitoringService(executionTime, "credit/api/getTariffs", "GET", 500, 0, e.Message);
+               _monitoring.MonitoringService(executionTime, "credit/api/getTariffs", "GET", 500, 0, e.Message);
 
                 return Problem(statusCode: 500, title: "Something went wrong");
             }
-           
+            
+
         }
         [HttpPut]
         [Route("closeCredit/{creditId}")]
@@ -118,7 +174,7 @@ namespace CreditService.Controllers
             stopwatch.Start();
             try
             {
-                await _creditService.CloseLoan(creditId);
+                await Retry.Do(() => _creditService.CloseLoan(creditId), TimeSpan.FromSeconds(1));
                 _logger.LogInformation($"Succesful get all credit tariffs");
 
                 stopwatch.Stop();
@@ -167,7 +223,7 @@ namespace CreditService.Controllers
             stopwatch.Start();
             try
             {
-                var result = await _creditService.GetOverdueLoan(userId);
+                var result = await Retry.Do(() => _creditService.GetOverdueLoan(userId), TimeSpan.FromSeconds(1));
 
                 stopwatch.Stop();
                 TimeSpan executionTime = stopwatch.Elapsed;

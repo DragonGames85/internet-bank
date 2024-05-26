@@ -28,8 +28,7 @@ public class UserController : ControllerBase
         stopwatch.Start();
         try
         {
-            var result = await _userGetService.GetAllUsers();
-
+            var result = await Retry.Do(() => _userGetService.GetAllUsers(), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "auth/api/User/all", "GET", 200, 1, "Get all users");
@@ -53,8 +52,7 @@ public class UserController : ControllerBase
         stopwatch.Start();
         try
         {
-            await _userHandleService.ToggleBanUser(userId);
-
+            await Retry.Do(() => _userHandleService.ToggleBanUser(userId), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "auth/api/User/{userId}/ban", "POST", 200, 1, "");
@@ -78,8 +76,7 @@ public class UserController : ControllerBase
         stopwatch.Start();
         try
         {
-            await _userHandleService.DeleteUser(id);
-
+            await Retry.Do(() => _userHandleService.DeleteUser(id), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "auth/api/User/{id}", "DELETE", 200, 1, "Delete user");

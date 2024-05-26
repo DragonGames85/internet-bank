@@ -35,8 +35,7 @@ public class SettingsController : ControllerBase
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId")
                 ?? throw new Exception("userId is not found.");
 
-            await _settingsHandleService.ChangeConfig(Guid.Parse(userIdClaim.Value), dto);
-
+            await Retry.Do(() => _settingsHandleService.ChangeConfig(Guid.Parse(userIdClaim.Value), dto), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "auth/api/Settings/config", "POST", 200, 1, "");
@@ -64,8 +63,7 @@ public class SettingsController : ControllerBase
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId")
                 ?? throw new Exception("userId is not found.");
 
-            var result = await _settingsGetService.GetHideAccounts(Guid.Parse(userIdClaim.Value));
-
+            var result = await Retry.Do(() => _settingsGetService.GetHideAccounts(Guid.Parse(userIdClaim.Value)), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "auth/api/Settings/hideAccount", "GET", 200, 1, "");
@@ -93,7 +91,7 @@ public class SettingsController : ControllerBase
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId")
                 ?? throw new Exception("userId is not found.");
 
-            await _settingsHandleService.AddHideAccount(Guid.Parse(userIdClaim.Value), accountId);
+            await Retry.Do(() => _settingsHandleService.AddHideAccount(Guid.Parse(userIdClaim.Value), accountId), TimeSpan.FromSeconds(1));
 
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
@@ -122,8 +120,7 @@ public class SettingsController : ControllerBase
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId")
                 ?? throw new Exception("userId is not found.");
 
-            await _settingsHandleService.DeleteHideAccount(Guid.Parse(userIdClaim.Value), accountId);
-
+             await Retry.Do(() => _settingsHandleService.DeleteHideAccount(Guid.Parse(userIdClaim.Value), accountId), TimeSpan.FromSeconds(1));
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
             _monitoring.MonitoringService(executionTime, "auth/api/Settings/hideAccount", "DELETE", 200, 1, "");

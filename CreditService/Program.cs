@@ -34,9 +34,9 @@ builder.Services.AddScoped<IUserCreditService, UserCreditService>();
 builder.Services.AddScoped<ICreditRepository, CreditRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<ICreditEmployeeRepository, CreditEmployeeRepository>();
-builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddHostedService<MyHostedService>();
 builder.Services.AddScoped<IMonitoring, Monitoring>();
+builder.Services.AddScoped<IExceptionService, ExceptionService>();
 builder.Services.AddHttpClient();
 
 
