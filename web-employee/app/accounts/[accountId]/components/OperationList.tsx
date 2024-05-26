@@ -1,8 +1,10 @@
 import { api } from '@/app/api';
 import { Operation } from '@/app/api/types';
 import { useBankFetch } from '@/app/hooks/useBankFetch';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { FaKey } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const OperationList: FC<{ accId: string }> = ({ accId }) => {
     const mockedOperations: Operation[] = [
@@ -18,14 +20,51 @@ const OperationList: FC<{ accId: string }> = ({ accId }) => {
         },
     ];
 
-    const { result: operations, mock } = useBankFetch<Operation[]>(
+    const { result: operations, mock, mutate } = useBankFetch<Operation[]>(
         `/api/operations/${accId}`,
         () => api.operations.getAll(accId),
         mockedOperations
     );
 
+    useEffect(() => {
+        const userId = JSON.parse(localStorage.getItem('user') ?? '').userId;
+
+        const url = "wss://bayanshonhodoev.ru/core";
+
+        const ws = new WebSocket(`${url}/employeeOperationHub?userId=${userId}`);
+
+        ws.onopen = () => {
+            console.log('WebSocket Connection Established');
+
+            const message = JSON.stringify({ "protocol": "json", "version": 1 });
+            ws.send(message + '\u001E');
+        };
+
+        ws.onmessage = event => {   
+            console.log(`We got ${event.data}`);
+            if (JSON.stringify(event.data).includes("ReceiveOperationsUpdate")) {
+                toast('Новая операция!')
+                mutate();
+            }
+        };
+
+        ws.onclose = e => {
+            console.log(e);
+            console.log('WebSocket Connection Closed');
+        };
+
+        ws.onerror = error => {
+            console.log('WebSocket Error: ', error);
+        };
+
+        return () => {
+            ws.close();
+        };
+    }, []);
+
     return (
         <>
+            <ToastContainer />
             <div className="flex-center mt-16 mb-6 gap-5">
                 <button
                     onClick={() => mock(prev => !prev)}
@@ -40,11 +79,10 @@ const OperationList: FC<{ accId: string }> = ({ accId }) => {
                 <div className="flex flex-col sm:flex-row justify-between h-full bg-slate-600 py-4 mt-4 w-full 2xl:w-[60%] self-center text-xl overflow-hidden text-ellipsis items-center relative px-6 border-[1px] rounded-3xl">
                     <p>Сумма: {operation.value}$</p>
                     <p
-                        className={`h-full ${
-                            !!operation.value ? 'bg-green-400' : 'bg-red-400'
-                        } sm:absolute right-0 w-full sm:w-[40%] md:w-[35%] lg:w-[20%] flex items-center justify-center font-bold`}
+                        className={`h-full ${operation.name == 'Пополнение' ? 'bg-green-400' : 'bg-red-400'
+                            } sm:absolute right-0 w-full sm:w-[40%] md:w-[35%] lg:w-[20%] flex items-center justify-center font-bold`}
                     >
-                        {!!operation.value ? 'ПОПОЛНЕНИЕ' : 'СНЯТИЕ'}
+                        {operation.name == 'Пополнение' ? 'Пополнение' : 'СНЯТИЕ'}
                     </p>
                 </div>
             ))}

@@ -2,6 +2,7 @@ using InternetBank.Core.Api;
 using InternetBank.Core.Application.Extensions;
 using InternetBank.Core.Application.Interfaces.Services.CurrencyServices;
 using InternetBank.Core.Infrastructure.Extensions;
+using InternetBank.Core.Infrastructure.Hubs.EmployeeOperationHubs;
 using InternetBank.Core.Infrastructure.Hubs.OperationHubs;
 using InternetBank.Core.Infrastructure.Services.CurrencyServices;
 using InternetBank.Core.Persistence.Contexts.EfCore;
@@ -53,6 +54,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<OperationHub>();
+builder.Services.AddSingleton<EmployeeOperationHub>();
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -137,6 +139,6 @@ app.MapControllers();
 
 // WebSocket
 app.MapHub<OperationHub>("/core/operationHub");
-app.MapHub<TestOperationHub>("/core/testOperationHub");
+app.MapHub<EmployeeOperationHub>("/core/employeeOperationHub");
 
 app.Run();

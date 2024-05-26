@@ -12,8 +12,8 @@ using monitoring_service;
 namespace monitoring_service.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240513084220_changeTracingEntity")]
-    partial class changeTracingEntity
+    [Migration("20240520022725_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

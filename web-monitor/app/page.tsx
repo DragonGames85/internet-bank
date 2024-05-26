@@ -1,28 +1,27 @@
 'use client';
+import axios from 'axios';
 import {
-    Chart as ChartJS,
     CategoryScale,
+    ChartData,
+    Chart as ChartJS,
+    Legend,
+    LineElement,
     LinearScale,
     PointElement,
-    LineElement,
     Title,
     Tooltip,
-    Legend,
 } from 'chart.js';
-import { useEffect, useState } from 'react';
-import { faker } from '@faker-js/faker';
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+import { useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
 import { GLOBAL_API } from './api';
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 export default function Home() {
-    const [statusCodes, setStatusCodes] = useState<number[]>([]);
     const [responseTimes, setResponseTimes] = useState<number[]>([]);
 
-    const [body, setBody] = useState<GLOBAL_API['/monitoring/api/all/tracing']['body']>();
+    const [body, setBody] = useState<GLOBAL_API['/monitoring/api/all/tracing']['body'][]>();
 
     const [begin, setBegin] = useState('');
     const [end, setEnd] = useState('');
@@ -40,25 +39,13 @@ export default function Home() {
         },
     };
 
-    const getRandomValue = () => {
-        const randomStatus = faker.datatype.number({ min: 200, max: 500 });
-        setStatusCodes(prev => [...prev, randomStatus]);
-        setResponseTimes(prev => {
-            if (prev.length == 0) {
-                return [1];
-            } else {
-                return [...prev, prev[prev.length - 1] + 1];
-            }
-        });
-        toast.success(`Новый запрос: ${randomStatus}`);
-    };
 
-    const data = {
+    const data: ChartData = {
         labels: responseTimes,
         datasets: [
             {
                 label: 'СТАТУС КОД',
-                data: statusCodes,
+                data: body?.map(f => f.statusCode!)!,
                 borderColor: 'rgb(255, 99, 132)',
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
             },
@@ -68,14 +55,15 @@ export default function Home() {
     const getAllTracing = async (data: GLOBAL_API['/monitoring/api/all/tracing']['parameters']) => {
         let result = null;
         try {
-            result = await axios.get<GLOBAL_API['/monitoring/api/all/tracing']['body']>(
-                'url' + '/monitoring/api/all/tracing',
+            result = await axios.get<GLOBAL_API['/monitoring/api/all/tracing']['body'][]>(
+                'https://bayanshonhodoev.ru/monitoring' + '/api/all/tracing',
                 {
                     params: data,
                 }
             );
             setBody(result.data);
-        } catch (error) {}
+            setResponseTimes(Array.from({ 'length': result.data.length }).map((_, i) => i + 1))
+        } catch (error) { }
     };
 
     // getAllTracing({});
@@ -88,20 +76,25 @@ export default function Home() {
                 <label>end</label>
                 <input type="date" onChange={e => setEnd(e.target.value)} />
             </div>
-            <Line options={options} data={data} />
+            <Line options={{ ...options, }} data={data} />
             <button
                 onClick={() => getAllTracing({ begin, end })}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
                 Получить
             </button>
-            <button
-                onClick={getRandomValue}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-                Мокнуть запрос
-            </button>
             <ToastContainer />
+            <div className='flex flex-col gap-6'>
+                {body?.map(zapros => <div>
+                    <p>Сделан: {zapros.created_At}</p>
+                    <p>Запрос: {zapros.method + ' ' + zapros.route}</p>
+                    <p>Сервис: {zapros.service}</p>
+                    <p>СТАТУС КОД: {zapros.statusCode}</p>
+                    <p>Описание: {zapros.description}</p>
+                    <p>Тип: {zapros.type}</p>
+                    <p>Время: {zapros.time}</p>
+                </div>)}
+            </div>
         </main>
     );
 }
