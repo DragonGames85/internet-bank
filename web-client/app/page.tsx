@@ -11,6 +11,11 @@ import { useLocalStorage } from './hooks/useLocalStorage';
 import { api } from './api';
 import useSWR, { useSWRConfig } from 'swr';
 import { FaFlagCheckered } from 'react-icons/fa';
+import { useEffect } from 'react';
+import { getToken, onMessage } from 'firebase/messaging';
+import { messaging } from './accounts/components/firebase';
+import axios from 'axios';
+import { authAppUrl } from './config';
 
 export default function Home() {
     const token = useSearchParams().get('token') ?? '';

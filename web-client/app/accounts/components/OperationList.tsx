@@ -2,12 +2,11 @@ import { api } from '@/app/api';
 import { Operation } from '@/app/api/types';
 import { coreWebsocketAppUrl } from '@/app/config';
 import { useBankFetch } from '@/app/hooks/useBankFetch';
-import { HubConnectionBuilder } from '@microsoft/signalr';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { FaKey } from 'react-icons/fa';
-import { useSWRConfig } from 'swr';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 const OperationList: FC<{ accId: string }> = ({ accId }) => {
     // const user = JSON.parse(localStorage.getItem('user') ?? '');
 
@@ -26,11 +25,11 @@ const OperationList: FC<{ accId: string }> = ({ accId }) => {
         },
     ];
 
-    const { result: operations, mock, mutate } = useBankFetch<Operation[]>(
-        `/api/operations/${accId}`,
-        () => api.operations.getAll(accId),
-        mockedOperations
-    );
+    const {
+        result: operations,
+        mock,
+        mutate,
+    } = useBankFetch<Operation[]>(`/api/operations/${accId}`, () => api.operations.getAll(accId), mockedOperations);
 
     // const [operations, setOperations] = useState([]);
 
@@ -44,14 +43,15 @@ const OperationList: FC<{ accId: string }> = ({ accId }) => {
         ws.onopen = () => {
             console.log('WebSocket Connection Established');
 
-            const message = JSON.stringify({ "protocol": "json", "version": 1 });
+            const message = JSON.stringify({ protocol: 'json', version: 1 });
             ws.send(message + '\u001E');
         };
 
-        ws.onmessage = event => {   
+        ws.onmessage = event => {
             console.log(`We got ${event.data}`);
-            if (JSON.stringify(event.data).includes("ReceiveOperationsUpdate")) {
-                toast('Новая операция!')
+
+            if (JSON.stringify(event.data).includes('ReceiveOperationsUpdate')) {
+                toast('Новая операция!');
                 mutate();
             }
         };
@@ -89,8 +89,9 @@ const OperationList: FC<{ accId: string }> = ({ accId }) => {
                         Сумма: {operation.value} {operation.currency.symbol}
                     </p>
                     <p
-                        className={`h-full ${operation.name == 'Пополнение' ? 'bg-green-400' : 'bg-red-400'
-                            } sm:absolute right-0 w-full sm:w-[40%] md:w-[35%] lg:w-[20%] flex items-center justify-center font-bold`}
+                        className={`h-full ${
+                            operation.name == 'Пополнение' ? 'bg-green-400' : 'bg-red-400'
+                        } sm:absolute right-0 w-full sm:w-[40%] md:w-[35%] lg:w-[20%] flex items-center justify-center font-bold`}
                     >
                         {operation.name == 'Пополнение' ? 'Пополнение' : 'СНЯТИЕ'}
                     </p>
