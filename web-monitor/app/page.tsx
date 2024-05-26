@@ -16,6 +16,7 @@ import { Line } from 'react-chartjs-2';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { GLOBAL_API } from './api';
+import moment from 'moment';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 export default function Home() {
@@ -39,7 +40,6 @@ export default function Home() {
         },
     };
 
-
     const data: ChartData = {
         labels: responseTimes,
         datasets: [
@@ -62,8 +62,12 @@ export default function Home() {
                 }
             );
             setBody(result.data);
-            setResponseTimes(Array.from({ 'length': result.data.length }).map((_, i) => i + 1))
-        } catch (error) { }
+            setResponseTimes(
+                Array.from({ length: result.data.length }).map((_, i) =>
+                    moment(result.data[i].created_At).format('HH:mm:ss')
+                )
+            );
+        } catch (error) {}
     };
 
     // getAllTracing({});
@@ -76,7 +80,7 @@ export default function Home() {
                 <label>end</label>
                 <input type="date" onChange={e => setEnd(e.target.value)} />
             </div>
-            <Line options={{ ...options, }} data={data} />
+            <Line options={{ ...options }} data={data} />
             <button
                 onClick={() => getAllTracing({ begin, end })}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -84,16 +88,18 @@ export default function Home() {
                 Получить
             </button>
             <ToastContainer />
-            <div className='flex flex-col gap-6'>
-                {body?.map(zapros => <div>
-                    <p>Сделан: {zapros.created_At}</p>
-                    <p>Запрос: {zapros.method + ' ' + zapros.route}</p>
-                    <p>Сервис: {zapros.service}</p>
-                    <p>СТАТУС КОД: {zapros.statusCode}</p>
-                    <p>Описание: {zapros.description}</p>
-                    <p>Тип: {zapros.type}</p>
-                    <p>Время: {zapros.time}</p>
-                </div>)}
+            <div className="flex flex-col gap-6">
+                {body?.map(zapros => (
+                    <div>
+                        <p>Сделан: {zapros.created_At}</p>
+                        <p>Запрос: {zapros.method + ' ' + zapros.route}</p>
+                        <p>Сервис: {zapros.service}</p>
+                        <p>СТАТУС КОД: {zapros.statusCode}</p>
+                        <p>Описание: {zapros.description}</p>
+                        <p>Тип: {zapros.type}</p>
+                        <p>Время: {zapros.time}</p>
+                    </div>
+                ))}
             </div>
         </main>
     );
