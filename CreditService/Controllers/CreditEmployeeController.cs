@@ -29,7 +29,7 @@ namespace CreditService.Controllers
             stopwatch.Start();
             try
             {
-                await _employeeService.CreateNewTariff(model);
+                await Retry.Do(() => _employeeService.CreateNewTariff(model), TimeSpan.FromSeconds(1));
                 _logger.LogInformation($"Succesful create new tariff");
 
                 stopwatch.Stop();
@@ -67,7 +67,7 @@ namespace CreditService.Controllers
             stopwatch.Start();
             try
             {
-                var results = await _employeeService.GetUserCredits(userId);
+                var results = await Retry.Do(() => _employeeService.GetUserCredits(userId), TimeSpan.FromSeconds(1));
 
                 stopwatch.Stop();
                 TimeSpan executionTime = stopwatch.Elapsed;
@@ -105,8 +105,8 @@ namespace CreditService.Controllers
             stopwatch.Start();
             try
             {
-                var results = await _employeeService.GetCreditDetails(creditId);
-
+                var results = await Retry.Do(() => _employeeService.GetCreditDetails(creditId), TimeSpan.FromSeconds(1));
+                
                 stopwatch.Stop();
                 TimeSpan executionTime = stopwatch.Elapsed;
 
@@ -143,7 +143,7 @@ namespace CreditService.Controllers
             stopwatch.Start();
             try
             {
-                await _employeeService.DeleteCredit(creditId);
+                await Retry.Do(() => _employeeService.DeleteCredit(creditId), TimeSpan.FromSeconds(1));
 
                 stopwatch.Stop();
                 TimeSpan executionTime = stopwatch.Elapsed;
@@ -181,7 +181,7 @@ namespace CreditService.Controllers
             stopwatch.Start();
             try
             {
-                var result = await _employeeService.GetUserCreditRating(userId);
+                var result = await Retry.Do(() => _employeeService.GetUserCreditRating(userId), TimeSpan.FromSeconds(1));
 
                 stopwatch.Stop();
                 TimeSpan executionTime = stopwatch.Elapsed;
