@@ -68,6 +68,7 @@ public class OperationNotificationService : IOperationNotificationService
                 }
             }
         }
+
         if (senderUserId != null)
         {
             var response = await httpClient.GetAsync($"{authAppUrl}/api/Device/user/{senderUserId}");
@@ -89,6 +90,27 @@ public class OperationNotificationService : IOperationNotificationService
 
                     await httpClient.PostAsync($"{coreAppUrl}/sendNotification?token={notification.Token}&message={notification.Message}", content);
                 }
+            }
+        }
+
+        var responseEmployee = await httpClient.GetAsync($"{authAppUrl}/api/Device/employees");
+
+        if (responseEmployee.IsSuccessStatusCode)
+        {
+            var jsonContent = await responseEmployee.Content.ReadAsStringAsync();
+            var devices = JsonConvert.DeserializeObject<List<Device>>(jsonContent);
+
+            foreach (var device in devices)
+            {
+                var notification = new Notification()
+                {
+                    Token = device.Token,
+                    Message = "Создана новая операция клиента"
+                };
+
+                var content = new StringContent(string.Empty);
+
+                await httpClient.PostAsync($"{coreAppUrl}/sendNotification?token={notification.Token}&message={notification.Message}", content);
             }
         }
     }
