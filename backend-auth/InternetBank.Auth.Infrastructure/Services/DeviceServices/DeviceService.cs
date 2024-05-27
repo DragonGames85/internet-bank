@@ -36,6 +36,7 @@ public class DeviceService : IDeviceService
         device.User = user;
 
         await _context.Devices.AddAsync(device);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<List<DeviceDto>> GetUserDevices(Guid userId)
