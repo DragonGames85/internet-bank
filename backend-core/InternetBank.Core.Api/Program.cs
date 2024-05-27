@@ -118,7 +118,7 @@ app.MapPost("/sendNotification", async (FirebaseApp firebaseApp, string token, s
 });
 
 // Auto migration
-/*using (var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
@@ -134,7 +134,7 @@ app.MapPost("/sendNotification", async (FirebaseApp firebaseApp, string token, s
             dbContext.SaveChanges();
         }
     }
-}*/
+}
 
 app.UseCors();
 

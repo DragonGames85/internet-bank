@@ -1,4 +1,3 @@
-using CreditService.Logger;
 using InternetBank.Auth.Api;
 using InternetBank.Auth.Application.DTOs.RoleDTOs;
 using InternetBank.Auth.Application.DTOs.UserDTOs;

@@ -9,11 +9,13 @@
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\InternetBank.Auth.Application\InternetBank.Auth.Application.csproj" />
+    <ProjectReference Include="..\InternetBank.Auth.Persistence\InternetBank.Auth.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
