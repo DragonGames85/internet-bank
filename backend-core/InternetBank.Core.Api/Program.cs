@@ -109,8 +109,8 @@ app.MapPost("/sendNotification", async (FirebaseApp firebaseApp, string token, s
         Token = token,
         Notification = new Notification
         {
-            Title = "Hello from Bayan",
-            Body = $"Project InternetBank.Core started. Message: {message}."
+            Title = "Notification from InternetBank system",
+            Body = $"{message}."
         }
     };
     var result = await messaging.SendAsync(mes);
