@@ -64,7 +64,7 @@ public class OperationNotificationService : IOperationNotificationService
 
                     var content = new StringContent(string.Empty);
 
-                    await httpClient.PostAsync($"{coreAppUrl}/sendNotification?token={notification.Token}&message={notification.Message}", content);
+                    await httpClient.PostAsync($"{coreAppUrl}/api/sendNotification?token={notification.Token}&message={notification.Message}", content);
                 }
             }
         }
@@ -88,7 +88,7 @@ public class OperationNotificationService : IOperationNotificationService
 
                     var content = new StringContent(string.Empty);
 
-                    await httpClient.PostAsync($"{coreAppUrl}/sendNotification?token={notification.Token}&message={notification.Message}", content);
+                    await httpClient.PostAsync($"{coreAppUrl}/api/sendNotification?token={notification.Token}&message={notification.Message}", content);
                 }
             }
         }
@@ -110,7 +110,7 @@ public class OperationNotificationService : IOperationNotificationService
 
                 var content = new StringContent(string.Empty);
 
-                await httpClient.PostAsync($"{coreAppUrl}/sendNotification?token={notification.Token}&message={notification.Message}", content);
+                await httpClient.PostAsync($"{coreAppUrl}/api/sendNotification?token={notification.Token}&message={notification.Message}", content);
             }
         }
     }

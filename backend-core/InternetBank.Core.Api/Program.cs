@@ -101,7 +101,7 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-app.MapPost("/sendNotification", async (FirebaseApp firebaseApp, string token, string message) =>
+app.MapPost("core/api/sendNotification", async (FirebaseApp firebaseApp, string token, string message) =>
 {
     var messaging = FirebaseMessaging.GetMessaging(firebaseApp);
     var mes = new Message()
