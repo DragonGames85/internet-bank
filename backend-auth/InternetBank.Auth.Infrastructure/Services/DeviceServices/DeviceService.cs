@@ -57,7 +57,11 @@ public class DeviceService : IDeviceService
     {
         var devicesDto = new List<DeviceDto>();
 
-        var employees = await _context.Users.Include(x => x.UserRoles).Where(x => x.UserRoles.Any(x => x.Name == "Employee")).ToListAsync();
+        var employees = await _context.Users
+            .Include(x => x.UserRoles)
+                .ThenInclude(x => x.RoleUsers)
+            .Where(x => x.UserRoles.Any(x => x.Name == "Employee"))
+            .ToListAsync();
         
         var employeeIds = employees.Select(e => e.Id).ToList();
 
