@@ -60,10 +60,7 @@ public class DeviceController : ControllerBase
         stopwatch.Start();
         try
         {
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId")
-                ?? throw new Exception("userId is not found.");
-
-            var result = await _deviceService.GetUserDevices(Guid.Parse(userIdClaim.Value));
+            var result = await _deviceService.GetUserDevices(userId);
 
             stopwatch.Stop();
             TimeSpan executionTime = stopwatch.Elapsed;
@@ -88,9 +85,6 @@ public class DeviceController : ControllerBase
         stopwatch.Start();
         try
         {
-            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId")
-                ?? throw new Exception("userId is not found.");
-
             var result = await _deviceService.GetEmployeesDevices();
 
             stopwatch.Stop();
