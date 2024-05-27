@@ -18,7 +18,13 @@ public class OperationBackgroundService : BackgroundService
     public OperationBackgroundService(IOperationHandleService operationHandleService)
     {
         _operationHandleService = operationHandleService;
+        // InitRabbitMQ();
+    }
+
+/*    public override Task StartAsync(CancellationToken cancellationToken)
+    {
         InitRabbitMQ();
+        return base.StartAsync(cancellationToken);
     }
 
     private void InitRabbitMQ()
@@ -59,7 +65,7 @@ public class OperationBackgroundService : BackgroundService
                 break;
             }
         }
-    }
+    }*/
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {

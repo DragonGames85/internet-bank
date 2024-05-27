@@ -12,6 +12,7 @@ public class User : BaseAuditableEntity
     public Config UserConfig { get; set; }
     public ICollection<Role> UserRoles { get; set; } = new List<Role>();
     public ICollection<HideAccount> UserHideAccounts { get; set; } = new List<HideAccount>();
+    public ICollection<Device> Devices { get; set; } = new List<Device>();
 
     public static User Create(string login, string name, string password)
     {

@@ -1,4 +1,8 @@
+using FirebaseAdmin;
+using FirebaseAdmin.Messaging;
+using Google.Apis.Auth.OAuth2;
 using InternetBank.Core.Api;
+using InternetBank.Core.Api.Middlewares;
 using InternetBank.Core.Application.Extensions;
 using InternetBank.Core.Application.Interfaces.Services.CurrencyServices;
 using InternetBank.Core.Infrastructure.Extensions;
@@ -15,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using WebApiCoreApplication.Controllers;
+using Message = FirebaseAdmin.Messaging.Message;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +60,15 @@ builder.Services.AddControllers();
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<OperationHub>();
 builder.Services.AddSingleton<EmployeeOperationHub>();
+builder.Services.AddHttpClient();
+
+builder.Services.AddSingleton(provider =>
+{
+    return FirebaseApp.Create(new AppOptions()
+    {
+        Credential = GoogleCredential.FromFile("./internetBankFirebaseCredentials.json")
+    });
+});
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -87,8 +101,24 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+app.MapPost("/sendNotification", async (FirebaseApp firebaseApp, string token, string message) =>
+{
+    var messaging = FirebaseMessaging.GetMessaging(firebaseApp);
+    var mes = new Message()
+    {
+        Token = token,
+        Notification = new Notification
+        {
+            Title = "Hello from Bayan",
+            Body = $"Project InternetBank.Core started. Message: {message}."
+        }
+    };
+    var result = await messaging.SendAsync(mes);
+    return Results.Ok(result);
+});
+
 // Auto migration
-using (var scope = app.Services.CreateScope())
+/*using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
@@ -104,7 +134,7 @@ using (var scope = app.Services.CreateScope())
             dbContext.SaveChanges();
         }
     }
-}
+}*/
 
 app.UseCors();
 
@@ -134,6 +164,9 @@ app.UseAuthentication();
 app.UseRouting();
 
 app.UseAuthorization();
+
+/*app.UseMiddleware<CircuitBreakerMiddleware>();
+app.UseMiddleware<HalfErrorMiddleware>();*/
 
 app.MapControllers();
 

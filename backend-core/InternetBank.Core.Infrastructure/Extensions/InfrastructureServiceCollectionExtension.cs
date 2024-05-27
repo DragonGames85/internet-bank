@@ -1,11 +1,13 @@
 ﻿using InternetBank.Core.Application.Interfaces.Services.AccountServices;
 using InternetBank.Core.Application.Interfaces.Services.CurrencyServices;
 using InternetBank.Core.Application.Interfaces.Services.OperationServices;
+using InternetBank.Core.Infrastructure.Consumers;
 using InternetBank.Core.Infrastructure.Providers;
 using InternetBank.Core.Infrastructure.Refit.Interfaces.Cbr;
 using InternetBank.Core.Infrastructure.Services.AccountServices;
 using InternetBank.Core.Infrastructure.Services.CurrencyServices;
 using InternetBank.Core.Infrastructure.Services.OperationServices;
+using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +21,7 @@ public static class InfrastructureServiceCollectionExtension
     {
         services.AddServices();
         services.AddWebSockets();
-        services.AddMessageQueue();
+        // services.AddMessageQueue();
         services.AddCbrClient();
     }
 
@@ -50,6 +52,26 @@ public static class InfrastructureServiceCollectionExtension
 
     private static void AddMessageQueue(this IServiceCollection services)
     {
-        services.AddHostedService<OperationBackgroundService>();
+        services.AddMassTransit(e =>
+        {
+            e.AddConsumer<CreateOperationConsumer>();
+
+            e.UsingRabbitMq((context, cfg) =>
+            {
+
+                cfg.Host("localhost", x =>
+                {
+                    x.Username("guest");
+                    x.Password("guest");
+                });
+
+                cfg.ReceiveEndpoint("operationsQueue", e =>
+                {
+                    e.ConfigureConsumer<CreateOperationConsumer>(context);
+                });
+            });
+            // e.AddMessageQueue();
+        });
+        // services.AddHostedService<OperationBackgroundService>();
     }
 }

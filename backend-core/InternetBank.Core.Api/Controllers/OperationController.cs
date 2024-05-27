@@ -1,6 +1,7 @@
 ﻿using InternetBank.Core.Application.DTOs.OperationDTOs;
 using InternetBank.Core.Application.Interfaces.Services.OperationServices;
 using InternetBank.Core.Infrastructure.Hubs.OperationHubs;
+using MassTransit;
 using Microsoft.AspNet.SignalR.Messaging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -133,14 +134,28 @@ public class OperationController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-
-
     /*
-    public Task<ActionResult> CreateOperationWithMQ(CreateOperationDto dto)
+    public async Task<ActionResult> CreateOperationWithMQ(CreateOperationDto dto)
     {
         try
         {
-            var factory = new ConnectionFactory() { HostName = "localhost", UserName = "user", Password = "password" };
+            await _publishEndpoint.Publish(dto);
+
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+        *//*try
+        {
+            var factory = new ConnectionFactory() { HostName = "localhost", UserName = "user", Password = "password", Port = 5672 };
+
+
+            var myFactory = await _rmq.Rece();
+
+            using (var connection = myFactory.)
+
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
@@ -164,9 +179,8 @@ public class OperationController : ControllerBase
         catch (Exception e)
         {
             return Task.FromResult<ActionResult>(BadRequest(e.Message));
-        }
+        }*//*
     }*/
-
 
     [HttpPost]
     public async Task<ActionResult> CreateOperation(CreateOperationDto dto, bool isCreditOperation = false)

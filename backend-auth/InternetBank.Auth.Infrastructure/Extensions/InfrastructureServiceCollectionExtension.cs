@@ -2,6 +2,7 @@
 using InternetBank.Auth.Application.Interfaces.Services.RoleServices;
 using InternetBank.Auth.Application.Interfaces.Services.SettingsServices;
 using InternetBank.Auth.Application.Interfaces.Services.UserServices;
+using InternetBank.Auth.Infrastructure.Services.DeviceServices;
 using InternetBank.Auth.Infrastructure.Services.JwtServices;
 using InternetBank.Auth.Infrastructure.Services.RoleServices;
 using InternetBank.Auth.Infrastructure.Services.SettingsServices;
@@ -28,5 +29,6 @@ public static class InfrastructureServiceCollectionExtension
         services.AddTransient<ISettingsGetService, SettingsGetService>();
         services.AddTransient<ISettingsHandleService, SettingsHandleService>();
         services.AddTransient<IJwtTokenService, JwtTokenService>();
+        services.AddTransient<IDeviceService, DeviceService>();
     }
 }
