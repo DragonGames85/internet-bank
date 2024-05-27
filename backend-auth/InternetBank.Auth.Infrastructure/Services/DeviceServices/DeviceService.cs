@@ -23,7 +23,7 @@ public class DeviceService : IDeviceService
 
     public async Task CreateDevice(Guid userId, string token)
     {
-        if (_context.Devices.FirstOrDefault(x => x.Token == token) != null)
+        if (_context.Devices.Include(x => x.User).FirstOrDefault(x => x.Token == token && x.User.Id == userId) != null)
             throw new Exception("Token has already created.");
 
         var device = new Device()
