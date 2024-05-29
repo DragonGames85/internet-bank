@@ -165,8 +165,8 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-/*app.UseMiddleware<CircuitBreakerMiddleware>();
-app.UseMiddleware<HalfErrorMiddleware>();*/
+app.UseMiddleware<CircuitBreakerMiddleware>();
+app.UseMiddleware<HalfErrorMiddleware>();
 
 app.MapControllers();
 

@@ -1,6 +1,7 @@
 using monitoring_service;
 using monitoring_service.Services;
 using Microsoft.EntityFrameworkCore;
+using monitoring_service.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +69,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
+
+app.UseMiddleware<CircuitBreakerMiddleware>();
 
 app.MapControllers();
 

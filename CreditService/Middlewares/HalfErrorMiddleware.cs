@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InternetBank.Core.Api.Middlewares;
+namespace CreditService.Middlewares;
 
 public class HalfErrorMiddleware
 {

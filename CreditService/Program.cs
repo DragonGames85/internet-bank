@@ -1,5 +1,6 @@
 using CreditService;
 using CreditService.Logger;
+using CreditService.Middlewares;
 using CreditService.Repository;
 using CreditService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -73,6 +74,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 app.MapHealthChecks("/health");
+
+app.UseMiddleware<CircuitBreakerMiddleware>();
+app.UseMiddleware<HalfErrorMiddleware>();
+
 app.MapControllers();
 
 

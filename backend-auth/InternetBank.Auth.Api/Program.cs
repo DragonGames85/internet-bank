@@ -1,4 +1,5 @@
 using InternetBank.Auth.Api;
+using InternetBank.Auth.Api.Middlewares;
 using InternetBank.Auth.Application.DTOs.RoleDTOs;
 using InternetBank.Auth.Application.DTOs.UserDTOs;
 using InternetBank.Auth.Application.Extensions;
@@ -145,6 +146,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<CircuitBreakerMiddleware>();
+app.UseMiddleware<HalfErrorMiddleware>();
 
 app.MapControllers();
 

@@ -1,4 +1,4 @@
-﻿namespace InternetBank.Core.Api.Middlewares;
+﻿namespace monitoring_service.Middlewares;
 
 public class CircuitBreakerMiddleware
 {
